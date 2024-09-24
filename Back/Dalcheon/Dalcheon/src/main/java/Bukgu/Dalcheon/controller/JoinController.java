@@ -15,7 +15,7 @@ public class JoinController {
         this.joinService = joinService;
     }
 
-    @PostMapping("/xz")
+    @PostMapping("/new")
     public ResponseEntity<String> joinProcess(@RequestBody JoinDTO joinDTO){
 
         System.out.println(joinDTO.getUserId());
@@ -24,7 +24,7 @@ public class JoinController {
         return joinService.joinProcess(joinDTO);
     }
     @GetMapping("/check/userid/{userid}")
-    public String idCheck(@PathVariable(value = "userid") String userid){
+    public ResponseEntity<String> idCheck(@PathVariable(value = "userid") String userid){
         return joinService.UserIdCheck(userid);
     }
     @GetMapping("/check/password/{password}/{passwordCheck}")

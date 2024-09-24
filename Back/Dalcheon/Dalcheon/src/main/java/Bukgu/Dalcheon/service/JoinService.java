@@ -47,12 +47,12 @@ public class JoinService {
     }
 
     // ID 중복체크
-    public String UserIdCheck(String userId){
+    public ResponseEntity<String> UserIdCheck(String userId){
          Boolean isExist = userRepository.existsByUsername(userId);
          if (isExist) {
-             return "중복없음";
+             return new ResponseEntity<>("중복된 아이디입니다.", HttpStatus.CONFLICT);
          }
-        return "중복";
+        return new ResponseEntity<>("사용 가능한 아이디입니다." , HttpStatus.OK);
     }
 
     // 비밀번호 확인
