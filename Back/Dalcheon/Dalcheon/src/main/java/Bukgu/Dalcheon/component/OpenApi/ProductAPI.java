@@ -1,6 +1,6 @@
 package Bukgu.Dalcheon.component.OpenApi;
 
-import Bukgu.Dalcheon.domain.Api.SearchProduct;
+import Bukgu.Dalcheon.domain.OpenApi.SearchProduct;
 import org.springframework.http.ResponseEntity;
 
 import java.io.UnsupportedEncodingException;

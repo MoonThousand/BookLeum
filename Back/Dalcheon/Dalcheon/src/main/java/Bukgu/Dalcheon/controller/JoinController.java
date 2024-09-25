@@ -23,9 +23,9 @@ public class JoinController {
 
         return joinService.joinProcess(joinDTO);
     }
-    @GetMapping("/check/userid/{userid}")
-    public ResponseEntity<String> idCheck(@PathVariable(value = "userid") String userid){
-        return joinService.UserIdCheck(userid);
+    @GetMapping("/check/userid/{userId}")
+    public ResponseEntity<String> idCheck(@PathVariable(value = "userId") String userId){
+        return joinService.UserIdCheck(userId);
     }
     @GetMapping("/check/password/{password}/{passwordCheck}")
     public String passwordCheck(@PathVariable(value = "password") String password,

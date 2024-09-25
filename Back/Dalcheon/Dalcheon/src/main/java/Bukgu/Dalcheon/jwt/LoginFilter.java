@@ -3,7 +3,6 @@ package Bukgu.Dalcheon.jwt;
 import Bukgu.Dalcheon.domain.login.dao.RefreshEntity;
 import Bukgu.Dalcheon.domain.login.dto.LoginDTO;
 import Bukgu.Dalcheon.repository.RefreshRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletInputStream;
@@ -62,7 +61,7 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
             throw new RuntimeException(e);
         }
 
-        String username = loginDTO.getUsername();
+        String username = loginDTO.getUserId();
         String password = loginDTO.getPassword();
 
         /**

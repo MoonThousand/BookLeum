@@ -1,38 +1,30 @@
 package Bukgu.Dalcheon.service;
 
-import Bukgu.Dalcheon.component.OpenApi.ProductCheckAPI;
-import Bukgu.Dalcheon.component.OpenApi.ProductListAPI;
-import Bukgu.Dalcheon.component.OpenApi.ProductSearchAPI;
-import Bukgu.Dalcheon.domain.Api.CheckProduct;
-import Bukgu.Dalcheon.domain.Api.ListProduct;
-import Bukgu.Dalcheon.domain.Api.SearchProduct;
-import org.springframework.beans.factory.annotation.Autowired;
+import Bukgu.Dalcheon.component.User.UserHistory;
+import Bukgu.Dalcheon.domain.login.dao.UserEntity;
+import Bukgu.Dalcheon.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
+import java.net.URL;
 
 @Service
 public class ApiService {
+    private final UserHistory userHistory;
+    private final UserRepository userRepository;
 
-    private final ProductSearchAPI productSearchAPI;
-    private final ProductListAPI productListAPI;
-    private final ProductCheckAPI productCheckAPI;
-
-    @Autowired
-    public ApiService(ProductSearchAPI productSearchAPI, ProductListAPI productListAPI, ProductCheckAPI productCheckAPI) {
-        this.productSearchAPI = productSearchAPI;
-        this.productListAPI = productListAPI;
-        this.productCheckAPI = productCheckAPI;
+    public ApiService(UserHistory userHistory, UserRepository userRepository) {
+        this.userHistory = userHistory;
+        this.userRepository = userRepository;
     }
 
-    public Object AladinSearchProduct(SearchProduct searchProduct) throws UnsupportedEncodingException {
-        return productSearchAPI.fetch(searchProduct).getBody();
-    }
-    public Object AladinListProduct(ListProduct listProduct) throws UnsupportedEncodingException {
-        return productListAPI.fetch(listProduct).getBody();
-    }
-    public Object AladinCheckProduct(CheckProduct checkProduct) throws UnsupportedEncodingException {
-        return productCheckAPI.fetch(checkProduct).getBody();
+    public String UserHistory(String userId) throws JsonProcessingException {
+        UserEntity userEntity = userRepository.findByUsername(userId);
+
+        if (userEntity == null) {
+            return "User Not Found";
+        }
+        return userHistory.userHistory(userEntity);
     }
 
 

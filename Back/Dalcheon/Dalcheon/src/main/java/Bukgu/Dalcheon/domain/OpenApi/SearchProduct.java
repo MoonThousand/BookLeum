@@ -1,4 +1,4 @@
-package Bukgu.Dalcheon.domain.Api;
+package Bukgu.Dalcheon.domain.OpenApi;
 
 import lombok.Getter;
 
