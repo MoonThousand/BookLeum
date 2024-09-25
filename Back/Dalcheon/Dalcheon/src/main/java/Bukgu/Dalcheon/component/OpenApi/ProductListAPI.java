@@ -1,6 +1,6 @@
 package Bukgu.Dalcheon.component.OpenApi;
 
-import Bukgu.Dalcheon.domain.Api.ListProduct;
+import Bukgu.Dalcheon.domain.OpenApi.ListProduct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
