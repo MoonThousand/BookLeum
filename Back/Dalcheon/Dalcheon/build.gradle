@@ -12,6 +12,8 @@ java {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
+
+// java 컴파일 옵션
 compileJava {
 	options.compilerArgs << '-parameters'
 }
