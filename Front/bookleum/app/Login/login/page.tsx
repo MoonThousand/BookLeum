@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 
 import Input from "@/components/UI/login/Input";
+import Link from "next/link";
 import axios from "axios";
 import { setCookie } from "cookies-next";
 import { useDispatch } from "react-redux";
@@ -16,19 +17,14 @@ export default function LogIn() {
   const router = useRouter();
 
   const handleLogin = async () => {
-    // if (!email.includes("@")) {
-    //   alert("이메일을 다시 확인해주세요.");
-    //   return;
-    // }
-
-    // if (!/(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])/g.test(password)) {
-    //   alert("비밀번호가 틀립니다.");
-    //   return;
-    // }
+    if (userId === "" || password === "") {
+      alert("빈 칸을 채워주세요");
+      return;
+    }
 
     try {
       const response = await axios.post(
-        `http://220.120.143.96:7070/login`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
         {
           userId,
           password,
@@ -47,11 +43,11 @@ export default function LogIn() {
         console.log("로그인 성공");
       } else {
         console.error("로그인 실패 - 서버 응답이 200이 아님");
-        alert("로그인에 실패했습니다.");
+        alert("아이디 또는 비밀번호가 틀립니다.");
       }
     } catch (error) {
       console.error("로그인 실패", error);
-      alert("로그인에 실패했습니다. 다시 시도해주세요.");
+      alert("아이디 또는 비밀번호가 틀립니다.");
     }
   };
 
@@ -59,23 +55,34 @@ export default function LogIn() {
     <div className="w-[60%] mx-auto mt-8">
       <div>
         <span className="font-bold text-[1.5rem]">로그인</span>
-        <div className="w-full h-[4px] bg-black mt-2"></div>
+        <div className="w-full h-[2px] bg-[#9b8e61] mt-2"></div>
       </div>
 
       <div className="flex flex-col items-center mt-4">
-        <Input label="ID" value={userId} onChange={setId} />
-        <Input label="Password" value={password} onChange={setPassword} />
+        <Input label="ID" value={userId} onChange={setId} placeholder="ID" />
+        <Input
+          label="Password"
+          value={password}
+          onChange={setPassword}
+          placeholder="Password"
+        />
       </div>
 
       <div className="w-[70%] mx-auto flex flex-col items-center justify-center mt-4">
         <button
           onClick={handleLogin}
-          className="mt-4 p-2 bg-black text-white rounded w-full border border-gray-400"
+          className="mt-4 p-2 bg-[#98bc91] text-white rounded-md w-full border border-gray-400"
         >
           Log In
         </button>
-        <button className="mt-4 p-2 bg-gray-200 rounded w-full border border-gray-400">
-          Sign Up
+
+        <button className="mt-4 p-2 bg-gray-200 rounded-md w-full border border-gray-400">
+          <Link
+            href="/Login/signup"
+            className="w-full h-full flex items-center justify-center"
+          >
+            Sign Up
+          </Link>
         </button>
       </div>
     </div>

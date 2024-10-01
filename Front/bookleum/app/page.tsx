@@ -5,7 +5,7 @@ import TodayBook from "@/components/UI/main/todayBook";
 export default function Home() {
   return (
     <div className="flex flex-col items-center">
-      <div className="mt-12 w-[80%]">
+      <div className="mt-20 w-[80%]">
         <Image
           src="/logo.png"
           width={1000}

@@ -110,15 +110,18 @@ export default function SignUp() {
     }
 
     try {
-      const response = await axios.post(`http://220.120.143.96:7070/join/new`, {
-        userId,
-        password,
-        email,
-        name,
-        phone,
-        address: fullAddress,
-        birthDate: formattedBirthDate,
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/join/new`,
+        {
+          userId,
+          password,
+          email,
+          name,
+          phone,
+          address: fullAddress,
+          birthDate: formattedBirthDate,
+        }
+      );
 
       if (response.status === 200) {
         router.push("/");
