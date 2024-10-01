@@ -1,16 +1,33 @@
 import NewListDetail from "./newListDetail";
 import React from "react";
 
-export default function NewList() {
+interface Book {
+  title: string;
+  author: string;
+  cover: string;
+  itemId: string;
+}
+
+interface Props {
+  books: Book[];
+}
+
+export default function NewList({ books }: Props) {
   return (
     <div className="w-[80%] mt-8">
       <div className="font-bold text-[2rem] my-4 py-2">
-        <p>신간 리스트</p>
+        <p>베스트 셀러</p>
       </div>
       <div className="flex justify-around">
-        <NewListDetail title="불편한 편의점" author="김호연" />
-        <NewListDetail title="불편한 편의점" author="김호연" />
-        <NewListDetail title="불편한 편의점" author="김호연" />
+        {books.map((book: Book) => (
+          <NewListDetail
+            key={book.itemId}
+            title={book.title}
+            author={book.author}
+            cover={book.cover}
+            itemId={book.itemId}
+          />
+        ))}
       </div>
     </div>
   );
