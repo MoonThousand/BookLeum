@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/components/UI/footer";
 import Nav from "@/components/UI/nav";
 import { Provider } from "react-redux";
 import { ReactNode } from "react";
@@ -14,6 +15,7 @@ export default function ClientLayout({ children }: Props) {
     <Provider store={store}>
       <Nav />
       {children}
+      <Footer />
     </Provider>
   );
 }
