@@ -1,36 +1,93 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+
 import BookDetailContent from "@/components/UI/main/bookDetailContent";
 import { FaStar } from "react-icons/fa";
 import Image from "next/image";
-import React from "react";
 import ReviewDetail from "@/components/UI/main/reviewDetail";
+import axios from "axios";
+import { usePathname } from "next/navigation";
 
 export default function BookDetail() {
+  const pathname = usePathname();
+  const isbn13 = pathname.substring(pathname.lastIndexOf("/") + 1);
+  const [book, setBook] = useState({
+    author: "",
+    description: "",
+    categoryName: "",
+    title: "",
+    cover: "",
+    priceSales: "",
+    priceStandard: "",
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/check-product/ISBN/${isbn13}/mid`
+        );
+
+        if (response.status === 200) {
+          console.log("데이터 받아오기 성공", response);
+          const bookData = response.data.item;
+
+          const todayBookData = bookData[0];
+          const originalCoverUrl = todayBookData.cover;
+
+          const modifiedCoverUrl = originalCoverUrl.replace(
+            "/coversum/",
+            "/cover500/"
+          );
+          setBook({
+            author: todayBookData.author,
+            description: todayBookData.description,
+            categoryName: todayBookData.categoryName,
+            title: todayBookData.title,
+            cover: modifiedCoverUrl,
+            priceSales: todayBookData.priceSales,
+            priceStandard: todayBookData.priceStandard,
+          });
+        } else {
+          console.error("실패");
+        }
+      } catch (error) {
+        console.error("실패", error);
+        alert("서버에러.");
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <div className="w-[90%] mx-auto mt-16">
+    <div className="w-[80%] mx-auto mt-16">
       <div className="flex justify-around items-center">
-        <Image src="/book.png" width={250} height={100} alt="main logo Image" />
+        <Image
+          src={book.cover}
+          width={250}
+          height={100}
+          alt="main logo Image"
+        />
         <div>
-          <p className="my-2 text-[2rem]">흔한남매17</p>
-          <p className="text-[1.1rem]">
-            저자 : 흔한남매 17 | 출판사 : 토네이도 | 출판일 20204-09-19
-          </p>
+          <p className="my-2 text-[2rem]">{book.title}</p>
+          <p className="text-[1.1rem]">{book.author}</p>
           <div className="w-full h-[2px] bg-gray-400 my-6"></div>
-          <p className="text-[1.1rem]">판매가 : 12000원</p>
-          <p className="my-3 text-[1.1rem]">배송료 : 3000원</p>
-          <p className="flex items-center">
-            <FaStar className="text-[#FF4E88] text-[2rem]" />
-            <b className="text-[1.2rem] ml-4">3.9</b>
-          </p>
+          <div className="flex flex-col items-end">
+            <p className="text-[1.3rem]">{`정가 : ${book.priceStandard}원`}</p>
+            <p className="text-[1.3rem] my-3">{`판매가 : ${book.priceSales}원`}</p>
+            <p className="my-3 text-[1.1rem]">배송료 : 2000원</p>
+            <p className="flex items-center">
+              <FaStar className="text-[#FF4E88] text-[2rem]" />
+              <b className="text-[1.2rem] ml-4">3.9</b>
+            </p>
+          </div>
+
           <div className="w-full h-[2px] bg-gray-400 my-6"></div>
         </div>
       </div>
-      <BookDetailContent
-        title="책 소개"
-        content="고국을 떠나 70년 만에 필리핀의 한 작은 섬에서 발견된 쑤니 할머니의
-            젊은 시절을 담은 이야기이다. 작가는 우리나라가 일본에 주권을 빼앗긴
-            채 가난하고 핍박받던 시절을 맨몸으로 버텨 낸 우리 어머니의 어머니,
-            아버지의 아버지들의 이야기를 남기고자 집필을 시작했다."
-      />
+      <BookDetailContent title="책 소개" content={book.description} />
       <BookDetailContent
         title="목차"
         content="01화 흔한남매의 단소 불기 도전!02화 첨벙첨벙 신나는 물놀이알쏭달쏭

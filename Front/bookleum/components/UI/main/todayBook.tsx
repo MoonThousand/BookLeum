@@ -5,7 +5,7 @@ import React from "react";
 interface Props {
   author: string;
   description: string;
-  itemId: string;
+  isbn13: string;
   title: string;
   cover: string;
 }
@@ -13,7 +13,7 @@ interface Props {
 export default function TodayBook({
   author,
   description,
-  itemId,
+  isbn13,
   title,
   cover,
 }: Props) {
@@ -24,7 +24,7 @@ export default function TodayBook({
       </div>
       <div className="flex justify-around w-full">
         <div className="w-[40%] flex justify-center items-center">
-          <Link href={`/Other/book/${itemId}`}>
+          <Link href={`/Other/book/${isbn13}`}>
             <Image src={cover} width={200} height={100} alt="today book" />
           </Link>
         </div>
@@ -33,7 +33,7 @@ export default function TodayBook({
           <p className="mb-4 text-[1.2rem]">{author}</p>
           <p className="mb-4">{description}</p>
           <div className="flex justify-end">
-            <Link href={`/Other/book/${itemId}`}>
+            <Link href={`/Other/book/${isbn13}`}>
               <button className="bg-green-300 w-32 h-12">살펴보기</button>
             </Link>
           </div>

@@ -11,14 +11,14 @@ interface Book {
   title: string;
   author: string;
   cover: string;
-  itemId: string;
+  isbn13: string;
 }
 
 export default function Home() {
   const [todayBook, setTodayBook] = useState({
     author: "",
     description: "",
-    itemId: "",
+    isbn13: "",
     title: "",
     cover: "",
   });
@@ -34,6 +34,7 @@ export default function Home() {
 
         if (response.status === 200) {
           console.log("데이터 받아오기 성공");
+          console.log(response.data);
 
           const bookData = response.data.item;
 
@@ -48,7 +49,7 @@ export default function Home() {
           setTodayBook({
             author: todayBookData.author,
             description: todayBookData.description,
-            itemId: todayBookData.itemId,
+            isbn13: todayBookData.isbn13,
             title: todayBookData.title,
             cover: modifiedCoverUrl,
           });
@@ -63,7 +64,7 @@ export default function Home() {
             return {
               author: book.author,
               title: book.title,
-              itemId: book.itemId,
+              isbn13: book.isbn13,
               cover: newCoverUrl,
             };
           });
@@ -94,7 +95,7 @@ export default function Home() {
       <TodayBook
         author={todayBook.author}
         description={todayBook.description}
-        itemId={todayBook.itemId}
+        isbn13={todayBook.isbn13}
         title={todayBook.title}
         cover={todayBook.cover}
       />
