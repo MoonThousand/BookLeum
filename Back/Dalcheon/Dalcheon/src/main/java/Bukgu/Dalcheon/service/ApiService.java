@@ -19,7 +19,7 @@ public class ApiService {
     }
 
     public String UserHistory(String userId) throws JsonProcessingException {
-        UserEntity userEntity = userRepository.findByUsername(userId);
+        UserEntity userEntity = userRepository.findByUserId(userId);
 
         if (userEntity == null) {
             return "User Not Found";

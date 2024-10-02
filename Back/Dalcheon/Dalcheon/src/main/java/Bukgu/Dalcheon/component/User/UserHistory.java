@@ -11,7 +11,7 @@ public class UserHistory {
 
     public String userHistory(UserEntity userEntity) throws JsonProcessingException {
         UserHistoryDTO userHistoryDTO = new UserHistoryDTO(
-                userEntity.getUsername(),
+                userEntity.getUserId(),
                 userEntity.getName(),
                 userEntity.getEmail(),
                 userEntity.getAddress(),
