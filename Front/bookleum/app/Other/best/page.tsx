@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import BestSellerDetail from "@/components/best/bestSellerDetail";
+import ListBookDetailDiv from "@/components/book/listBookDetailDiv";
 import Loding from "@/components/UI/loding";
 import axios from "axios";
 
@@ -79,6 +79,7 @@ export default function Best() {
           <select
             value={year}
             onChange={(e) => setYear(Number(e.target.value))}
+            className="border border-gray-500 rounded-md p-2"
           >
             {years.map((y) => (
               <option key={y} value={y}>
@@ -89,6 +90,7 @@ export default function Best() {
           <select
             value={month}
             onChange={(e) => setMonth(Number(e.target.value))}
+            className="border border-gray-500 rounded-md p-2"
           >
             {months.map((m) => (
               <option key={m} value={m}>
@@ -100,6 +102,7 @@ export default function Best() {
           <select
             value={week}
             onChange={(e) => setWeek(Number(e.target.value))}
+            className="border border-gray-500 rounded-md p-2"
           >
             {weeks.map((w) => (
               <option key={w} value={w}>
@@ -120,7 +123,7 @@ export default function Best() {
       {!loading ? (
         <div>
           {books.map((book: Book, index) => (
-            <BestSellerDetail
+            <ListBookDetailDiv
               key={`${book.isbn13}-${index}`}
               author={book.author}
               description={book.description}

@@ -13,7 +13,7 @@ interface Props {
   index: number;
 }
 
-export default function BestSellerDetail({
+export default function ListBookDetailDiv({
   author,
   description,
   isbn13,
@@ -39,13 +39,13 @@ export default function BestSellerDetail({
         </p>
       </div>
       <div className="w-[15%] flex flex-col items-end justify-around">
-        <button className="bg-gray-100 w-32 h-8 rounded-md border border-gray-200">
+        <button className="w-32 h-8 rounded-md border border-gray-400">
           찜
         </button>
         <button className="bg-gray-500 border border-gray-600 w-32 h-8 my-6 rounded-md text-white">
           장바구니
         </button>
-        <button className="bg-[#A4C49E] border border-[#99be92] w-32 h-8 rounded-md">
+        <button className="bg-[#A4C49E] border border-gray-600 w-32 h-8 rounded-md">
           구매하기
         </button>
       </div>

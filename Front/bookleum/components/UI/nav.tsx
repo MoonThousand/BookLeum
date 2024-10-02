@@ -61,12 +61,12 @@ export default function Nav() {
       </div>
       {!isLoggedIn ? (
         <div className=" flex-grow w-[33%] flex justify-end">
-          <button className="bg-[#F1F1F1] px-4 py-2 rounded-full mr-4 hover:cursor-pointer hover:bg-[#eeeded] w-32 flex items-center justify-center">
+          <button className="bg-[#ddebda] px-4 py-2 rounded-full mr-4 hover:cursor-pointer hover:bg-[#d7e7d4] w-32 flex items-center justify-center">
             <Link href="/Login/login" className="flex items-center">
               <div className="flex justify-center items-center bg-white rounded-full p-1 w-8 h-8 mr-2">
-                <IoIosUnlock className="text-gray-600" />
+                <IoIosUnlock className="text-[#A4C49E]" />
               </div>
-              <p className="font-medium text-gray-700">Log in</p>
+              <p className="font-bold text-gray-400">로그인</p>
             </Link>
           </button>
         </div>
