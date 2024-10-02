@@ -4,6 +4,7 @@ import Bukgu.Dalcheon.domain.user.dao.CartDAO;
 import Bukgu.Dalcheon.domain.user.dto.CartDTO;
 import Bukgu.Dalcheon.domain.user.dto.RequestCartAddDTO;
 import Bukgu.Dalcheon.service.CartService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +25,7 @@ public class UserController {
 
     // TODO 장바구니 물품 등록( 유저ID, ISBN )
     @PostMapping("/cart/add")
-    public CartDAO CartAdd(@RequestBody RequestCartAddDTO requestCartAddDTO){
+    public ResponseEntity<CartDAO> CartAdd(@RequestBody RequestCartAddDTO requestCartAddDTO){
         return cartService.addToCart(requestCartAddDTO);
     }
 
