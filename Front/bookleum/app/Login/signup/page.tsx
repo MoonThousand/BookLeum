@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 
-import Address from "@/components/UI/signup/address";
-import Input from "@/components/UI/login/Input";
+import Address from "@/components/signup/address";
+import Input from "@/components/login/Input";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 

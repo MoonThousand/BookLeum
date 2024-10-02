@@ -6,13 +6,13 @@ interface Props {
   title: string;
   author: string;
   cover: string;
-  itemId: string;
+  isbn13: string;
 }
 
-export default function NewListDetail({ title, author, cover, itemId }: Props) {
+export default function NewListDetail({ title, author, cover, isbn13 }: Props) {
   return (
     <div className="flex flex-col items-center">
-      <Link href={`/Other/book/${itemId}`}>
+      <Link href={`/Other/book/${isbn13}`}>
         <Image src={cover} width={170} height={100} alt="new book" />
       </Link>
       <p className="font-semibold my-4">{title}</p>

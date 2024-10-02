@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 
-import BookDetailContent from "@/components/UI/main/bookDetailContent";
+import BookDetailContent from "@/components/main/bookDetailContent";
 import { FaStar } from "react-icons/fa";
 import Image from "next/image";
-import ReviewDetail from "@/components/UI/main/reviewDetail";
+import ReviewDetail from "@/components/main/reviewDetail";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 
@@ -70,7 +70,7 @@ export default function BookDetail() {
           height={100}
           alt="main logo Image"
         />
-        <div>
+        <div className="w-[60%]">
           <p className="my-2 text-[2rem]">{book.title}</p>
           <p className="text-[1.1rem]">{book.author}</p>
           <div className="w-full h-[2px] bg-gray-400 my-6"></div>
@@ -83,7 +83,6 @@ export default function BookDetail() {
               <b className="text-[1.2rem] ml-4">3.9</b>
             </p>
           </div>
-
           <div className="w-full h-[2px] bg-gray-400 my-6"></div>
         </div>
       </div>

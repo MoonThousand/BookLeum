@@ -26,10 +26,18 @@ export default function Nav() {
     <div className="flex items-center shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] px-6 h-20">
       <div className=" flex-grow w-[33%]">
         <ul className="flex justify-evenly">
-          <li>베스트 셀러</li>
-          <li>신간 리스트</li>
-          <li>Event</li>
-          <li>공지사항</li>
+          <li>
+            <Link href="/Other/best">베스트 셀러</Link>
+          </li>
+          <li>
+            <Link href="/Other/new">신간 리스트</Link>
+          </li>
+          <li>
+            <Link href="/Other/event">이벤트</Link>
+          </li>
+          <li>
+            <Link href="/Other/notice">공지사항</Link>
+          </li>
         </ul>
       </div>
       <div className=" mx-auto w-[34%] flex justify-center">

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import Input from "@/components/UI/login/Input";
+import Input from "@/components/login/Input";
 import Link from "next/link";
 import axios from "axios";
 import { setCookie } from "cookies-next";

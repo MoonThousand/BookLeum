@@ -5,7 +5,7 @@ interface Book {
   title: string;
   author: string;
   cover: string;
-  itemId: string;
+  isbn13: string;
 }
 
 interface Props {
@@ -21,11 +21,11 @@ export default function NewList({ books }: Props) {
       <div className="flex justify-around">
         {books.map((book: Book) => (
           <NewListDetail
-            key={book.itemId}
+            key={book.isbn13}
             title={book.title}
             author={book.author}
             cover={book.cover}
-            itemId={book.itemId}
+            isbn13={book.isbn13}
           />
         ))}
       </div>
