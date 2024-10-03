@@ -1,14 +1,16 @@
 package Bukgu.Dalcheon.service;
 
-import Bukgu.Dalcheon.domain.admin.dao.NoticeDAO;
 import Bukgu.Dalcheon.domain.login.dao.UserEntity;
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
 import Bukgu.Dalcheon.domain.user.dto.RequestCartAddDTO;
+import Bukgu.Dalcheon.domain.user.dto.ResponseCartReadDTO;
 import Bukgu.Dalcheon.repository.CartRepository;
 import Bukgu.Dalcheon.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CartService {
@@ -36,5 +38,16 @@ public class CartService {
         cartRepository.save(cart);
 
         return ResponseEntity.ok(cart);
+    }
+
+    public List<ResponseCartReadDTO> getCartList(String userId) {
+        List<ResponseCartReadDTO> cartReadDTOList = new ArrayList<>();
+        List<CartDAO> cartDAOList = cartRepository.findByUserEntity_UserId(userId);
+        for (CartDAO cartDAO : cartDAOList) {
+            ResponseCartReadDTO responseCartReadDTO = new ResponseCartReadDTO(
+                    cartDAO.getCartId(), cartDAO.getIsbn(), cartDAO.getQuantity());
+            cartReadDTOList.add(responseCartReadDTO);
+        }
+        return cartReadDTOList;
     }
 }
