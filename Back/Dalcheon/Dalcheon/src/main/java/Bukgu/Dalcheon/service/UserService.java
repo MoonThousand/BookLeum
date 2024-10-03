@@ -10,6 +10,7 @@ import Bukgu.Dalcheon.repository.WishRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
 
@@ -18,15 +19,18 @@ import java.util.List;
 
 @Service
 public class UserService {
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
     private final WishRepository wishRepository;
-  
-    public UserService(CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository) {
+
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.wishRepository = wishRepository;
     }
+
 
     // TODO 장바구니 추가
     public ResponseEntity<CartDAO> addToCart(RequestCartAddDTO requestCartAddDTO) {
@@ -179,5 +183,26 @@ public class UserService {
             return "삭제에 실패하였습니다. 해당 id는 DB에 존재하지 않습니다.";
         }
         return "삭제가 완료되었습니다. userId : " + userId + " 찜 목록 리스트 전체 삭제";
+    }
+
+    // TODO 유저 히스토리 조회
+    public ResponseUserHistoryDTO GetUserHistory(String userId) {
+        UserEntity user = userRepository.findByUserId(userId);
+
+        ResponseUserHistoryDTO responseUserHistoryDTO = new ResponseUserHistoryDTO(
+                user.getId(), user.getUserId(), user.getPassword(), user.getEmail(), user.getName(), user.getPhone(), user.getAddress(), user.getBirthDate()
+        );
+        return responseUserHistoryDTO;
+    }
+
+    // TODO 유저 패스워드 변경
+    public String ChangePassword(RequestChangePassword requestChangePasswordDTO) {
+        UserEntity user = userRepository.findByUserId(requestChangePasswordDTO.getUserId());
+        if(bCryptPasswordEncoder.matches(requestChangePasswordDTO.getOldPassword(), user.getPassword())){
+            System.out.println("비밀번호 일치함");
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(requestChangePasswordDTO.getNewPassword()));
+        userRepository.save(user);
+        return "변경 성공!";
     }
 }

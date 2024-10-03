@@ -75,6 +75,19 @@ public class UserController {
     public String WishAllDelete(@PathVariable String userId) {
         return userService.DeleteAllWish(userId);
     }
+
+    // TODO 유저 히스토리 조회
+    @GetMapping("/history/read/{userId}")
+    public ResponseUserHistoryDTO history(@PathVariable String userId) {
+        return userService.GetUserHistory(userId);
+    }
+
+    // TODO 비밀번호 변경
+    @PostMapping("/history/change-password")
+    public String ChangePassword(@RequestBody RequestChangePassword requestChangePassword){
+        return userService.ChangePassword(requestChangePassword);
+    }
+
     // TODO 구매
 
 
