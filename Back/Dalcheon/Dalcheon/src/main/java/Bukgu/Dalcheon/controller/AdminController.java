@@ -70,7 +70,7 @@ public class AdminController {
         return adminService.createEvent(event);
     }
     // TODO 이벤트 업데이트
-    @PutMapping("/event/update/{postId}")
+    @PutMapping("/event/update/{eventId}")
     public ResponseEntity<EventDAO> updateEvent(@PathVariable Long postId, @RequestBody RequestEventCreateDTO eventDetails) {
         try {
             EventDAO updatedEvent = adminService.updateEvent(postId, eventDetails);
@@ -81,9 +81,9 @@ public class AdminController {
     }
     // TODO 이벤트 삭제
     // 특정 공지사항 삭제
-    @DeleteMapping("/event/delete/{postId}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable Long postId) {
-        adminService.deleteNotice(postId);
+    @DeleteMapping("/event/delete/{eventId}")
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long eventId) {
+        adminService.deleteEvent(eventId);
         return ResponseEntity.noContent().build();
     }
 }

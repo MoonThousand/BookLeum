@@ -63,4 +63,9 @@ public class AdminService {
             return eventRepository.save(event);
         }).orElseThrow(() -> new RuntimeException("event not found with id " + id));
     }
+
+    // TODO Event 삭제
+    public void deleteEvent(Long eventId) {
+        eventRepository.deleteById(eventId);
+    }
 }
