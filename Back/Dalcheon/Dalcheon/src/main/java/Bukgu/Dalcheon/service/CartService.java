@@ -4,12 +4,15 @@ import Bukgu.Dalcheon.domain.login.dao.UserEntity;
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
 import Bukgu.Dalcheon.domain.user.dto.RequestCartAddDTO;
 import Bukgu.Dalcheon.domain.user.dto.RequestCartDeleteDTO;
+import Bukgu.Dalcheon.domain.user.dto.RequestCartUpdateDTO;
 import Bukgu.Dalcheon.domain.user.dto.ResponseCartReadDTO;
 import Bukgu.Dalcheon.repository.CartRepository;
 import Bukgu.Dalcheon.repository.UserRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,5 +77,30 @@ public class CartService {
             return "삭제에 실패하였습니다. 해당 id는 DB에 존재하지 않습니다.";
         }
         return "삭제가 완료되었습니다. userId : " + userId;
+    }
+
+    // TODO 장바구니 품목 수량 업데이트
+    public String UpdateCart(RequestCartUpdateDTO requestCartUpdateDTO) {
+
+        CartDAO cartDAO = new CartDAO();
+        try{
+            cartDAO = cartRepository.findByUserEntity_UserIdAndIsbn(requestCartUpdateDTO.getUserId(), requestCartUpdateDTO.getIsbn());
+        }catch(EmptyResultDataAccessException e) {
+            return "해당 장바구니 품목이 없습니다.";
+        }
+        cartDAO.setQuantity(requestCartUpdateDTO.getQuantity());
+        try{
+            cartRepository.save(cartDAO);
+        } catch (DataIntegrityViolationException e) {
+            // 데이터 무결성 제약 조건을 위반한 경우
+            System.out.println("Data integrity violation: " + e.getMessage());
+        } catch (TransactionSystemException e) {
+            // 트랜잭션과 관련된 예외 처리
+            System.out.println("Transaction system exception: " + e.getMessage());
+        } catch (Exception e) {
+            // 기타 예외 처리
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        return "isbn 품목 수량 변경 성공 : " + requestCartUpdateDTO.getIsbn();
     }
 }
