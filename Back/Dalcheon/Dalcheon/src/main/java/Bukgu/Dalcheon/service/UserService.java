@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CartService {
+public class UserService {
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
     private final WishRepository wishRepository;
   
-    public CartService(CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository) {
+    public UserService(CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository) {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.wishRepository = wishRepository;
@@ -134,5 +134,30 @@ public class CartService {
             System.out.println("An error occurred: " + e.getMessage());
         }
         return "찜목록 추가 완료 : " + requestWishAddDTO.getIsbn();
+    }
+
+    // TODO 찜 목록 조회
+    public ResponseEntity<?> ReadWishList(String userId) {
+        // UserEntity 조회
+        UserEntity user = new UserEntity();
+        try{
+            user = userRepository.findByUserId(userId);
+        }catch(EmptyResultDataAccessException e) {
+            return ResponseEntity.status(401).body("User not found");
+        }
+        List<ResponseWishReadDTO> responseWishReadDTOList = new ArrayList<>();
+        List<WishDAO> wishDAOList = new ArrayList<>();
+        try{
+            wishDAOList = wishRepository.findByUserEntity_UserId(userId);
+        }catch (EmptyResultDataAccessException e) {
+            return ResponseEntity.status(300).body("찜 목록이 비어있습니다.");
+        }
+        for(WishDAO wishDAO : wishDAOList) {
+            ResponseWishReadDTO responseWishReadDTO = new ResponseWishReadDTO(
+                    wishDAO.getUserEntity().getUserId(),
+                    wishDAO.getIsbn());
+            responseWishReadDTOList.add(responseWishReadDTO);
+        }
+        return ResponseEntity.ok(responseWishReadDTOList);
     }
 }
