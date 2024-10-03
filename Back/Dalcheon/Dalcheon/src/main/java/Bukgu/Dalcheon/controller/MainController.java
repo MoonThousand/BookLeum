@@ -1,5 +1,6 @@
 package Bukgu.Dalcheon.controller;
 
+import Bukgu.Dalcheon.domain.admin.dao.EventDAO;
 import Bukgu.Dalcheon.domain.admin.dao.NoticeDAO;
 import Bukgu.Dalcheon.service.MainService;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,17 @@ public class MainController {
     }
 
 
-    // TODO 이벤트 조회
-
+    // TODO 모든 이벤트 조회
+    @GetMapping("/event/list")
+    public List<EventDAO> getAllEvents() {
+        return mainService.getAllEvents();
+    }
+    // TODO 특정 이벤트 조회
+    @GetMapping("/event/post/{eventId}")
+    public ResponseEntity<EventDAO> getEventById(@PathVariable Long eventId) {
+        return mainService.getEventById(eventId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
     // TODO 검색 기능
 }
