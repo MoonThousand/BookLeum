@@ -160,4 +160,24 @@ public class UserService {
         }
         return ResponseEntity.ok(responseWishReadDTOList);
     }
+
+    // TODO 찜 목록 품목 한개 삭제
+    public String DeleteWish(RequestWishDeleteDTO requestWishDeleteDTO) {
+        try{
+            wishRepository.deleteByUserEntity_UserIdAndIsbn(requestWishDeleteDTO.getUserId(), requestWishDeleteDTO.getIsbn());
+        } catch(EmptyResultDataAccessException e) {
+            return "삭제에 실패하였습니다. 해당 id는 DB에 존재하지 않습니다.";
+        }
+        return "삭제가 완료되었습니다. isbn : " + requestWishDeleteDTO.getIsbn();
+    }
+
+    // TODO 찜 목록 전체 삭제
+    public String DeleteAllWish(String userId) {
+        try{
+            wishRepository.deleteByUserEntity_UserId(userId);
+        } catch(EmptyResultDataAccessException e) {
+            return "삭제에 실패하였습니다. 해당 id는 DB에 존재하지 않습니다.";
+        }
+        return "삭제가 완료되었습니다. userId : " + userId + " 찜 목록 리스트 전체 삭제";
+    }
 }

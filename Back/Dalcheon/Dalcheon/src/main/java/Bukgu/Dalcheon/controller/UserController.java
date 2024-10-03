@@ -63,6 +63,18 @@ public class UserController {
     public String WishAdd(@RequestBody RequestWishAddDTO requestWishAddDTO) {
         return userService.AddWish(requestWishAddDTO);
     }
+
+    // TODO 찜하기 품목 하나 삭제 (userId, ISBN)
+    @PostMapping("/wish/delete")
+    public String WishDelete(@RequestBody RequestWishDeleteDTO requestWishDeleteDTO) {
+        return userService.DeleteWish(requestWishDeleteDTO);
+    }
+
+    // TODO 찜하기 전체 삭제(userId)
+    @DeleteMapping("/wish/deleteAll/{userId}")
+    public String WishAllDelete(@PathVariable String userId) {
+        return userService.DeleteAllWish(userId);
+    }
     // TODO 구매
 
 
