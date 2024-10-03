@@ -98,7 +98,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/main/notice/**", "/join/**","/api/**").permitAll()
                         .requestMatchers("/user/cart/**", "/user/wish/**", "/user/history/**").permitAll()
-                        .requestMatchers("/admin/notice/**", "/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/notice/**","/admin/event/**", "/admin/**").hasRole("ADMIN")
                         .requestMatchers("/reissue").permitAll()
                         .anyRequest().authenticated());
 

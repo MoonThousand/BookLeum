@@ -8,15 +8,18 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Entity
 @Getter
 @Setter
-public class NoticeDAO extends BaseTimeEntity {
-
+public class EventDAO extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
+
     private String content;
+
+    private String author;
 }

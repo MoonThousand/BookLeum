@@ -1,6 +1,8 @@
 package Bukgu.Dalcheon.controller;
 
+import Bukgu.Dalcheon.domain.admin.dao.EventDAO;
 import Bukgu.Dalcheon.domain.admin.dao.NoticeDAO;
+import Bukgu.Dalcheon.domain.admin.dto.RequestEventCreateDTO;
 import Bukgu.Dalcheon.service.AdminService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,7 +33,7 @@ public class AdminController {
     }
 
     // 특정 공지사항 조회
-    @GetMapping("/notice/{postId}")
+    @GetMapping("/notice/read/{postId}")
     public ResponseEntity<NoticeDAO> getNoticeById(@PathVariable Long postId) {
         return adminService.getNoticeById(postId)
                 .map(ResponseEntity::ok)
@@ -45,7 +47,7 @@ public class AdminController {
     }
 
     // 특정 공지사항 업데이트
-    @PutMapping("/notice/{postId}")
+    @PutMapping("/notice/update/{postId}")
     public ResponseEntity<NoticeDAO> updateNotice(@PathVariable Long postId, @RequestBody NoticeDAO noticeDetails) {
         try {
             NoticeDAO updatedNotice = adminService.updateNotice(postId, noticeDetails);
@@ -56,8 +58,31 @@ public class AdminController {
     }
 
     // 특정 공지사항 삭제
-    @DeleteMapping("/notice/{postId}")
+    @DeleteMapping("/notice/delete/{postId}")
     public ResponseEntity<Void> deleteNotice(@PathVariable Long postId) {
+        adminService.deleteNotice(postId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // TODO 이벤트 작성
+    @PostMapping("/event/create")
+    public EventDAO createEvent(@RequestBody RequestEventCreateDTO event) {
+        return adminService.createEvent(event);
+    }
+    // TODO 이벤트 업데이트
+    @PutMapping("/event/update/{postId}")
+    public ResponseEntity<EventDAO> updateEvent(@PathVariable Long postId, @RequestBody RequestEventCreateDTO eventDetails) {
+        try {
+            EventDAO updatedEvent = adminService.updateEvent(postId, eventDetails);
+            return ResponseEntity.ok(updatedEvent);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    // TODO 이벤트 삭제
+    // 특정 공지사항 삭제
+    @DeleteMapping("/event/delete/{postId}")
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long postId) {
         adminService.deleteNotice(postId);
         return ResponseEntity.noContent().build();
     }
