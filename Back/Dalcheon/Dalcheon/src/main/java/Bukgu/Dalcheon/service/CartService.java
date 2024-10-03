@@ -56,7 +56,7 @@ public class CartService {
         return cartReadDTOList;
     }
 
-    // TODO 장바구니 삭제
+    // TODO 장바구니 한개 삭제
     public String DeleteCart(RequestCartDeleteDTO requestCartDeleteDTO) {
         try{
             cartRepository.deleteByUserEntity_UserIdAndIsbn(requestCartDeleteDTO.getUserId(), requestCartDeleteDTO.getIsbn());
@@ -64,5 +64,15 @@ public class CartService {
             return "삭제에 실패하였습니다. 해당 id는 DB에 존재하지 않습니다.";
         }
         return "삭제가 완료되었습니다. isbn : " + requestCartDeleteDTO.getIsbn();
+    }
+
+    // TODO 장바구니 전체 삭제
+    public String DeleteCartAll(String userId) {
+        try{
+            cartRepository.deleteAllByUserEntity_UserId(userId);
+        } catch(EmptyResultDataAccessException e) {
+            return "삭제에 실패하였습니다. 해당 id는 DB에 존재하지 않습니다.";
+        }
+        return "삭제가 완료되었습니다. userId : " + userId;
     }
 }

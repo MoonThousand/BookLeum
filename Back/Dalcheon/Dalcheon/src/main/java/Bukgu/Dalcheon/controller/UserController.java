@@ -44,7 +44,7 @@ public class UserController {
     // TODO 장바구니 전체 삭제 (유저ID)
     @DeleteMapping("/cart/deleteAll/{userId}")
     public String CartAllDelete(@PathVariable String userId) {
-
+        return cartService.DeleteCartAll(userId);
     }
 
     // TODO 찜하기 조회

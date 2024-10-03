@@ -10,5 +10,7 @@ public interface CartRepository extends JpaRepository<CartDAO, Integer> {
 
     @Transactional
     void deleteByUserEntity_UserIdAndIsbn(String userId, String isbn);
+    @Transactional
+    void deleteAllByUserEntity_UserId(String userId);
     List<CartDAO> findByUserEntity_UserId(String userId);
 }
