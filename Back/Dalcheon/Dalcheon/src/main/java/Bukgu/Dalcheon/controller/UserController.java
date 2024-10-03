@@ -2,6 +2,7 @@ package Bukgu.Dalcheon.controller;
 
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
 import Bukgu.Dalcheon.domain.user.dto.RequestCartAddDTO;
+import Bukgu.Dalcheon.domain.user.dto.RequestCartDeleteDTO;
 import Bukgu.Dalcheon.domain.user.dto.ResponseCartReadDTO;
 import Bukgu.Dalcheon.service.CartService;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +32,19 @@ public class UserController {
 
     // TODO 장바구니 물품 등록( 유저ID, ISBN )
     @PostMapping("/cart/add")
-    public ResponseEntity<CartDAO> CartAdd(@RequestBody RequestCartAddDTO requestCartAddDTO){
+    public ResponseEntity<CartDAO> CartAdd(@RequestBody RequestCartAddDTO requestCartAddDTO) {
         return cartService.addToCart(requestCartAddDTO);
+    }
+
+    // TODO 장바구니 물품 품목 하나 삭제(유저ID, ISBN)
+    @PostMapping("/cart/delete")
+    public String CartDelete(@RequestBody RequestCartDeleteDTO requestCartDeleteDTO) {
+        return cartService.DeleteCart(requestCartDeleteDTO);
+    }
+    // TODO 장바구니 전체 삭제 (유저ID)
+    @DeleteMapping("/cart/deleteAll/{userId}")
+    public String CartAllDelete(@PathVariable String userId) {
+
     }
 
     // TODO 찜하기 조회

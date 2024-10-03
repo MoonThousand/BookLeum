@@ -3,9 +3,11 @@ package Bukgu.Dalcheon.service;
 import Bukgu.Dalcheon.domain.login.dao.UserEntity;
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
 import Bukgu.Dalcheon.domain.user.dto.RequestCartAddDTO;
+import Bukgu.Dalcheon.domain.user.dto.RequestCartDeleteDTO;
 import Bukgu.Dalcheon.domain.user.dto.ResponseCartReadDTO;
 import Bukgu.Dalcheon.repository.CartRepository;
 import Bukgu.Dalcheon.repository.UserRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ public class CartService {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
     }
+
+    // TODO 장바구니 추가
     public ResponseEntity<CartDAO> addToCart(RequestCartAddDTO requestCartAddDTO) {
         // UserEntity 조회
         UserEntity user = userRepository.findByUserId(requestCartAddDTO.getUserId());
@@ -40,6 +44,7 @@ public class CartService {
         return ResponseEntity.ok(cart);
     }
 
+    // TODO 장바구니 조회
     public List<ResponseCartReadDTO> getCartList(String userId) {
         List<ResponseCartReadDTO> cartReadDTOList = new ArrayList<>();
         List<CartDAO> cartDAOList = cartRepository.findByUserEntity_UserId(userId);
@@ -49,5 +54,15 @@ public class CartService {
             cartReadDTOList.add(responseCartReadDTO);
         }
         return cartReadDTOList;
+    }
+
+    // TODO 장바구니 삭제
+    public String DeleteCart(RequestCartDeleteDTO requestCartDeleteDTO) {
+        try{
+            cartRepository.deleteByUserEntity_UserIdAndIsbn(requestCartDeleteDTO.getUserId(), requestCartDeleteDTO.getIsbn());
+        } catch(EmptyResultDataAccessException e) {
+            return "삭제에 실패하였습니다. 해당 id는 DB에 존재하지 않습니다.";
+        }
+        return "삭제가 완료되었습니다. isbn : " + requestCartDeleteDTO.getIsbn();
     }
 }
