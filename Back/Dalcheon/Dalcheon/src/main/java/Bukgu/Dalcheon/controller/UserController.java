@@ -1,10 +1,7 @@
 package Bukgu.Dalcheon.controller;
 
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
-import Bukgu.Dalcheon.domain.user.dto.RequestCartAddDTO;
-import Bukgu.Dalcheon.domain.user.dto.RequestCartDeleteDTO;
-import Bukgu.Dalcheon.domain.user.dto.RequestCartUpdateDTO;
-import Bukgu.Dalcheon.domain.user.dto.ResponseCartReadDTO;
+import Bukgu.Dalcheon.domain.user.dto.*;
 import Bukgu.Dalcheon.service.CartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,7 +55,10 @@ public class UserController {
     // TODO 찜하기 조회
 
     // TODO 찜하기 등록 (유저ID, ISBN)
-
+    @PostMapping("/wish/add")
+    public String WishAdd(@RequestBody RequestWishAddDTO requestWishAddDTO) {
+        return cartService.AddWish(requestWishAddDTO);
+    }
     // TODO 구매
 
 

@@ -1,6 +1,7 @@
 package Bukgu.Dalcheon.domain.login.dao;
 
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
+import Bukgu.Dalcheon.domain.user.dao.WishDAO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,5 +29,8 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartDAO> carts;
+
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WishDAO> wishes;
 }
 

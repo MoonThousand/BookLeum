@@ -2,12 +2,11 @@ package Bukgu.Dalcheon.service;
 
 import Bukgu.Dalcheon.domain.login.dao.UserEntity;
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
-import Bukgu.Dalcheon.domain.user.dto.RequestCartAddDTO;
-import Bukgu.Dalcheon.domain.user.dto.RequestCartDeleteDTO;
-import Bukgu.Dalcheon.domain.user.dto.RequestCartUpdateDTO;
-import Bukgu.Dalcheon.domain.user.dto.ResponseCartReadDTO;
+import Bukgu.Dalcheon.domain.user.dao.WishDAO;
+import Bukgu.Dalcheon.domain.user.dto.*;
 import Bukgu.Dalcheon.repository.CartRepository;
 import Bukgu.Dalcheon.repository.UserRepository;
+import Bukgu.Dalcheon.repository.WishRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +20,12 @@ import java.util.List;
 public class CartService {
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
+    private final WishRepository wishRepository;
   
-    public CartService(CartRepository cartRepository, UserRepository userRepository) {
+    public CartService(CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository) {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
+        this.wishRepository = wishRepository;
     }
 
     // TODO 장바구니 추가
@@ -102,5 +103,36 @@ public class CartService {
             System.out.println("An error occurred: " + e.getMessage());
         }
         return "isbn 품목 수량 변경 성공 : " + requestCartUpdateDTO.getIsbn();
+    }
+
+    // TODO 찜 목록 추가
+    public String AddWish(RequestWishAddDTO requestWishAddDTO) {
+        // UserEntity 조회
+        UserEntity user = new UserEntity();
+        try{
+            user = userRepository.findByUserId(requestWishAddDTO.getUserId());
+        }catch(EmptyResultDataAccessException e) {
+            return "User not found";
+        }
+
+        // WishDAO 생성 및 설정
+        WishDAO wish = new WishDAO();
+        wish.setUserEntity(user);
+        wish.setIsbn(requestWishAddDTO.getIsbn());
+
+        // WishDAO 저장
+        try{
+            wishRepository.save(wish);
+        } catch (DataIntegrityViolationException e) {
+            // 데이터 무결성 제약 조건을 위반한 경우
+            System.out.println("Data integrity violation: " + e.getMessage());
+        } catch (TransactionSystemException e) {
+            // 트랜잭션과 관련된 예외 처리
+            System.out.println("Transaction system exception: " + e.getMessage());
+        } catch (Exception e) {
+            // 기타 예외 처리
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        return "찜목록 추가 완료 : " + requestWishAddDTO.getIsbn();
     }
 }
