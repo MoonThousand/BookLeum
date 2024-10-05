@@ -96,7 +96,7 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/main/notice/**", "/main/event/**","/join/**","/api/**").permitAll()
+                        .requestMatchers("/login", "/main/notice/**", "/main/event/**","/join/**","/api/open/**").permitAll()
                         .requestMatchers("/user/cart/**", "/user/wish/**", "/user/history/**").permitAll()
                         .requestMatchers("/admin/notice/**","/admin/event/**", "/admin/**").hasRole("ADMIN")
                         .requestMatchers("/reissue").permitAll()

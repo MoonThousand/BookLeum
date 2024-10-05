@@ -1,6 +1,7 @@
 package Bukgu.Dalcheon.component.OpenApi;
 
 import Bukgu.Dalcheon.domain.OpenApi.CheckProduct;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.util.Map;
 
 @Component
@@ -32,4 +34,9 @@ public class ProductCheckAPI {
         System.out.println(resultMap.getBody());
         return resultMap;
     }
+    public String getApiResponse(CheckProduct checkProduct) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(makeURL(checkProduct), String.class);
+    }
+
 }
