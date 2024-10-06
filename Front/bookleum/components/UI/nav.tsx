@@ -25,12 +25,12 @@ export default function Nav() {
   return (
     <div className="flex items-center shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] px-6 h-20">
       <div className=" flex-grow w-[33%]">
-        <ul className="flex justify-evenly">
+        <ul className="flex justify-evenly font-Score font-semibold">
           <li>
             <Link href="/Other/best">베스트 셀러</Link>
           </li>
           <li>
-            <Link href="/Other/new">신간 리스트</Link>
+            <Link href="/Other/new">새로나온 책</Link>
           </li>
           <li>
             <Link href="/Other/event">이벤트</Link>
@@ -43,7 +43,7 @@ export default function Nav() {
       <div className=" mx-auto w-[34%] flex justify-center">
         <div className="font-bold text-[2.7rem]">
           <Link href="/">
-            <div className="drop-shadow-[0_0.8px_0.8px_rgba(0,0,0,0.5)]">
+            <div className="drop-shadow-[0_0.8px_0.8px_rgba(0,0,0,0.5)] font-Score">
               <span className="text-[#88B04B]">Book</span>
               <span
                 style={{
@@ -66,7 +66,7 @@ export default function Nav() {
               <div className="flex justify-center items-center bg-white rounded-full p-1 w-8 h-8 mr-2">
                 <IoIosUnlock className="text-[#A4C49E]" />
               </div>
-              <p className="font-bold text-gray-400">로그인</p>
+              <p className="font-bold text-gray-400 font-Score">로그인</p>
             </Link>
           </button>
         </div>

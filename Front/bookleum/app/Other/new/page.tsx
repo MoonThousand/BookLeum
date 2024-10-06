@@ -24,7 +24,7 @@ export default function NewBook() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/list-product/itemNewAll/50/book/2024/9/2/mid`
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/open/list-product/itemNewAll/50/book/2024/9/2/mid`
       );
 
       if (response.status === 200) {

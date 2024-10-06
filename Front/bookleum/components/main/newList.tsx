@@ -14,7 +14,7 @@ interface Props {
 
 export default function NewList({ books }: Props) {
   return (
-    <div className="w-[80%] mt-8">
+    <div className="w-[80%] my-8 font-Score">
       <div className="font-bold text-[2rem] my-4 py-2">
         <p>베스트 셀러</p>
       </div>

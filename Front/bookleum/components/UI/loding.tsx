@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Loding() {
+export default function Loading() {
   return (
     <div className="w-full h-[400px] flex justify-center items-center">
       <div role="status">
@@ -22,7 +22,7 @@ export default function Loding() {
         </svg>
         <span className="sr-only">잠시만 기다려주세요</span>
       </div>
-      <p className="ml-4">Loding...</p>
+      <p className="ml-4">잠시만 기다려주세요...</p>
     </div>
   );
 }

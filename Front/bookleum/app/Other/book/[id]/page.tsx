@@ -26,7 +26,7 @@ export default function BookDetail() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/check-product/ISBN/${isbn13}/mid`
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/open/check-product/ISBN/${isbn13}/mid`
         );
 
         if (response.status === 200) {
@@ -61,6 +61,8 @@ export default function BookDetail() {
     fetchData();
   }, []);
 
+  const randomRating = (Math.random() * (4.3 - 3.4) + 3.4).toFixed(1);
+
   return (
     <div className="w-[80%] mx-auto mt-16">
       <div className="flex justify-around items-center">
@@ -80,7 +82,7 @@ export default function BookDetail() {
             <p className="my-3 text-[1.1rem]">배송료 : 2000원</p>
             <p className="flex items-center">
               <FaStar className="text-[#FF4E88] text-[2rem]" />
-              <b className="text-[1.2rem] ml-4">3.9</b>
+              <b className="text-[1.2rem] ml-4">{randomRating}</b>
             </p>
           </div>
           <div className="w-full h-[2px] bg-gray-400 my-6"></div>

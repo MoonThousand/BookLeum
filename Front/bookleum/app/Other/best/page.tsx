@@ -31,7 +31,7 @@ export default function Best() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/list-product/bestseller/50/book/${year}/${month}/${week}/mid`
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/open/list-product/bestseller/50/book/${year}/${month}/${week}/mid`
       );
 
       if (response.status === 200) {
