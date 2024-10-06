@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import ListBookDetailDiv from "@/components/book/listBookDetailDiv";
 import Loading from "@/components/UI/loding";
-import SearchBar from "@/components/UI/searcBar";
+import SearchBar from "@/components/UI/searchbar";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import NewList from "@/components/main/newList";
-import SearchBar from "@/components/UI/searcBar";
+import SearchBar from "@/components/UI/searchbar";
 import TodayBook from "@/components/main/todayBook";
 import axios from "axios";
 import { useRouter } from "next/navigation";
