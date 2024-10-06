@@ -33,6 +33,12 @@ public class OpenApiController {
         SearchProduct searchProduct = new SearchProduct(queryType, query, maxResults, searchTarget, cover);
         return openApiService.AladinSearchProduct(searchProduct);
     }
+    // TODO Open API DTO 매핑해서 Item만 전송
+    @GetMapping("/open/search2-product/{query}")
+    public Object testSearchProduct(@PathVariable String query) throws Exception {
+        SearchProduct searchProduct = new SearchProduct(query);
+        return openApiService.testSearchProduct(searchProduct);
+    }
 
     @GetMapping("/open/list-product/{queryType}/{maxResults}/{searchTarget}/{year}/{month}/{week}/{cover}")
     public Object openApiListProduct(@PathVariable(value = "queryType") String queryType,
@@ -45,6 +51,16 @@ public class OpenApiController {
         ListProduct listProduct = new ListProduct(queryType, maxResults, searchTarget, year, month, week, cover);
         return openApiService.AladinListProduct(listProduct);
     }
+    // TODO Open API DTO 매핑해서 Item만 전송
+    @GetMapping("/open/list2-product/{queryType}/{year}/{month}/{week}")
+    public Object testListProduct(@PathVariable(value = "queryType") String queryType,
+                                  @PathVariable(value = "year") int year,
+                                  @PathVariable(value = "month") int month,
+                                  @PathVariable(value = "week") int week) throws Exception {
+        ListProduct listProduct = new ListProduct(queryType, year, month, week);
+        return openApiService.testListProduct(listProduct);
+    }
+
     @GetMapping("/open/check-product/{itemIdType}/{itemId}/{cover}")
     public Object openApiCheckProduct(@PathVariable(value = "itemIdType") String itemIdType,
                                       @PathVariable(value = "itemId") String itemId,
@@ -53,11 +69,9 @@ public class OpenApiController {
         return openApiService.AladinCheckProduct(checkProduct);
     }
 
-    @GetMapping("/open/check2-product/{itemIdType}/{itemId}/{cover}")
-    public Object testCheckProduct(@PathVariable(value = "itemIdType") String itemIdType,
-                                    @PathVariable(value = "itemId") String itemId,
-                                    @PathVariable(value = "cover") String cover) throws Exception {
-        CheckProduct checkProduct = new CheckProduct(itemIdType, itemId, cover);
+    @GetMapping("/open/check2-product/{itemId}")
+    public Object testCheckProduct(@PathVariable(value = "itemId") String itemId) throws Exception {
+        CheckProduct checkProduct = new CheckProduct(itemId);
         return openApiService.testCheckProduct(checkProduct);
     }
 

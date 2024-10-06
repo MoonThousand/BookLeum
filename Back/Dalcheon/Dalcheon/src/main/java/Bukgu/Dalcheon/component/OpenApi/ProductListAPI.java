@@ -37,4 +37,8 @@ public class ProductListAPI {
         System.out.println(resultMap.getBody());
         return resultMap;
     }
+    public String getListProductJsonString(ListProduct listProduct) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(makeURL(listProduct), String.class);
+    }
 }

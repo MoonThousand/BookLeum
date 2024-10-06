@@ -24,4 +24,14 @@ public class SearchProduct {
         this.end = "&output=js&Version=20131101";
     }
 
+    public SearchProduct(String query) {
+        this.BASE_URL = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=";
+        this.queryType = "Keyword";
+        this.query = query;
+        this.maxResults = "100";
+        this.start = "1";
+        this.searchTarget = "Book";
+        this.cover = "mid";
+        this.end = "&output=js&Version=20131101";
+    }
 }

@@ -37,5 +37,9 @@ public class ProductSearchAPI implements ProductAPI{
         System.out.println(resultMap.getBody());
         return resultMap;
     }
+    public String getSearchProductJsonString(SearchProduct searchProduct) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(makeURL(searchProduct), String.class);
+    }
 }
 

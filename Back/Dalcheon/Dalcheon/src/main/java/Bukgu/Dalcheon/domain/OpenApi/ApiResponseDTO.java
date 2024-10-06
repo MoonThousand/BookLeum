@@ -1,6 +1,5 @@
 package Bukgu.Dalcheon.domain.OpenApi;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,8 +11,8 @@ import java.util.List;
 public class ApiResponseDTO {
     private String version;
     private String logo;
-    private String link;
     private String title;
+    private String link;
     private String pubDate;
     private int totalResults;
     private int startIndex;
