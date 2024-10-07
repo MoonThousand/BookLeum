@@ -2,53 +2,66 @@ import React from "react";
 import { TbTriangleInvertedFilled } from "react-icons/tb";
 
 interface SideMenuProps {
-  notice: number;
-  setNotice: (notice: number) => void;
+  select: number;
+  setSelect: (notice: number) => void;
+  mainTitle: string;
+  subTitle: string;
+  subTitle2: string;
+  subTitle3: string;
 }
 
-export default function SideMenu({ notice, setNotice }: SideMenuProps) {
+export default function SideMenu({
+  select,
+  setSelect,
+  mainTitle,
+  subTitle,
+  subTitle2,
+  subTitle3,
+}: SideMenuProps) {
   return (
     <div className="flex flex-col">
-      <p className="font-medium text-[1.5rem] mb-2">고객센터</p>
+      <p className="font-medium text-[1.5rem] mb-2">{mainTitle}</p>
       <div className="flex flex-col w-[180px]">
         <button
           className={`border-t border-r border-l border-gray-600 py-3 flex items-center cursor-pointer ${
-            notice === 1 ? "bg-gray-100" : ""
+            select === 1 ? "bg-gray-100" : ""
           } hover:bg-gray-200`}
-          onClick={() => setNotice(1)}
+          onClick={() => setSelect(1)}
         >
-          <p className="w-[80%] pl-4">공지사항</p>
+          <p className="w-[80%] pl-4">{subTitle}</p>
           <TbTriangleInvertedFilled
             className={`w-[20%] text-gray-400 hover:text-gray-600 ${
-              notice === 1 ? "text-gray-600" : "text-gray-400"
+              select === 1 ? "text-gray-600" : "text-gray-400"
             }`}
           />
         </button>
         <button
           className={`border-t border-r border-l border-gray-600 py-3 flex items-center cursor-pointer ${
-            notice === 2 ? "bg-gray-100" : ""
+            select === 2 ? "bg-gray-100" : ""
           } hover:bg-gray-200`}
-          onClick={() => setNotice(2)}
+          onClick={() => setSelect(2)}
         >
           <p className="w-[80%] pl-4 text-gray-700 hover:text-black">
-            자주하는 질문
+            {subTitle2}
           </p>
           <TbTriangleInvertedFilled
             className={`w-[20%] text-gray-400 hover:text-gray-600 ${
-              notice === 2 ? "text-gray-600" : "text-gray-400"
+              select === 2 ? "text-gray-600" : "text-gray-400"
             }`}
           />
         </button>
         <button
           className={`border border-gray-600 py-3 flex items-center cursor-pointer ${
-            notice === 3 ? "bg-gray-100" : ""
+            select === 3 ? "bg-gray-100" : ""
           } hover:bg-gray-200`}
-          onClick={() => setNotice(3)}
+          onClick={() => setSelect(3)}
         >
-          <p className="w-[80%] pl-4 text-gray-700 hover:text-black">1:1문의</p>
+          <p className="w-[80%] pl-4 text-gray-700 hover:text-black">
+            {subTitle3}
+          </p>
           <TbTriangleInvertedFilled
             className={`w-[20%] text-gray-400 hover:text-gray-600 ${
-              notice === 3 ? "text-gray-600" : "text-gray-400"
+              select === 3 ? "text-gray-600" : "text-gray-400"
             }`}
           />
         </button>
