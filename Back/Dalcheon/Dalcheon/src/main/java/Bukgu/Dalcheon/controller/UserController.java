@@ -18,14 +18,9 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-    // TODO 내 정보 조회
-
-    // TODO 내 정보 수정
-
     // TODO 장바구니 조회
     @GetMapping("/cart/read/{userId}")
-    public List<ResponseCartReadDTO> readCart(@PathVariable String userId) {
+    public List<ResponseCartReadDTO> readCart(@PathVariable String userId) throws JsonProcessingException {
         return userService.getCartList(userId);
     }
 
@@ -90,6 +85,14 @@ public class UserController {
     }
 
     // TODO 구매
+    @PostMapping("/order/purchase")
+    public ResponseEntity<String> purchaseBook(@RequestBody RequestOrderDTO requestOrderDTO) {
+        return userService.PurchaseBook(requestOrderDTO);
+    }
 
-
+    // TODO 구매 내역
+    @GetMapping("/order/history/{userId}")
+    public ResponseEntity<?> orderHistory(@PathVariable String userId) {
+        return userService.OrderHistory(userId);
+    }
 }

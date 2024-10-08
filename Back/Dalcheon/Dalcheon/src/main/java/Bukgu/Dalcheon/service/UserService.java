@@ -6,24 +6,24 @@ import Bukgu.Dalcheon.domain.OpenApi.CheckProduct;
 import Bukgu.Dalcheon.domain.OpenApi.ItemDTO;
 import Bukgu.Dalcheon.domain.login.dao.UserEntity;
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
+import Bukgu.Dalcheon.domain.user.dao.OrderDAO;
+import Bukgu.Dalcheon.domain.user.dao.OrderDetailsDAO;
 import Bukgu.Dalcheon.domain.user.dao.WishDAO;
 import Bukgu.Dalcheon.domain.user.dto.*;
-import Bukgu.Dalcheon.repository.CartRepository;
-import Bukgu.Dalcheon.repository.UserRepository;
-import Bukgu.Dalcheon.repository.WishRepository;
+import Bukgu.Dalcheon.repository.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -31,13 +31,16 @@ public class UserService {
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
     private final WishRepository wishRepository;
+    private final OrderRepository orderRepository;
     private final ProductCheckAPI productCheckAPI;
 
-    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository, ProductCheckAPI productCheckAPI) {
+
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository, OrderRepository orderRepository, ProductCheckAPI productCheckAPI) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.wishRepository = wishRepository;
+        this.orderRepository = orderRepository;
         this.productCheckAPI = productCheckAPI;
     }
 
@@ -76,12 +79,24 @@ public class UserService {
     }
 
     // TODO 장바구니 조회
-    public List<ResponseCartReadDTO> getCartList(String userId) {
+    public List<ResponseCartReadDTO> getCartList(String userId) throws JsonProcessingException {
         List<ResponseCartReadDTO> cartReadDTOList = new ArrayList<>();
         List<CartDAO> cartDAOList = cartRepository.findByUserEntity_UserId(userId);
         for (CartDAO cartDAO : cartDAOList) {
+            CheckProduct checkProduct = new CheckProduct(cartDAO.getIsbn());
+            ObjectMapper objectMapper = new ObjectMapper();
+            ApiResponseDTO apiResponseDTO = objectMapper.readValue(productCheckAPI.getCheckProductJsonString(checkProduct), ApiResponseDTO.class);
+
+            ItemDTO itemDTO = apiResponseDTO.getItems().get(0);
+
             ResponseCartReadDTO responseCartReadDTO = new ResponseCartReadDTO(
                     cartDAO.getCartId(), cartDAO.getIsbn(), cartDAO.getQuantity());
+            responseCartReadDTO.setTitle(itemDTO.getTitle());
+            responseCartReadDTO.setPrice(itemDTO.getPriceStandard());
+            responseCartReadDTO.setCover(itemDTO.getCover());
+            responseCartReadDTO.setAuthor(itemDTO.getAuthor());
+            responseCartReadDTO.setUserId(cartDAO.getUserEntity().getUserId());
+
             cartReadDTOList.add(responseCartReadDTO);
         }
         return cartReadDTOList;
@@ -183,7 +198,6 @@ public class UserService {
         }
         for(WishDAO wishDAO : wishDAOList) {
             CheckProduct checkProduct = new CheckProduct(wishDAO.getIsbn());
-            String json = productCheckAPI.getCheckProductJsonString(checkProduct);
             ObjectMapper objectMapper = new ObjectMapper();
             ApiResponseDTO apiResponseDTO = objectMapper.readValue(productCheckAPI.getCheckProductJsonString(checkProduct), ApiResponseDTO.class);
 
@@ -240,5 +254,73 @@ public class UserService {
         user.setPassword(bCryptPasswordEncoder.encode(requestChangePasswordDTO.getNewPassword()));
         userRepository.save(user);
         return "변경 성공!";
+    }
+
+    // TODO 구매
+    public ResponseEntity<String> PurchaseBook(RequestOrderDTO requestOrderDTO) {
+        // UserEntity 조회
+        UserEntity user = new UserEntity();
+        try{
+            user = userRepository.findByUserId(requestOrderDTO.getUserId());
+        }catch(EmptyResultDataAccessException e) {
+            return ResponseEntity.status(401).body("User not found");
+        }
+        OrderDAO orderDAO = new OrderDAO();
+        orderDAO.setUserEntity(user);
+        orderDAO.setRecipient(requestOrderDTO.getRecipient());
+        orderDAO.setPhone(requestOrderDTO.getPhone());
+        orderDAO.setAddress(requestOrderDTO.getAddress());
+        orderDAO.setMemo(requestOrderDTO.getMemo());
+
+        List<OrderDetailsDAO> orderDetailsDAOList = new ArrayList<>();
+        for (RequestOrderDetails orderDetail : requestOrderDTO.getRequestOrderDetailsList()) {
+            OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAO();
+            orderDetailsDAO.setOrderDAO(orderDAO);
+            orderDetailsDAO.setTitle(orderDetail.getTitle());
+            orderDetailsDAO.setPrice(orderDetail.getPrice());
+            orderDetailsDAO.setCover(orderDetail.getCover());
+            orderDetailsDAO.setAuthor(orderDetail.getAuthor());
+            orderDetailsDAO.setQuantity(orderDetail.getQuantity());
+            orderDetailsDAO.setIsbn(orderDetail.getIsbn());
+
+            orderDetailsDAOList.add(orderDetailsDAO);
+        }
+        orderDAO.setOrderDetails(orderDetailsDAOList);
+        orderRepository.save(orderDAO);
+        return ResponseEntity.status(200).body("구매 완료");
+    }
+
+    // TODO 구매내역
+    public ResponseEntity<?> OrderHistory(String userId) {
+        // UserEntity 조회
+        UserEntity user = new UserEntity();
+        try{
+            user = userRepository.findByUserId(userId);
+        }catch(EmptyResultDataAccessException e) {
+            return ResponseEntity.status(401).body("User not found");
+        }
+        Optional<OrderDAO> orderDAOs = orderRepository.findAllByUserEntity_UserId(userId);
+
+
+
+        // Optional이 비어 있는지 확인
+        if (orderDAOs.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Unauthorized: Order not found or access denied.");
+        }
+        List<ResponseOrderHistoryDTO> orderHistoryDTOS = new ArrayList<>();
+        for(OrderDAO orderDAO : orderDAOs.stream().toList()) {
+            ResponseOrderHistoryDTO responseOrderHistoryDTO = new ResponseOrderHistoryDTO(orderDAO);
+
+            List<ResponseOrderDetailsDTO> responseOrderDetailsDTOS = new ArrayList<>();
+            for (OrderDetailsDAO orderDetailsDAO : orderDAO.getOrderDetails()) {
+                ResponseOrderDetailsDTO responseOrderDetailsDTO = new ResponseOrderDetailsDTO(orderDetailsDAO);
+                responseOrderDetailsDTOS.add(responseOrderDetailsDTO);
+            }
+            responseOrderHistoryDTO.setResponseOrderDetailsDTOS(responseOrderDetailsDTOS);
+            orderHistoryDTOS.add(responseOrderHistoryDTO);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(orderHistoryDTOS);
     }
 }
