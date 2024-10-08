@@ -43,12 +43,14 @@ public class UserService {
 
 
     // TODO 장바구니 추가
-    public ResponseEntity<CartDAO> addToCart(RequestCartAddDTO requestCartAddDTO) {
+    public String addToCart(RequestCartAddDTO requestCartAddDTO) {
         // UserEntity 조회
         UserEntity user = userRepository.findByUserId(requestCartAddDTO.getUserId());
         if (user == null) {
             throw new RuntimeException("User not found");
         }
+
+        // TODO 장바구니에 원래 있는 데이터인지 검사
 
         // CartDAO 생성 및 설정
         CartDAO cart = new CartDAO();
@@ -57,9 +59,20 @@ public class UserService {
         cart.setQuantity(1);
 
         // CartDAO 저장
-        cartRepository.save(cart);
+        try{
+            cartRepository.save(cart);
+        } catch (DataIntegrityViolationException e) {
+            // 데이터 무결성 제약 조건을 위반한 경우
+            System.out.println("Data integrity violation: " + e.getMessage());
+        } catch (TransactionSystemException e) {
+            // 트랜잭션과 관련된 예외 처리
+            System.out.println("Transaction system exception: " + e.getMessage());
+        } catch (Exception e) {
+            // 기타 예외 처리
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        return "장바구니 추가 완료 : " + requestCartAddDTO.getIsbn();
 
-        return ResponseEntity.ok(cart);
     }
 
     // TODO 장바구니 조회
@@ -128,6 +141,8 @@ public class UserService {
         }catch(EmptyResultDataAccessException e) {
             return "User not found";
         }
+
+        // TODO 찜목록에 원래 있는 데이터인지 추가
 
         // WishDAO 생성 및 설정
         WishDAO wish = new WishDAO();

@@ -31,7 +31,7 @@ public class UserController {
 
     // TODO 장바구니 물품 등록( 유저ID, ISBN )
     @PostMapping("/cart/add")
-    public ResponseEntity<CartDAO> CartAdd(@RequestBody RequestCartAddDTO requestCartAddDTO) {
+    public String CartAdd(@RequestBody RequestCartAddDTO requestCartAddDTO) {
         return userService.addToCart(requestCartAddDTO);
     }
 
