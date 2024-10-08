@@ -34,7 +34,6 @@ public class ProductListAPI {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
         ResponseEntity<Map> resultMap = restTemplate.exchange(makeURL(listProduct), HttpMethod.GET, entity, Map.class);
-        System.out.println(resultMap.getBody());
         return resultMap;
     }
     public String getListProductJsonString(ListProduct listProduct) {

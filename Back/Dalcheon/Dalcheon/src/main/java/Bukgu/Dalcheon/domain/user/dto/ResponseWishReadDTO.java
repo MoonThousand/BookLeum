@@ -9,9 +9,11 @@ public class ResponseWishReadDTO {
 
     private String userId;
     private String isbn;
+    private String title;
+    private String cover;
+    private long price;
 
-    public ResponseWishReadDTO(String userId, String isbn) {
-        this.userId = userId;
-        this.isbn = isbn;
+
+    public ResponseWishReadDTO() {
     }
 }

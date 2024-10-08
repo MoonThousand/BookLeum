@@ -16,8 +16,8 @@ public class ItemDTO {
     private String description;
     private String isbn13;
     private long itemId;
-    private int priceSales;
-    private int priceStandard;
+    private long priceSales;
+    private long priceStandard;
     private String cover;
     private int categoryId;
     private String categoryName;

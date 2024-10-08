@@ -1,5 +1,9 @@
 package Bukgu.Dalcheon.service;
 
+import Bukgu.Dalcheon.component.OpenApi.ProductCheckAPI;
+import Bukgu.Dalcheon.domain.OpenApi.ApiResponseDTO;
+import Bukgu.Dalcheon.domain.OpenApi.CheckProduct;
+import Bukgu.Dalcheon.domain.OpenApi.ItemDTO;
 import Bukgu.Dalcheon.domain.login.dao.UserEntity;
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
 import Bukgu.Dalcheon.domain.user.dao.WishDAO;
@@ -7,15 +11,19 @@ import Bukgu.Dalcheon.domain.user.dto.*;
 import Bukgu.Dalcheon.repository.CartRepository;
 import Bukgu.Dalcheon.repository.UserRepository;
 import Bukgu.Dalcheon.repository.WishRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -23,12 +31,14 @@ public class UserService {
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
     private final WishRepository wishRepository;
+    private final ProductCheckAPI productCheckAPI;
 
-    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository) {
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository, ProductCheckAPI productCheckAPI) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.wishRepository = wishRepository;
+        this.productCheckAPI = productCheckAPI;
     }
 
 
@@ -141,7 +151,7 @@ public class UserService {
     }
 
     // TODO 찜 목록 조회
-    public ResponseEntity<?> ReadWishList(String userId) {
+    public ResponseEntity<?> ReadWishList(String userId) throws JsonProcessingException {
         // UserEntity 조회
         UserEntity user = new UserEntity();
         try{
@@ -157,9 +167,20 @@ public class UserService {
             return ResponseEntity.status(300).body("찜 목록이 비어있습니다.");
         }
         for(WishDAO wishDAO : wishDAOList) {
-            ResponseWishReadDTO responseWishReadDTO = new ResponseWishReadDTO(
-                    wishDAO.getUserEntity().getUserId(),
-                    wishDAO.getIsbn());
+            CheckProduct checkProduct = new CheckProduct(wishDAO.getIsbn());
+            String json = productCheckAPI.getCheckProductJsonString(checkProduct);
+            ObjectMapper objectMapper = new ObjectMapper();
+            ApiResponseDTO apiResponseDTO = objectMapper.readValue(productCheckAPI.getCheckProductJsonString(checkProduct), ApiResponseDTO.class);
+
+            ItemDTO itemDTO = apiResponseDTO.getItems().get(0);
+
+            ResponseWishReadDTO responseWishReadDTO = new ResponseWishReadDTO();
+            responseWishReadDTO.setUserId(wishDAO.getUserEntity().getUserId());
+            responseWishReadDTO.setIsbn(wishDAO.getIsbn());
+            responseWishReadDTO.setTitle(itemDTO.getTitle());
+            responseWishReadDTO.setCover(itemDTO.getCover());
+            responseWishReadDTO.setPrice(itemDTO.getPriceStandard());
+
             responseWishReadDTOList.add(responseWishReadDTO);
         }
         return ResponseEntity.ok(responseWishReadDTOList);

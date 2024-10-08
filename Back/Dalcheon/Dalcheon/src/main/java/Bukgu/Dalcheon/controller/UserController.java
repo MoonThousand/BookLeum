@@ -3,6 +3,7 @@ package Bukgu.Dalcheon.controller;
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
 import Bukgu.Dalcheon.domain.user.dto.*;
 import Bukgu.Dalcheon.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +55,7 @@ public class UserController {
 
     // TODO 찜하기 조회
     @GetMapping("/wish/read/{userId}")
-    public ResponseEntity<?> WishRead(@PathVariable String userId) {
+    public ResponseEntity<?> WishRead(@PathVariable String userId) throws JsonProcessingException {
         return userService.ReadWishList(userId);
     }
 
