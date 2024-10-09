@@ -299,18 +299,16 @@ public class UserService {
         }catch(EmptyResultDataAccessException e) {
             return ResponseEntity.status(401).body("User not found");
         }
-        Optional<OrderDAO> orderDAOs = orderRepository.findAllByUserEntity_UserId(userId);
+        List<OrderDAO> orderDAOs = orderRepository.findAllByUserEntity_UserId(userId);
 
-
-
-        // Optional이 비어 있는지 확인
+        // List이 비어 있는지 확인
         if (orderDAOs.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body("Unauthorized: Order not found or access denied.");
         }
         List<ResponseOrderHistoryDTO> orderHistoryDTOS = new ArrayList<>();
-        for(OrderDAO orderDAO : orderDAOs.stream().toList()) {
+        for(OrderDAO orderDAO : orderDAOs) {
             ResponseOrderHistoryDTO responseOrderHistoryDTO = new ResponseOrderHistoryDTO(orderDAO);
 
             List<ResponseOrderDetailsDTO> responseOrderDetailsDTOS = new ArrayList<>();

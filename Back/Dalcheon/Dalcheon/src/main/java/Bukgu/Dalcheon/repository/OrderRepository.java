@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<OrderDAO, Long> {
 
-    Optional<OrderDAO> findAllByUserEntity_UserId(String userId);
+    List<OrderDAO> findAllByUserEntity_UserId(String userId);
 }
