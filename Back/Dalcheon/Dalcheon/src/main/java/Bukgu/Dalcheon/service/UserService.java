@@ -106,14 +106,18 @@ public class UserService {
         return cartReadDTOList;
     }
 
-    // TODO 장바구니 한개 삭제
+    // TODO 장바구니 선택 삭제
     public String DeleteCart(RequestCartDeleteDTO requestCartDeleteDTO) {
-        try{
-            cartRepository.deleteByUserEntity_UserIdAndIsbn(requestCartDeleteDTO.getUserId(), requestCartDeleteDTO.getIsbn());
-        } catch(EmptyResultDataAccessException e) {
-            return "삭제에 실패하였습니다. 해당 id는 DB에 존재하지 않습니다.";
+
+        if(!userRepository.existsByUserId(requestCartDeleteDTO.getUserId())) {
+            return "해당 userId는 없습니다";
         }
-        return "삭제가 완료되었습니다. isbn : " + requestCartDeleteDTO.getIsbn();
+        int num = 0;
+        for(String isbn : requestCartDeleteDTO.getIsbn()) {
+            cartRepository.deleteByIsbn(isbn);
+            num++;
+        }
+        return num + "개의 상품 삭제가 완료되었습니다.";
     }
 
     // TODO 장바구니 전체 삭제
