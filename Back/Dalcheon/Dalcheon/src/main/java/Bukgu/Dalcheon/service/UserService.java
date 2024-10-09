@@ -158,6 +158,9 @@ public class UserService {
         }
 
         // TODO 찜목록에 원래 있는 데이터인지 추가
+        if (wishRepository.existsByIsbn(requestWishAddDTO.getIsbn())) {
+            return "찜 목록에 이미 있습니다.";
+        }
 
         // WishDAO 생성 및 설정
         WishDAO wish = new WishDAO();
