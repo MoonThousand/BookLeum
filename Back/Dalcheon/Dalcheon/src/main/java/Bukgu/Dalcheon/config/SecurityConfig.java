@@ -5,6 +5,7 @@ import Bukgu.Dalcheon.jwt.JWTFilter;
 import Bukgu.Dalcheon.jwt.JWTUtil;
 import Bukgu.Dalcheon.jwt.LoginFilter;
 import Bukgu.Dalcheon.repository.RefreshRepository;
+import Bukgu.Dalcheon.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
@@ -33,12 +34,14 @@ public class SecurityConfig {
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
     private final ObjectMapper objectMapper;
+    private final UserRepository userRepository;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository, ObjectMapper objectMapper) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository, ObjectMapper objectMapper, UserRepository userRepository) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
         this.objectMapper = objectMapper;
+        this.userRepository = userRepository;
     }
     /**
      * AutenticationManager Bean 등록
@@ -108,7 +111,7 @@ public class SecurityConfig {
 
         // UsernamePasswordAuthenticationFilter를 대체해서 등록
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, objectMapper), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, objectMapper, userRepository), UsernamePasswordAuthenticationFilter.class);
         // logout 필터 등록
         http
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);

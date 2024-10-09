@@ -1,8 +1,10 @@
 package Bukgu.Dalcheon.jwt;
 
 import Bukgu.Dalcheon.domain.login.dao.RefreshEntity;
+import Bukgu.Dalcheon.domain.login.dao.UserEntity;
 import Bukgu.Dalcheon.domain.login.dto.LoginDTO;
 import Bukgu.Dalcheon.repository.RefreshRepository;
+import Bukgu.Dalcheon.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletInputStream;
@@ -32,12 +34,14 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
     private final ObjectMapper objectMapper;
+    private final UserRepository userRepository;
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository, ObjectMapper objectMapper) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository, ObjectMapper objectMapper, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
         this.objectMapper = objectMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -98,10 +102,16 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
         response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
         // 바디에 추가
         Map<String, String> jsonResponse = new HashMap<>();
+        UserEntity userEntity = userRepository.findByUserId(username);
+        String name = userEntity.getName();
+        jsonResponse.put("name", name);
         jsonResponse.put("access", access);
         jsonResponse.put("refresh", refresh);
+
         String token = objectMapper.writeValueAsString(jsonResponse);
         response.getWriter().write(token);
 
