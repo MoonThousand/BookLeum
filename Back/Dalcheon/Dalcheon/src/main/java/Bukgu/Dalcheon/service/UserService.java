@@ -117,7 +117,7 @@ public class UserService {
             cartRepository.deleteByIsbn(isbn);
             num++;
         }
-        return num + "개의 상품 삭제가 완료되었습니다.";
+        return "장바구니의 "+num + "개의 상품 삭제가 완료되었습니다.";
     }
 
     // TODO 장바구니 전체 삭제
@@ -226,14 +226,17 @@ public class UserService {
         return ResponseEntity.ok(responseWishReadDTOList);
     }
 
-    // TODO 찜 목록 품목 한개 삭제
+    // TODO 찜 목록 선택 삭제
     public String DeleteWish(RequestWishDeleteDTO requestWishDeleteDTO) {
-        try{
-            wishRepository.deleteByUserEntity_UserIdAndIsbn(requestWishDeleteDTO.getUserId(), requestWishDeleteDTO.getIsbn());
-        } catch(EmptyResultDataAccessException e) {
-            return "삭제에 실패하였습니다. 해당 id는 DB에 존재하지 않습니다.";
+        if(!userRepository.existsByUserId(requestWishDeleteDTO.getUserId())) {
+            return "해당 userId는 없습니다";
         }
-        return "삭제가 완료되었습니다. isbn : " + requestWishDeleteDTO.getIsbn();
+        int num = 0;
+        for(String isbn : requestWishDeleteDTO.getIsbn()) {
+            wishRepository.deleteByIsbn(isbn);
+            num++;
+        }
+        return "찜목록의 " + num + "개의 상품 삭제가 완료되었습니다.";
     }
 
     // TODO 찜 목록 전체 삭제

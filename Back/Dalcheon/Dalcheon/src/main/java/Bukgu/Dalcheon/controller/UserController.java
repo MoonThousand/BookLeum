@@ -30,7 +30,7 @@ public class UserController {
         return userService.addToCart(requestCartAddDTO);
     }
 
-    // TODO 장바구니 물품 품목 하나 삭제(유저ID, ISBN)
+    // TODO 장바구니 물품 선택 삭제(유저ID, ISBN)
     @PostMapping("/cart/delete")
     public String CartDelete(@RequestBody RequestCartDeleteDTO requestCartDeleteDTO) {
         return userService.DeleteCart(requestCartDeleteDTO);
@@ -60,7 +60,7 @@ public class UserController {
         return userService.AddWish(requestWishAddDTO);
     }
 
-    // TODO 찜하기 품목 하나 삭제 (userId, ISBN)
+    // TODO 찜하기 품목 선택 삭제 (userId, ISBN)
     @PostMapping("/wish/delete")
     public String WishDelete(@RequestBody RequestWishDeleteDTO requestWishDeleteDTO) {
         return userService.DeleteWish(requestWishDeleteDTO);

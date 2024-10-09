@@ -14,6 +14,9 @@ public interface WishRepository extends JpaRepository<WishDAO, Integer> {
     void deleteByUserEntity_UserIdAndIsbn(String userId,String isbn);
 
     @Transactional
+    void deleteByIsbn(String isbn);
+
+    @Transactional
     void deleteByUserEntity_UserId(String userId);
 
     boolean existsByIsbn(String isbn);
