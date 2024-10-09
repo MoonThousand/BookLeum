@@ -54,6 +54,10 @@ public class UserService {
         }
 
         // TODO 장바구니에 원래 있는 데이터인지 검사
+        if (cartRepository.existsByIsbn(requestCartAddDTO.getIsbn())) {
+            return "장바구니에 이미 있는 상품입니다.";
+        }
+
 
         // CartDAO 생성 및 설정
         CartDAO cart = new CartDAO();

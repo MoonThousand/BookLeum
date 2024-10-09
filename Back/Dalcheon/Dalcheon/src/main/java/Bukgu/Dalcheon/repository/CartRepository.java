@@ -17,4 +17,6 @@ public interface CartRepository extends JpaRepository<CartDAO, Integer> {
     List<CartDAO> findByUserEntity_UserId(String userId);
 
     CartDAO findByUserEntity_UserIdAndIsbn(String userId, String isbn);
+
+    Boolean existsByIsbn(String isbn);
 }
