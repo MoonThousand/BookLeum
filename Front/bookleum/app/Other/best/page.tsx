@@ -74,7 +74,7 @@ export default function Best() {
     <div className="w-[80%] mx-auto mt-12">
       <div>
         <p className="font-bold text-[2rem]">베스트 셀러</p>
-        <div className="w-full h-[30px] bg-gradient-to-r from-lime-500 to-lime-600 mt-2"></div>
+        <div className="w-full h-[30px] bg-gradient-to-r from-orange-400 to-orange-500 mt-2"></div>
         <div className="mt-4 flex space-x-4 justify-end">
           <select
             value={year}
@@ -113,7 +113,7 @@ export default function Best() {
 
           <button
             onClick={fetchData}
-            className="bg-gray-700  text-white py-2 px-4 rounded-md border border-gray-800"
+            className="bg-gray-500 text-white py-2 px-4 rounded-md border border-gray-800 hover:bg-gray-600"
           >
             조회
           </button>
@@ -133,6 +133,7 @@ export default function Best() {
               priceSales={book.priceSales}
               priceStandard={book.priceStandard}
               index={index + 1}
+              type="best"
             />
           ))}
         </div>

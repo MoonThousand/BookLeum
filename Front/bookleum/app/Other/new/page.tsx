@@ -67,7 +67,7 @@ export default function NewBook() {
     <div className="w-[80%] mx-auto mt-12">
       <div>
         <p className="font-bold text-[2rem]">신간 리스트</p>
-        <div className="w-full h-[30px] bg-gradient-to-r from-lime-500 to-lime-600 mt-2"></div>
+        <div className="w-full h-[30px] bg-gradient-to-r from-blue-400 to-blue-500 mt-2"></div>
         <div className="mt-4 flex space-x-4 justify-end"></div>
       </div>
 
@@ -84,6 +84,7 @@ export default function NewBook() {
               priceSales={book.priceSales}
               priceStandard={book.priceStandard}
               index={index + 1}
+              type="new"
             />
           ))}
         </div>

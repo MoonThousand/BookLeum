@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import BookDetailContent from "@/components/main/bookDetailContent";
 import { FaStar } from "react-icons/fa";
 import Image from "next/image";
+import Link from "next/link";
 import ReviewDetail from "@/components/main/reviewDetail";
 import axios from "axios";
 import { usePathname } from "next/navigation";
@@ -86,6 +87,17 @@ export default function BookDetail() {
             </p>
           </div>
           <div className="w-full h-[2px] bg-gray-400 my-6"></div>
+          <div className="flex justify-end ">
+            <button className="rounded-md border border-gray-400 py-2 px-4">
+              찜하기
+            </button>
+            <button className="bg-[#4F6F52] text-white border border-gray-400 rounded-md py-2 px-4 mx-4">
+              <Link href={`/Other/purchase/${isbn13}`}>구매하기</Link>
+            </button>
+            <button className="bg-[#C5EBAA] border border-gray-400 rounded-md py-2 px-4">
+              장바구니
+            </button>
+          </div>
         </div>
       </div>
       <BookDetailContent title="책 소개" content={book.description} />

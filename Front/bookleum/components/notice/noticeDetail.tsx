@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
+import Link from "next/link";
 import axios from "axios";
 
 interface Notice {
@@ -53,12 +54,14 @@ export default function NoticeDetail() {
         <div className="w-full h-[2px] bg-black mt-2"></div>
       </div>
       {noticeList.map((notice: Notice, index) => (
-        <div className="py-3" key={notice.id}>
-          <ul className="flex items-center pl-2 pt-2">
-            <li className="w-[20%]">{index + 1}.</li>
-            <li className="w-[50%]">{notice.title}</li>
-            <li className="w-[30%]">2024.01.26</li>
-          </ul>
+        <div className="py-4" key={notice.id}>
+          <Link href={`/Other/notice/noticeDetail/${notice.id}`}>
+            <ul className="flex items-center pl-2 pt-2">
+              <li className="w-[20%]">{index + 1}.</li>
+              <li className="w-[50%]">{notice.title}</li>
+              <li className="w-[30%]">2024.01.26</li>
+            </ul>
+          </Link>
         </div>
       ))}
     </div>

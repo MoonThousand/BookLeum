@@ -3,16 +3,14 @@
 import React, { useEffect, useState } from "react";
 
 import axios from "axios";
-import { formatDate } from "@/utils/formatDate";
 import { usePathname } from "next/navigation";
 
-export default function EventDetail() {
+export default function NoticeDetailPage() {
   const pathname = usePathname();
   const postId = pathname.substring(pathname.lastIndexOf("/") + 1);
-  const [eventData, setEventData] = useState({
+  const [noticeData, setNoticeData] = useState({
     id: "",
     title: "",
-    author: "",
     content: "",
     createdDate: "",
   });
@@ -21,14 +19,12 @@ export default function EventDetail() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/main/event/post/${postId}`
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/main/notice/post/${postId}`
         );
         if (response.status === 200) {
-          console.log(response);
-          setEventData({
+          setNoticeData({
             id: response.data.id,
             title: response.data.title,
-            author: response.data.author,
             content: response.data.content,
             createdDate: response.data.createdDate,
           });
@@ -44,18 +40,16 @@ export default function EventDetail() {
     fetchData();
   }, [postId]);
 
-  const sentences = eventData.content.split(".");
+  const sentences = noticeData.content.split(".");
   return (
     <div className="w-[70%] mx-auto mt-12">
       <div>
-        <p className="font-bold text-[2rem]">이벤트</p>
+        <p className="font-bold text-[2rem]">공지사항</p>
         <div className="w-full h-[2px] bg-black mt-2"></div>
         <div className="flex justify-between items-center py-4">
-          <p className="text-[1.5rem]">{eventData.title}</p>
+          <p className="text-[1.5rem]">{noticeData.title}</p>
           <div>
-            <p className="pb-2">{`작성일 : ${formatDate(
-              eventData.createdDate
-            )}`}</p>
+            <p className="pb-2">{`작성일 : ${noticeData.createdDate}`}</p>
             <p>작성자 : 관리자</p>
           </div>
         </div>

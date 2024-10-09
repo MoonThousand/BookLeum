@@ -20,7 +20,8 @@ export default function TodayBook({
 }: Props) {
   return (
     <div className="w-[80%] my-8 font-Score">
-      <div className="font-bold text-[2.3rem] my-4">
+      <div className="flex items-center font-bold text-[2.3rem] my-4">
+        <div className="w-6 h-10 bg-blue-500 mr-2"></div>
         <p>Today Book</p>
       </div>
       {cover !== "" && (
@@ -34,9 +35,11 @@ export default function TodayBook({
             <p className="mb-4 font-bold text-[1.3rem]">{title}</p>
             <p className="mb-4 text-[1.2rem]">{author}</p>
             <p className="mb-4">{description}</p>
-            <div className="flex justify-end">
+            <div className="flex justify-end mt-12">
               <Link href={`/Other/book/${isbn13}`}>
-                <button className="bg-green-300 w-32 h-12">살펴보기</button>
+                <button className="bg-blue-600 text-white rounded-lg w-32 h-12">
+                  살펴보기
+                </button>
               </Link>
             </div>
           </div>

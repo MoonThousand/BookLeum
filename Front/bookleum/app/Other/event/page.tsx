@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
+import { formatDate } from "@/utils/formatDate";
 
 interface Event {
   title: string;
@@ -45,40 +46,37 @@ export default function Event() {
     fetchData();
   }, []);
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return date.toLocaleDateString("ko-KR", options).replace(/ /g, ""); // 공백 제거
-  };
-
   return (
-    <div className="w-[80%] mx-auto mt-12">
+    <div className="w-full mx-auto mt-12">
       <div className="flex justify-center mb-8">
         <Image src="/eventLogo.png" width={800} height={100} alt="today book" />
       </div>
-      <div>
-        <ul className="flex items-center pl-2 pt-2 font-bold">
-          <li className="w-[25%]">글쓴이</li>
-          <li className="w-[55%]">제목</li>
-          <li className="w-[25%]">등록일</li>
-        </ul>
-        <div className="w-full h-[2px] bg-black mt-2"></div>
-      </div>
-      {eventList.map((event: Event) => (
-        <div className="py-3" key={event.id}>
-          <Link href={`/Other/event/${event.id}`}>
-            <ul className="flex items-center pl-2 pt-2">
-              <li className="w-[25%]">{event.author}</li>
-              <li className="w-[55%]">{event.title}</li>
-              <li className="w-[25%]">{formatDate(event.createdDate)}</li>
-            </ul>
-          </Link>
+      <div className="w-[95%] mx-auto bg-[#FFF8E8] py-12 rounded-md">
+        <div className="w-[80%] mx-auto pb-4">
+          <ul className="flex items-center px-4 pt-2 font-bold">
+            <li className="w-[20%]">No.</li>
+            <li className="w-[40%]">제목</li>
+            <li className="w-[20%]">글쓴이</li>
+            <li className="w-[20%]">등록일</li>
+          </ul>
         </div>
-      ))}
+        {eventList.map((event: Event, index) => (
+          <div className="py-3 w-[80%] mx-auto bg-white px-4" key={event.id}>
+            <Link href={`/Other/event/${event.id}`}>
+              <ul className="flex items-center pl-2 pt-2 border-b border-gray-300 pb-4">
+                <li className="w-[20%]">{index + 1}</li>
+                <li className="w-[40%]">{event.title}</li>
+                <li className="w-[20%]">
+                  <p className="bg-orange-500 inline-block min-w-[80px] px-4 rounded-full text-white text-center">
+                    {event.author}
+                  </p>
+                </li>
+                <li className="w-[20%]">{formatDate(event.createdDate)}</li>
+              </ul>
+            </Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
