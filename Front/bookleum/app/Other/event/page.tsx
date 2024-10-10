@@ -47,7 +47,7 @@ export default function Event() {
   }, []);
 
   return (
-    <div className="w-full mx-auto mt-12">
+    <div className="w-full mx-auto mt-12 font-TTL">
       <div className="flex justify-center mb-8">
         <Image src="/eventLogo.png" width={800} height={100} alt="today book" />
       </div>

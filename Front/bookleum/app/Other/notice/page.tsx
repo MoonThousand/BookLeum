@@ -11,7 +11,7 @@ export default function Notice() {
   const [select, setSelect] = useState(1);
 
   return (
-    <div className="w-[80%] mx-auto flex mt-12">
+    <div className="w-[80%] mx-auto flex mt-12 font-TTL">
       <SideMenu
         select={select}
         setSelect={setSelect}

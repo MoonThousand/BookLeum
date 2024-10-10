@@ -71,7 +71,7 @@ export default function Best() {
   }, []);
 
   return (
-    <div className="w-[80%] mx-auto mt-12">
+    <div className="w-[80%] mx-auto mt-12 font-TTL">
       <div>
         <p className="font-bold text-[2rem]">베스트 셀러</p>
         <div className="w-full h-[30px] bg-gradient-to-r from-orange-400 to-orange-500 mt-2"></div>

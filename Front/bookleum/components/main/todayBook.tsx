@@ -31,7 +31,7 @@ export default function TodayBook({
               <Image src={cover} width={200} height={100} alt="today book" />
             </Link>
           </div>
-          <div className="px-12 w-[60%] flex flex-col justify-center">
+          <div className="px-12 w-[60%] flex flex-col justify-center font-TTL">
             <p className="mb-4 font-bold text-[1.3rem]">{title}</p>
             <p className="mb-4 text-[1.2rem]">{author}</p>
             <p className="mb-4">{description}</p>

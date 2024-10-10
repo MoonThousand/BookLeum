@@ -1,7 +1,41 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+
 import Image from "next/image";
-import React from "react";
+import axios from "axios";
+import { getCookie } from "cookies-next";
 
 export default function ShoppingBasket() {
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const id = getCookie("userId") as string | undefined;
+    if (id) {
+      setUserId(id);
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${process.env.NEXT_PUBLIC_SERVER_URL}/user/order/history/${userId}`
+  //       );
+  //       if (response.status === 200) {
+  //         console.log(response);
+  //       } else {
+  //         console.error("데이터를 불러오지 못했습니다.");
+  //       }
+  //     } catch (error) {
+  //       console.error("서버 에러:", error);
+  //       alert("서버 에러 발생");
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   return (
     <div className="w-[80%] mx-auto ml-8">
       <p className="font-bold text-[1.8rem]">주문 내역</p>

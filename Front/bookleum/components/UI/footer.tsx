@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="mx-auto flex w-[90%] justify-around items-center h-48 mt-16 border-t border-gray-400">
       <div className="w-[50%] pl-4">
-        <div className="drop-shadow-[0_0.8px_0.8px_rgba(0,0,0,0.5)] font-bold text-[2rem]">
+        <div className="drop-shadow-[0_0.8px_0.8px_rgba(0,0,0,0.5)] font-bold text-[2rem] font-TTL">
           <span className="text-[#88B04B]">Book</span>
           <span
             style={{

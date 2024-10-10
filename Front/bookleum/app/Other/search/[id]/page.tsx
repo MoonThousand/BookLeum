@@ -83,7 +83,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="w-[80%] mx-auto">
+    <div className="w-[80%] mx-auto font-TTL">
       <div className="mt-4 flex justify-end">
         <SearchBar
           searchTerm={searchTerm}

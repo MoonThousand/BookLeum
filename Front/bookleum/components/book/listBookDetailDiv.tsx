@@ -47,6 +47,7 @@ export default function ListBookDetailDiv({
   }, []);
 
   const handleWishData = async () => {
+    console.log(userId, isbn13);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/user/wish/add`,
@@ -82,7 +83,7 @@ export default function ListBookDetailDiv({
           <p className="font-bold text-[1.3rem]">{`${index}. ${title}`}</p>
           <p className="my-2 text-[1.1rem]">{author}</p>
           <p className="my-2 font-semibold">{`정가 ${priceStandard}원 | 판매가 : ${priceSales}원`}</p>
-          <p>{description}</p>
+          <p className="font-Score">{description}</p>
           <p className="flex items-center mt-2">
             <FaStar className="text-[#FF4E88] text-[2rem]" />
             <b className="text-[1.2rem] ml-4">{randomRating}</b>

@@ -43,7 +43,7 @@ export default function NoticeDetailPage() {
   const sentences = noticeData.content.split(".");
   return (
     <div className="w-[70%] mx-auto mt-12">
-      <div>
+      <div className="font-TTL">
         <p className="font-bold text-[2rem]">공지사항</p>
         <div className="w-full h-[2px] bg-black mt-2"></div>
         <div className="flex justify-between items-center py-4">

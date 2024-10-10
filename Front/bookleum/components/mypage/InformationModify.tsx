@@ -1,14 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+import axios from "axios";
+import { getCookie } from "cookies-next";
 
 export default function InformationModify() {
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const id = getCookie("userId") as string | undefined;
+    if (id) {
+      setUserId(id);
+    }
+  }, []);
+  console.log(userId);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${process.env.NEXT_PUBLIC_SERVER_URL}/user/history/read/${userId}`
+  //       );
+  //       if (response.status === 200) {
+  //         console.log(response);
+  //       } else {
+  //         console.error("데이터를 불러오지 못했습니다.");
+  //       }
+  //     } catch (error) {
+  //       console.error("서버 에러:", error);
+  //       alert("서버 에러 발생");
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [userId]);
+
   return (
     <div className="w-[80%] mx-auto ml-8">
       <div>
         <p className="font-bold text-[2rem]">내 정보</p>
         <div className="w-full h-[2px] bg-black mt-2"></div>
       </div>
-      <div className="w-[70%] pl-6 py-8 font-bold text-[1.2rem] flex justify-between">
-        <ul>
+      <div className="w-[70%] pl-6 py-8 text-[1.2rem] flex justify-between">
+        <ul className="font-bold">
           <li className="mb-6">ID</li>
           <li className="mb-6">이름</li>
           <li className="mb-6">이메일</li>

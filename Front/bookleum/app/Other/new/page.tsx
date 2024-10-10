@@ -64,7 +64,7 @@ export default function NewBook() {
   }, []);
 
   return (
-    <div className="w-[80%] mx-auto mt-12">
+    <div className="w-[80%] mx-auto mt-12 font-TTL">
       <div>
         <p className="font-bold text-[2rem]">신간 리스트</p>
         <div className="w-full h-[30px] bg-gradient-to-r from-blue-400 to-blue-500 mt-2"></div>

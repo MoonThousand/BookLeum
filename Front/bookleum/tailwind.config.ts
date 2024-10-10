@@ -15,6 +15,7 @@ const config: Config = {
       fontFamily: {
         TTS: ["TTSamlipCreamyWhiteR"],
         Score: ["S-CoreDream-3Ligh"],
+        TTL: ["TTLaundryGothicB"],
       },
     },
   },

@@ -6,6 +6,7 @@ import BookDetailContent from "@/components/main/bookDetailContent";
 import { FaStar } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
+import Loading from "@/components/UI/loding";
 import ReviewDetail from "@/components/main/reviewDetail";
 import axios from "axios";
 import { getCookie } from "cookies-next";
@@ -15,6 +16,7 @@ export default function BookDetail() {
   const pathname = usePathname();
   const isbn13 = pathname.substring(pathname.lastIndexOf("/") + 1);
   const [cookie, setCookie] = useState<string | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
   const [book, setBook] = useState({
     author: "",
     description: "",
@@ -57,6 +59,7 @@ export default function BookDetail() {
             priceSales: todayBookData.priceSales,
             priceStandard: todayBookData.priceStandard,
           });
+          setIsLoading(true);
         } else {
           console.error("실패");
         }
@@ -76,67 +79,74 @@ export default function BookDetail() {
   const randomRating = (Math.random() * (4.3 - 3.4) + 3.4).toFixed(1);
 
   return (
-    <div className="w-[80%] mx-auto mt-16">
-      <div className="flex justify-around items-center">
-        <Image
-          src={book.cover}
-          width={250}
-          height={100}
-          alt="main logo Image"
-        />
-        <div className="w-[60%]">
-          <p className="my-2 text-[2rem]">{book.title}</p>
-          <p className="text-[1.1rem]">{book.author}</p>
-          <div className="w-full h-[2px] bg-gray-400 my-6"></div>
-          <div className="flex flex-col items-end">
-            <p className="text-[1.3rem]">{`정가 : ${book.priceStandard}원`}</p>
-            <p className="text-[1.3rem] my-3">{`판매가 : ${book.priceSales}원`}</p>
-            <p className="my-3 text-[1.1rem]">배송료 : 2000원</p>
-            <p className="flex items-center">
-              <FaStar className="text-[#FF4E88] text-[2rem]" />
-              <b className="text-[1.2rem] ml-4">{randomRating}</b>
-            </p>
-          </div>
-          <div className="w-full h-[2px] bg-gray-400 my-6"></div>
-          <div className="flex justify-end">
-            {cookie !== undefined && (
-              <>
-                <button className="rounded-md border border-gray-400 py-2 px-4">
-                  찜하기
-                </button>
-                <button className="bg-[#4F6F52] text-white border border-gray-400 rounded-md py-2 px-4 mx-4">
-                  <Link href={`/Other/purchase/${isbn13}`}>구매하기</Link>
-                </button>
-                <button className="bg-[#C5EBAA] border border-gray-400 rounded-md py-2 px-4">
-                  장바구니
-                </button>
-              </>
-            )}
-            {cookie === undefined && (
-              <>
-                <button
-                  className="rounded-md border border-gray-400 py-2 px-4"
-                  onClick={handleAlert}
-                >
-                  찜하기
-                </button>
-                <button
-                  className="bg-[#4F6F52] text-white border border-gray-400 rounded-md py-2 px-4 mx-4"
-                  onClick={handleAlert}
-                >
-                  구매하기
-                </button>
-                <button
-                  className="bg-[#C5EBAA] border border-gray-400 rounded-md py-2 px-4"
-                  onClick={handleAlert}
-                >
-                  장바구니
-                </button>
-              </>
-            )}
+    <div className="w-[80%] mx-auto mt-16 font-TTL">
+      {isLoading ? (
+        <div className="flex justify-around items-center">
+          <Image
+            src={book.cover}
+            width={250}
+            height={100}
+            alt="main logo Image"
+          />
+          <div className="w-[60%]">
+            <p className="my-2 text-[2rem]">{book.title}</p>
+            <p className="text-[1.1rem]">{book.author}</p>
+            <div className="w-full h-[2px] bg-gray-400 my-6"></div>
+            <div className="flex flex-col items-end">
+              <p className="text-[1.3rem]">{`정가 : ${book.priceStandard}원`}</p>
+              <p className="text-[1.3rem] my-3">{`판매가 : ${book.priceSales}원`}</p>
+              <p className="my-3 text-[1.1rem]">배송료 : 2000원</p>
+              <p className="flex items-center">
+                <FaStar className="text-[#FF4E88] text-[2rem]" />
+                <b className="text-[1.2rem] ml-4">{randomRating}</b>
+              </p>
+            </div>
+            <div className="w-full h-[2px] bg-gray-400 my-6"></div>
+            <div className="flex justify-end">
+              {cookie !== undefined && (
+                <>
+                  <button className="rounded-md border border-gray-400 py-2 px-4">
+                    찜하기
+                  </button>
+                  <button className="bg-[#4F6F52] text-white border border-gray-400 rounded-md py-2 px-4 mx-4">
+                    <Link href={`/Other/purchase/${isbn13}`}>구매하기</Link>
+                  </button>
+                  <button className="bg-[#C5EBAA] border border-gray-400 rounded-md py-2 px-4">
+                    장바구니
+                  </button>
+                </>
+              )}
+              {cookie === undefined && (
+                <>
+                  <button
+                    className="rounded-md border border-gray-400 py-2 px-4"
+                    onClick={handleAlert}
+                  >
+                    찜하기
+                  </button>
+                  <button
+                    className="bg-[#4F6F52] text-white border border-gray-400 rounded-md py-2 px-4 mx-4"
+                    onClick={handleAlert}
+                  >
+                    구매하기
+                  </button>
+                  <button
+                    className="bg-[#C5EBAA] border border-gray-400 rounded-md py-2 px-4"
+                    onClick={handleAlert}
+                  >
+                    장바구니
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <>
+          <Loading />
+        </>
+      )}
+
       <BookDetailContent title="책 소개" content={book.description} />
       <BookDetailContent
         title="목차"

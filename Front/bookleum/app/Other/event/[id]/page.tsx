@@ -46,7 +46,7 @@ export default function EventDetail() {
   const sentences = eventData.content.split(".");
   return (
     <div className="w-[70%] mx-auto mt-12">
-      <div>
+      <div className="font-TTL">
         <p className="font-bold text-[2rem]">이벤트</p>
         <div className="w-full h-[2px] bg-black mt-2"></div>
         <div className="flex justify-between items-center py-4">
