@@ -15,7 +15,7 @@ export default function Mypage() {
         select={select}
         setSelect={setSelect}
         mainTitle="마이페이지"
-        subTitle="내 정보 수정"
+        subTitle="내 정보"
         subTitle2="찜 목록"
         subTitle3="주문내역 조회"
       />

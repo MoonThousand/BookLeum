@@ -24,7 +24,6 @@ export default function EventDetail() {
           `${process.env.NEXT_PUBLIC_SERVER_URL}/main/event/post/${postId}`
         );
         if (response.status === 200) {
-          console.log(response);
           setEventData({
             id: response.data.id,
             title: response.data.title,

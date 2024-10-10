@@ -33,13 +33,19 @@ export default function LogIn() {
       );
 
       if (response.status === 200) {
-        const { access, refresh } = response.data;
+        console.log(response);
+        const { access, refresh, userId } = response.data;
 
         setCookie("accessToken", access, { maxAge: 60 * 60 * 1 });
         setCookie("refreshToken", refresh, { maxAge: 60 * 60 * 24 * 7 });
+        setCookie("userId", userId, { maxAge: 60 * 60 * 1 });
 
         dispatch(userLogin());
-        router.push("/");
+        if (window.history.length > 1) {
+          router.back();
+        } else {
+          router.push("/");
+        }
         console.log("로그인 성공");
       } else {
         console.error("로그인 실패 - 서버 응답이 200이 아님");

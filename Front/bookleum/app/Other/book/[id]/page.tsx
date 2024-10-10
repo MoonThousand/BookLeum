@@ -8,11 +8,13 @@ import Image from "next/image";
 import Link from "next/link";
 import ReviewDetail from "@/components/main/reviewDetail";
 import axios from "axios";
+import { getCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
 
 export default function BookDetail() {
   const pathname = usePathname();
   const isbn13 = pathname.substring(pathname.lastIndexOf("/") + 1);
+  const [cookie, setCookie] = useState<string | undefined>(undefined);
   const [book, setBook] = useState({
     author: "",
     description: "",
@@ -24,6 +26,11 @@ export default function BookDetail() {
   });
 
   useEffect(() => {
+    const token = getCookie("accessToken") as string | undefined;
+    if (token) {
+      setCookie(token);
+    }
+
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -62,6 +69,10 @@ export default function BookDetail() {
     fetchData();
   }, []);
 
+  const handleAlert = () => {
+    alert("로그인이 필요합니다");
+  };
+
   const randomRating = (Math.random() * (4.3 - 3.4) + 3.4).toFixed(1);
 
   return (
@@ -87,16 +98,42 @@ export default function BookDetail() {
             </p>
           </div>
           <div className="w-full h-[2px] bg-gray-400 my-6"></div>
-          <div className="flex justify-end ">
-            <button className="rounded-md border border-gray-400 py-2 px-4">
-              찜하기
-            </button>
-            <button className="bg-[#4F6F52] text-white border border-gray-400 rounded-md py-2 px-4 mx-4">
-              <Link href={`/Other/purchase/${isbn13}`}>구매하기</Link>
-            </button>
-            <button className="bg-[#C5EBAA] border border-gray-400 rounded-md py-2 px-4">
-              장바구니
-            </button>
+          <div className="flex justify-end">
+            {cookie !== undefined && (
+              <>
+                <button className="rounded-md border border-gray-400 py-2 px-4">
+                  찜하기
+                </button>
+                <button className="bg-[#4F6F52] text-white border border-gray-400 rounded-md py-2 px-4 mx-4">
+                  <Link href={`/Other/purchase/${isbn13}`}>구매하기</Link>
+                </button>
+                <button className="bg-[#C5EBAA] border border-gray-400 rounded-md py-2 px-4">
+                  장바구니
+                </button>
+              </>
+            )}
+            {cookie === undefined && (
+              <>
+                <button
+                  className="rounded-md border border-gray-400 py-2 px-4"
+                  onClick={handleAlert}
+                >
+                  찜하기
+                </button>
+                <button
+                  className="bg-[#4F6F52] text-white border border-gray-400 rounded-md py-2 px-4 mx-4"
+                  onClick={handleAlert}
+                >
+                  구매하기
+                </button>
+                <button
+                  className="bg-[#C5EBAA] border border-gray-400 rounded-md py-2 px-4"
+                  onClick={handleAlert}
+                >
+                  장바구니
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

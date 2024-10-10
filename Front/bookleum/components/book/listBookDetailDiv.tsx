@@ -1,7 +1,12 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+
 import { FaStar } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import axios from "axios";
+import { getCookie } from "cookies-next";
 
 interface Props {
   author: string;
@@ -26,7 +31,44 @@ export default function ListBookDetailDiv({
   priceStandard,
   type,
 }: Props) {
+  const [cookie, setCookie] = useState<string | undefined>(undefined);
+  const [userId, setUserId] = useState<string | undefined>(undefined);
   const randomRating = (Math.random() * (4.3 - 3.4) + 3.4).toFixed(1);
+
+  useEffect(() => {
+    const token = getCookie("accessToken") as string | undefined;
+    if (token) {
+      setCookie(token);
+    }
+    const id = getCookie("userId") as string | undefined;
+    if (id) {
+      setUserId(id);
+    }
+  }, []);
+
+  const handleWishData = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/user/wish/add`,
+        {
+          userId,
+          isbn13,
+        }
+      );
+      if (response.status === 200) {
+        console.log("데이터 보내기 성공");
+      } else {
+        console.error("데이터를 보내기 실패.");
+      }
+    } catch (error) {
+      console.error("서버 에러:", error);
+      alert("서버 에러 발생");
+    }
+  };
+
+  const handleAlert = () => {
+    alert("로그인이 필요합니다");
+  };
 
   return (
     <div className="flex items-center justify-around my-4 py-8 px-6 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]">
@@ -48,24 +90,53 @@ export default function ListBookDetailDiv({
         </Link>
       </div>
       <div className="w-[15%] flex flex-col items-end justify-around font-bold">
-        <button
-          className={`${
-            type === "best"
-              ? "bg-orange-400 text-white"
-              : "bg-blue-400 text-white"
-          } border border-gray-400 w-32 h-12 mb-12 rounded-md`}
-        >
-          <Link href={`/Other/purchase/${isbn13}`}>구매하기</Link>
-        </button>
-        <button
-          className={`${
-            type === "best"
-              ? "bg-white text-orange-400 border border-orange-500"
-              : "bg-white text-blue-400 border border-blue-600"
-          } w-32 h-12 mb-12 rounded-md`}
-        >
-          장바구니
-        </button>
+        {cookie !== undefined && (
+          <>
+            <button
+              className={`${
+                type === "best"
+                  ? "bg-orange-400 text-white"
+                  : "bg-blue-400 text-white"
+              } border border-gray-400 w-32 h-12 mb-12 rounded-md`}
+            >
+              <Link href={`/Other/purchase/${isbn13}`}>구매하기</Link>
+            </button>
+            <button
+              className={`${
+                type === "best"
+                  ? "bg-white text-orange-400 border border-orange-500"
+                  : "bg-white text-blue-400 border border-blue-600"
+              } w-32 h-12 mb-12 rounded-md`}
+              onClick={handleWishData}
+            >
+              찜
+            </button>
+          </>
+        )}
+        {cookie === undefined && (
+          <>
+            <button
+              className={`${
+                type === "best"
+                  ? "bg-orange-400 text-white"
+                  : "bg-blue-400 text-white"
+              } border border-gray-400 w-32 h-12 mb-12 rounded-md`}
+              onClick={handleAlert}
+            >
+              구매하기
+            </button>
+            <button
+              className={`${
+                type === "best"
+                  ? "bg-white text-orange-400 border border-orange-500"
+                  : "bg-white text-blue-400 border border-blue-600"
+              } w-32 h-12 mb-12 rounded-md`}
+              onClick={handleAlert}
+            >
+              찜
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

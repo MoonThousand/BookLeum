@@ -106,6 +106,7 @@ export default function SearchPage() {
               priceSales={book.priceSales}
               priceStandard={book.priceStandard}
               index={index + 1}
+              type="search"
             />
           ))}
         </>

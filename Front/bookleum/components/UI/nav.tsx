@@ -1,26 +1,41 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
+import { deleteCookie, getCookie } from "cookies-next";
 import { useDispatch, useSelector } from "react-redux";
+import { userLogin, userLogout } from "@/redux/slices/authSlice";
 
 import { IoIosUnlock } from "react-icons/io";
 import Link from "next/link";
-import React from "react";
 import { RootState } from "@/redux/store";
-import { deleteCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
-import { userLogout } from "@/redux/slices/authSlice";
 
 export default function Nav() {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
   const router = useRouter();
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = getCookie("accessToken") as string | undefined;
+    if (token) {
+      dispatch(userLogin());
+    }
+    setLoading(false);
+  }, [dispatch]);
+
   const handleLogout = () => {
     deleteCookie("accessToken");
     deleteCookie("refreshToken");
+    deleteCookie("userId");
     dispatch(userLogout());
     router.push("/");
   };
+
+  if (loading) {
+    return null; // 로딩 중일 때는 아무것도 표시하지 않음
+  }
 
   return (
     <div className="flex items-center shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] px-6 h-20">
@@ -72,6 +87,9 @@ export default function Nav() {
         </div>
       ) : (
         <div className=" flex-grow w-[33%] flex justify-end">
+          <Link href="/Mypage">
+            <button className="mr-8">{`마이페이지`}</button>
+          </Link>
           <button onClick={handleLogout}>로그아웃</button>
         </div>
       )}
