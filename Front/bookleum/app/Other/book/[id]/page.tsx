@@ -16,6 +16,7 @@ export default function BookDetail() {
   const pathname = usePathname();
   const isbn13 = pathname.substring(pathname.lastIndexOf("/") + 1);
   const [cookie, setCookie] = useState<string | undefined>(undefined);
+  const [userId, setUserId] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const [book, setBook] = useState({
     author: "",
@@ -31,6 +32,10 @@ export default function BookDetail() {
     const token = getCookie("accessToken") as string | undefined;
     if (token) {
       setCookie(token);
+    }
+    const id = getCookie("userId") as string | undefined;
+    if (id) {
+      setUserId(id);
     }
 
     const fetchData = async () => {
@@ -72,6 +77,29 @@ export default function BookDetail() {
     fetchData();
   }, []);
 
+  console.log(userId);
+
+  const handleWishData = async () => {
+    console.log(userId, isbn13);
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/user/wish/add`,
+        {
+          userId,
+          isbn13,
+        }
+      );
+      if (response.status === 200) {
+        console.log("데이터 보내기 성공");
+      } else {
+        console.error("데이터를 보내기 실패.");
+      }
+    } catch (error) {
+      console.error("서버 에러:", error);
+      alert("서버 에러 발생");
+    }
+  };
+
   const handleAlert = () => {
     alert("로그인이 필요합니다");
   };
@@ -105,7 +133,10 @@ export default function BookDetail() {
             <div className="flex justify-end">
               {cookie !== undefined && (
                 <>
-                  <button className="rounded-md border border-gray-400 py-2 px-4">
+                  <button
+                    className="rounded-md border border-gray-400 py-2 px-4"
+                    onClick={handleWishData}
+                  >
                     찜하기
                   </button>
                   <button className="bg-[#4F6F52] text-white border border-gray-400 rounded-md py-2 px-4 mx-4">

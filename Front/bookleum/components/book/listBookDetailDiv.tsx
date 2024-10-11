@@ -53,11 +53,14 @@ export default function ListBookDetailDiv({
         `${process.env.NEXT_PUBLIC_SERVER_URL}/user/wish/add`,
         {
           userId,
-          isbn13,
+          isbn: isbn13,
         }
       );
       if (response.status === 200) {
         console.log("데이터 보내기 성공");
+      } else if (response.status === 204) {
+        console.log("데이터 안보냈음");
+        alert("선택이 불가능합니다");
       } else {
         console.error("데이터를 보내기 실패.");
       }
@@ -81,13 +84,22 @@ export default function ListBookDetailDiv({
       <div className="w-[50%]">
         <Link href={`/Other/book/${isbn13}`}>
           <p className="font-bold text-[1.3rem]">{`${index}. ${title}`}</p>
+          <div className="flex justify-start">
+            <p className="flex items-center mt-2">
+              <FaStar className="text-[#FF4E88] text-[1.5rem]" />
+              <b className="text-[1rem] ml-4">{randomRating}</b>
+            </p>
+          </div>
           <p className="my-2 text-[1.1rem]">{author}</p>
-          <p className="my-2 font-semibold">{`정가 ${priceStandard}원 | 판매가 : ${priceSales}원`}</p>
-          <p className="font-Score">{description}</p>
-          <p className="flex items-center mt-2">
-            <FaStar className="text-[#FF4E88] text-[2rem]" />
-            <b className="text-[1.2rem] ml-4">{randomRating}</b>
+          <p className="my-2 font-semibold text-[0.9rem]">
+            <span className="text-[#0D92F4]">정가 : </span>
+            {`${priceStandard}원`}
           </p>
+          <p className="my-2 font-semibold text-[0.9rem]">
+            <span className="text-[#EF5A6F]">판매가 : </span>
+            {` ${priceSales}원`}
+          </p>
+          <p className="font-Score">{description}</p>
         </Link>
       </div>
       <div className="w-[15%] flex flex-col items-end justify-around font-bold">

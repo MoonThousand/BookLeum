@@ -1,22 +1,20 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 
-import BookMarkDetail from "./BookMarkDetail";
 import Link from "next/link";
+import MyBasketListDetail from "./MyBasketListDetail";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 
-interface Wish {
+interface MyList {
   title: string;
   price: string;
   cover: string;
   isbn: string;
 }
 
-export default function BookMark() {
+export default function MyBasketList() {
   const [userId, setUserId] = useState<string | undefined>(undefined);
-  const [wishData, setWishData] = useState<Wish[]>([]);
+  const [myListData, setMyListData] = useState<MyList[]>([]);
 
   useEffect(() => {
     const id = getCookie("userId") as string | undefined;
@@ -29,11 +27,11 @@ export default function BookMark() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/user/wish/read/${userId}`
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/user/cart/read/${userId}`
         );
         if (response.status === 200) {
           console.log(response);
-          const wishData = response.data.map((wish: Wish) => {
+          const myListData = response.data.map((wish: MyList) => {
             const originalCoverUrl = wish.cover;
             const modifiedCoverUrl = originalCoverUrl.replace(
               "/coversum/",
@@ -47,7 +45,7 @@ export default function BookMark() {
               price: wish.price,
             };
           });
-          setWishData(wishData);
+          setMyListData(myListData);
         } else {
           console.error("데이터를 불러오지 못했습니다.");
         }
@@ -61,10 +59,10 @@ export default function BookMark() {
     }
   }, [userId]);
 
-  const handleWishListSelectDelete = async (isbn: string) => {
+  const handleMyBasketDelete = async (isbn: string) => {
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/user/wish/delete`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/user/cart/delete`,
         {
           userId,
           isbn: [isbn],
@@ -72,8 +70,8 @@ export default function BookMark() {
       );
       if (response.status === 200) {
         console.log("선택 목록 삭제 완료");
-        setWishData((prevData) =>
-          prevData.filter((wish) => wish.isbn !== isbn)
+        setMyListData((prevData) =>
+          prevData.filter((mylist) => mylist.isbn !== isbn)
         );
       } else {
         console.error("데이터를 불러오지 못했습니다.");
@@ -86,19 +84,26 @@ export default function BookMark() {
 
   return (
     <div className="w-[80%] mx-auto ml-8 font-TTL">
-      <p className="font-bold text-[1.8rem]">찜 목록</p>
-      <div className="w-full h-[30px] bg-gradient-to-r from-pink-400 to-pink-500 mt-2 flex justify-end items-center pr-4">
-        <p className="font-semibold text-white">{`나의 찜 개수 : ${wishData.length}개`}</p>
+      <p className="font-bold text-[1.8rem]">장바구니</p>
+      <div className="w-full h-[30px] bg-gradient-to-r from-emerald-400 to-emerald-500 mt-2 flex justify-end items-center pr-4">
+        <p className="font-semibold text-white">{`나의 장바구니 개수 : ${myListData.length}개`}</p>
       </div>
-      {wishData.map((wish: Wish) => (
-        <div key={wish.isbn}>
-          <Link href={`/Other/book/${wish.isbn}`}>
-            <BookMarkDetail
-              title={wish.title}
-              cover={wish.cover}
-              price={wish.price}
-              isbn={wish.isbn}
-              onDelete={handleWishListSelectDelete}
+      <div className="flex justify-end">
+        <Link href={"Other/purchase"}>
+          <button className="text-emerald-500 border-2 border-emerald-500 py-2 px-4 mt-3 rounded">
+            구매하기
+          </button>
+        </Link>
+      </div>
+      {myListData.map((mylist: MyList) => (
+        <div key={mylist.isbn}>
+          <Link href={`/Other/book/${mylist.isbn}`}>
+            <MyBasketListDetail
+              title={mylist.title}
+              cover={mylist.cover}
+              price={mylist.price}
+              isbn={mylist.isbn}
+              onDelete={handleMyBasketDelete}
             />
           </Link>
         </div>

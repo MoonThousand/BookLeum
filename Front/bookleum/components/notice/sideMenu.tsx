@@ -8,6 +8,8 @@ interface SideMenuProps {
   subTitle: string;
   subTitle2: string;
   subTitle3: string;
+  subTitle4?: string;
+  type: string;
 }
 
 export default function SideMenu({
@@ -17,6 +19,8 @@ export default function SideMenu({
   subTitle,
   subTitle2,
   subTitle3,
+  subTitle4,
+  type,
 }: SideMenuProps) {
   return (
     <div className="flex flex-col">
@@ -51,7 +55,9 @@ export default function SideMenu({
           />
         </button>
         <button
-          className={`border border-gray-600 py-3 flex items-center cursor-pointer ${
+          className={`border-t border-r border-l ${
+            type === "notice" ? "border-b" : ""
+          } border-gray-600 py-3 flex items-center cursor-pointer ${
             select === 3 ? "bg-gray-100" : ""
           } hover:bg-gray-200`}
           onClick={() => setSelect(3)}
@@ -65,6 +71,23 @@ export default function SideMenu({
             }`}
           />
         </button>
+        {type !== "notice" && (
+          <button
+            className={`border border-gray-600 py-3 flex items-center cursor-pointer ${
+              select === 4 ? "bg-gray-100" : ""
+            } hover:bg-gray-200`}
+            onClick={() => setSelect(4)}
+          >
+            <p className="w-[80%] pl-4 text-gray-700 hover:text-black">
+              {subTitle4}
+            </p>
+            <TbTriangleInvertedFilled
+              className={`w-[20%] text-gray-400 hover:text-gray-600 ${
+                select === 4 ? "text-gray-600" : "text-gray-400"
+              }`}
+            />
+          </button>
+        )}
       </div>
     </div>
   );

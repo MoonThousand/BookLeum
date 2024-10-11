@@ -1,17 +1,100 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Address from "@/components/signup/address";
 import Input from "@/components/login/Input";
 import PurchaseList from "@/components/purchase/purchaseList";
+import axios from "axios";
+import { getCookie } from "cookies-next";
+
+interface MyList {
+  title: string;
+  price: string;
+  cover: string;
+  isbn: string;
+}
 
 export default function Purchase() {
-  const [name, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+  const [myListData, setMyListData] = useState<MyList[]>([]);
+  const [recipient, setRecipient] = useState("");
+  const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
   const [memo, setMemo] = useState("");
+  const [requestOrderDetailsList, setRequestOrderDetailsList] = useState([]);
+
+  useEffect(() => {
+    const id = getCookie("userId") as string | undefined;
+    if (id) {
+      setUserId(id);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/user/cart/read/${userId}`
+        );
+        if (response.status === 200) {
+          console.log(response);
+          const myListData = response.data.map((wish: MyList) => {
+            const originalCoverUrl = wish.cover;
+            const modifiedCoverUrl = originalCoverUrl.replace(
+              "/coversum/",
+              "/cover500/"
+            );
+
+            return {
+              isbn: wish.isbn,
+              title: wish.title,
+              cover: modifiedCoverUrl,
+              price: wish.price,
+            };
+          });
+          setMyListData(myListData);
+        } else {
+          console.error("데이터를 불러오지 못했습니다.");
+        }
+      } catch (error) {
+        console.error("서버 에러:", error);
+        alert("서버 에러 발생");
+      }
+    };
+    if (userId !== undefined) {
+      fetchData();
+    }
+  }, [userId]);
+
+  const handlePurchase = async () => {
+    if (recipient === "" || phone === "" || address === "" || memo === "") {
+      alert("빈 칸을 입력해주세요");
+    } else {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/user/order/purchase`,
+          {
+            userId,
+            recipient,
+            phone,
+            address,
+            memo,
+            requestOrderDetailsList,
+          }
+        );
+        if (response.status === 200) {
+          console.log("데이터 전송 성공");
+        } else {
+          console.error("데이터를 불러오지 못했습니다.");
+        }
+      } catch (error) {
+        console.error("서버 에러:", error);
+        alert("서버 에러 발생");
+      }
+    }
+  };
 
   const handleAdress = (addr: string) => {
     setAddress(addr);
@@ -36,16 +119,16 @@ export default function Purchase() {
           <div className="flex items-center w-full">
             <Input
               label="수령인"
-              value={name}
-              onChange={setName}
+              value={recipient}
+              onChange={setRecipient}
               placeholder="수령인을 입력해주세요"
             />
           </div>
           <div className="flex items-center w-full">
             <Input
               label="전화 번호"
-              value={phoneNumber}
-              onChange={setPhoneNumber}
+              value={phone}
+              onChange={setPhone}
               placeholder="전화번호를 입력해주세요"
             />
           </div>

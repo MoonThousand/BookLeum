@@ -11,28 +11,31 @@ export default function InformationModify() {
     if (id) {
       setUserId(id);
     }
-  }, []);
+  }, [userId]);
+
   console.log(userId);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${process.env.NEXT_PUBLIC_SERVER_URL}/user/history/read/${userId}`
-  //       );
-  //       if (response.status === 200) {
-  //         console.log(response);
-  //       } else {
-  //         console.error("데이터를 불러오지 못했습니다.");
-  //       }
-  //     } catch (error) {
-  //       console.error("서버 에러:", error);
-  //       alert("서버 에러 발생");
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/user/history/read/${userId}`
+        );
+        if (response.status === 200) {
+          console.log(response);
+        } else {
+          console.error("데이터를 불러오지 못했습니다.");
+        }
+      } catch (error) {
+        console.error("서버 에러:", error);
+        alert("서버 에러 발생");
+      }
+    };
 
-  //   fetchData();
-  // }, [userId]);
+    if (userId !== undefined) {
+      fetchData();
+    }
+  }, [userId]);
 
   return (
     <div className="w-[80%] mx-auto ml-8">

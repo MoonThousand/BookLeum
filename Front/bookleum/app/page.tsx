@@ -97,7 +97,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-black opacity-50"></div>
         </div>
 
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-white">
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-white font-Jeju">
           <h1 className="text-4xl font-bold mb-6">환영합니다!</h1>
           <p className="text-lg mb-2">
             신작 도서와 베스트셀러 그 외에 다양한 책들까지!

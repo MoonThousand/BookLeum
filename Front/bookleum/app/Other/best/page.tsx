@@ -35,7 +35,7 @@ export default function Best() {
       );
 
       if (response.status === 200) {
-        console.log("데이터 받아오기 성공");
+        console.log("데이터 받아오기 성공", response);
         const bookData = response.data.item.map((book: Book) => {
           const originalCoverUrl = book.cover;
           const modifiedCoverUrl = originalCoverUrl.replace(

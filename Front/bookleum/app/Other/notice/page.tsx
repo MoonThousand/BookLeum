@@ -19,6 +19,7 @@ export default function Notice() {
         subTitle="공지사항"
         subTitle2="자주하는 질문"
         subTitle3="1:1문의"
+        type="notice"
       />
       {select === 1 && <NoticeDetail />}
       {select === 2 && <Question />}
