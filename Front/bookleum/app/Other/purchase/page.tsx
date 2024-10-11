@@ -5,14 +5,16 @@ import React, { useEffect, useState } from "react";
 import Address from "@/components/signup/address";
 import Input from "@/components/login/Input";
 import PurchaseList from "@/components/purchase/purchaseList";
+import PurchaseSummation from "@/components/purchase/purchaseSummation";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 
 interface MyList {
   title: string;
-  price: string;
+  price: string; // 가격이 문자열로 저장되어 있음
   cover: string;
   isbn: string;
+  quantity: number;
 }
 
 export default function Purchase() {
@@ -40,18 +42,19 @@ export default function Purchase() {
         );
         if (response.status === 200) {
           console.log(response);
-          const myListData = response.data.map((wish: MyList) => {
-            const originalCoverUrl = wish.cover;
+          const myListData = response.data.map((data: MyList) => {
+            const originalCoverUrl = data.cover;
             const modifiedCoverUrl = originalCoverUrl.replace(
               "/coversum/",
               "/cover500/"
             );
 
             return {
-              isbn: wish.isbn,
-              title: wish.title,
+              isbn: data.isbn,
+              title: data.title,
               cover: modifiedCoverUrl,
-              price: wish.price,
+              price: data.price,
+              quantity: data.quantity,
             };
           });
           setMyListData(myListData);
@@ -67,6 +70,12 @@ export default function Purchase() {
       fetchData();
     }
   }, [userId]);
+
+  console.log(myListData);
+
+  const totalPrice = myListData.reduce((acc, item) => {
+    return acc + parseFloat(item.price) * item.quantity;
+  }, 0);
 
   const handlePurchase = async () => {
     if (recipient === "" || phone === "" || address === "" || memo === "") {
@@ -109,9 +118,15 @@ export default function Purchase() {
           <li className="w-[15%] flex justify-center">수량</li>
           <li className="w-[25%] flex justify-center">금액</li>
         </ul>
-        <PurchaseList />
-        <PurchaseList />
-        <PurchaseList />
+        {myListData.map((data: MyList) => (
+          <PurchaseList
+            key={data.isbn}
+            title={data.title}
+            cover={data.cover}
+            price={data.price}
+            quantity={data.quantity}
+          />
+        ))}
       </div>
       <div className="flex  mt-16">
         <div className="w-[50%]">
@@ -150,23 +165,7 @@ export default function Purchase() {
             />
           </div>
         </div>
-        <div className="w-[50%] mt-8 bg-gray-300 py-4 px-6 flex flex-col justify-evenly border-2 border-gray-400">
-          <p className="text-[1.4rem] mb-4 pl-4 font-bold">결제 금액</p>
-          <div className="w-full h-[2px] bg-black mt-2"></div>
-          <span className="flex justify-between">
-            <p className="text-[1.3rem] mb-4 pl-4">주문 금액</p>
-            <p className="pr-4 text-[1.3rem] font-bold">37500원</p>
-          </span>
-          <span className="flex justify-between">
-            <p className="text-[1.3rem] mb-4 pl-4">배송비</p>
-            <p className="pr-4 text-[1.3rem] font-bold">3000원</p>
-          </span>
-          <div className="w-full h-[2px] bg-black mt-2"></div>
-          <span className="flex justify-between">
-            <p className="text-[1.3rem] mb-4 pl-4">총 결제 금액</p>
-            <p className="pr-4 text-[1.3rem] font-bold">40500원</p>
-          </span>
-        </div>
+        <PurchaseSummation price={totalPrice} tip={3000} />
       </div>
       <div className="border-2 border-gray-700 w-[15rem] h-[50px] mx-auto mt-16 rounded-lg hover:bg-gray-100">
         <button className="font-bold text-[1.5rem] w-full h-full flex justify-center items-center">
