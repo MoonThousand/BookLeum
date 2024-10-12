@@ -47,11 +47,18 @@ export default function Event() {
   }, []);
 
   return (
-    <div className="w-full mx-auto mt-12 font-TTL">
-      <div className="flex justify-center mb-8">
+    <div className="w-full mx-auto font-TTL bg-[#FFF8E8]">
+      <div className="flex justify-center mb-8 pt-12">
         <Image src="/eventLogo.png" width={800} height={100} alt="today book" />
       </div>
-      <div className="w-[95%] mx-auto bg-[#FFF8E8] py-12 rounded-md">
+      <div className="w-[75%] mx-auto flex justify-end">
+        <Link href="/Other/event/create">
+          <button className="py-2 px-4 border-2 border-orange-300 bg-orange-300 rounded-lg hover:bg-orange-400">
+            작성하기
+          </button>
+        </Link>
+      </div>
+      <div className="w-[95%] mx-auto py-12 rounded-md">
         <div className="w-[80%] mx-auto pb-4">
           <ul className="flex items-center px-4 pt-2 font-bold">
             <li className="w-[20%]">No.</li>

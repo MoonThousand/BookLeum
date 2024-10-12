@@ -8,6 +8,7 @@ import PurchaseList from "@/components/purchase/purchaseList";
 import PurchaseSummation from "@/components/purchase/purchaseSummation";
 import axios from "axios";
 import { getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 interface MyList {
   title: string;
@@ -25,7 +26,7 @@ export default function Purchase() {
   const [address, setAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
   const [memo, setMemo] = useState("");
-  const [requestOrderDetailsList, setRequestOrderDetailsList] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const id = getCookie("userId") as string | undefined;
@@ -71,37 +72,59 @@ export default function Purchase() {
     }
   }, [userId]);
 
-  console.log(myListData);
-
   const totalPrice = myListData.reduce((acc, item) => {
     return acc + parseFloat(item.price) * item.quantity;
   }, 0);
 
   const handlePurchase = async () => {
-    if (recipient === "" || phone === "" || address === "" || memo === "") {
+    if (!recipient || !phone || !address || !memo) {
       alert("빈 칸을 입력해주세요");
-    } else {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/user/order/purchase`,
-          {
-            userId,
-            recipient,
-            phone,
-            address,
-            memo,
-            requestOrderDetailsList,
-          }
-        );
-        if (response.status === 200) {
-          console.log("데이터 전송 성공");
-        } else {
-          console.error("데이터를 불러오지 못했습니다.");
+      return;
+    }
+
+    const fullAddress = `${address} ${detailAddress}`;
+
+    const requestOrderDetailsList = myListData.map((item) => ({
+      isbn: item.isbn,
+      title: item.title,
+      price: parseFloat(item.price), // 문자열인 가격을 숫자로 변환
+      cover: item.cover,
+      quantity: item.quantity,
+    }));
+
+    console.log(
+      userId,
+      recipient,
+      phone,
+      fullAddress,
+      memo,
+      requestOrderDetailsList
+    );
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/user/order/purchase`,
+        {
+          userId,
+          recipient,
+          phone,
+          fullAddress,
+          memo,
+          requestOrderDetailsList,
         }
-      } catch (error) {
-        console.error("서버 에러:", error);
-        alert("서버 에러 발생");
+      );
+
+      if (response.status === 200) {
+        console.log("구매 성공");
+        alert("구매가 완료되었습니다");
+        router.push("/");
+      } else {
+        console.error("데이터를 불러오지 못했습니다.");
+        alert("구매에 실패하였습니다");
       }
+    } catch (error) {
+      console.error("서버 에러:", error);
+      alert("서버 에러 발생");
     }
   };
 
@@ -168,7 +191,10 @@ export default function Purchase() {
         <PurchaseSummation price={totalPrice} tip={3000} />
       </div>
       <div className="border-2 border-gray-700 w-[15rem] h-[50px] mx-auto mt-16 rounded-lg hover:bg-gray-100">
-        <button className="font-bold text-[1.5rem] w-full h-full flex justify-center items-center">
+        <button
+          className="font-bold text-[1.5rem] w-full h-full flex justify-center items-center"
+          onClick={handlePurchase}
+        >
           <p>결제 하기</p>
         </button>
       </div>
