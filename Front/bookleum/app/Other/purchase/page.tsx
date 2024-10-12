@@ -106,9 +106,10 @@ export default function Purchase() {
         `${process.env.NEXT_PUBLIC_SERVER_URL}/user/order/purchase`,
         {
           userId,
+          type: "CART",
           recipient,
           phone,
-          fullAddress,
+          address: fullAddress,
           memo,
           requestOrderDetailsList,
         }

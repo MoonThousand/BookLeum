@@ -58,6 +58,7 @@ export default function ListBookDetailDiv({
       );
       if (response.status === 200) {
         console.log("데이터 보내기 성공");
+        alert("찜 목록에 추가되었습니다");
       } else if (response.status === 204) {
         console.log("데이터 안보냈음");
         alert("선택이 불가능합니다");

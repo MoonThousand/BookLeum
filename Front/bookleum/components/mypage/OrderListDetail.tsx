@@ -32,7 +32,9 @@ export default function OrderListDetail({
         <div className="flex flex-col w-full justify-between p-4 ">
           <div>
             <p className="font-Score font-bold text-[1.2rem]">
-              {`${ordertitle}외 ${orderListLengh - 1}권`}
+              {orderListLengh - 1 === 0
+                ? `${ordertitle}`
+                : `${ordertitle} 외 ${orderListLengh - 1}권`}
             </p>
             <p className="text-[1rem] my-3 font-Score font-bold">{`수령인 : ${recipient}`}</p>
             <p className="text-[0.9rem] font-Score font-bold mb-3">{`배송지: ${address}`}</p>

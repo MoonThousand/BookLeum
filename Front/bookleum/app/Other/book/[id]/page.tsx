@@ -77,20 +77,46 @@ export default function BookDetail() {
     fetchData();
   }, []);
 
-  console.log(userId);
+  const handleCartData = async () => {
+    console.log(userId, isbn13);
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/user/cart/add`,
+        {
+          userId,
+          isbn: isbn13,
+        }
+      );
+      if (response.status === 200) {
+        console.log("데이터 보내기 성공");
+        alert("장바구니에 추가되었습니다.");
+      } else if (response.status === 204) {
+        console.log("데이터 안보냈음");
+        alert("장바구니에 존재합니다.");
+      } else {
+        console.error("데이터를 보내기 실패.");
+      }
+    } catch (error) {
+      console.error("서버 에러:", error);
+      alert("서버 에러 발생");
+    }
+  };
 
   const handleWishData = async () => {
-    console.log(userId, isbn13);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/user/wish/add`,
         {
           userId,
-          isbn13,
+          isbn: isbn13,
         }
       );
       if (response.status === 200) {
         console.log("데이터 보내기 성공");
+        alert("찜목록에 추가되었습니다.");
+      } else if (response.status === 204) {
+        console.log("데이터 안보냈음");
+        alert("찜목록에 존재합니다.");
       } else {
         console.error("데이터를 보내기 실패.");
       }
@@ -142,7 +168,10 @@ export default function BookDetail() {
                   <button className="bg-[#4F6F52] text-white border border-gray-400 rounded-md py-2 px-4 mx-4">
                     <Link href={`/Other/purchase/${isbn13}`}>구매하기</Link>
                   </button>
-                  <button className="bg-[#C5EBAA] border border-gray-400 rounded-md py-2 px-4">
+                  <button
+                    className="bg-[#C5EBAA] border border-gray-400 rounded-md py-2 px-4"
+                    onClick={handleCartData}
+                  >
                     장바구니
                   </button>
                 </>

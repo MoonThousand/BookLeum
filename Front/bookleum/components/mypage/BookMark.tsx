@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 
 import BookMarkDetail from "./BookMarkDetail";
 import Link from "next/link";
+import Loading from "../UI/loding";
+import MyNan from "./MyNan";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 
@@ -17,6 +19,7 @@ interface Wish {
 export default function BookMark() {
   const [userId, setUserId] = useState<string | undefined>(undefined);
   const [wishData, setWishData] = useState<Wish[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const id = getCookie("userId") as string | undefined;
@@ -54,6 +57,8 @@ export default function BookMark() {
       } catch (error) {
         console.error("서버 에러:", error);
         alert("서버 에러 발생");
+      } finally {
+        setIsLoading(false);
       }
     };
     if (userId !== undefined) {
@@ -84,25 +89,35 @@ export default function BookMark() {
     }
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
-    <div className="w-[80%] mx-auto ml-8 font-TTL">
-      <p className="font-bold text-[1.8rem]">찜 목록</p>
-      <div className="w-full h-[30px] bg-gradient-to-r from-pink-400 to-pink-500 mt-2 flex justify-end items-center pr-4">
-        <p className="font-semibold text-white">{`나의 찜 개수 : ${wishData.length}개`}</p>
-      </div>
-      {wishData.map((wish: Wish) => (
-        <div key={wish.isbn}>
-          <Link href={`/Other/book/${wish.isbn}`}>
-            <BookMarkDetail
-              title={wish.title}
-              cover={wish.cover}
-              price={wish.price}
-              isbn={wish.isbn}
-              onDelete={handleWishListSelectDelete}
-            />
-          </Link>
+    <>
+      {wishData.length > 0 ? (
+        <div className="w-[80%] mx-auto ml-8 font-TTL">
+          <p className="font-bold text-[1.8rem]">찜 목록</p>
+          <div className="w-full h-[30px] bg-gradient-to-r from-pink-400 to-pink-500 mt-2 flex justify-end items-center pr-4">
+            <p className="font-semibold text-white">{`나의 찜 개수 : ${wishData.length}개`}</p>
+          </div>
+          {wishData.map((wish: Wish) => (
+            <div key={wish.isbn}>
+              <Link href={`/Other/book/${wish.isbn}`}>
+                <BookMarkDetail
+                  title={wish.title}
+                  cover={wish.cover}
+                  price={wish.price}
+                  isbn={wish.isbn}
+                  onDelete={handleWishListSelectDelete}
+                />
+              </Link>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      ) : (
+        <MyNan title="찜 목록" />
+      )}
+    </>
   );
 }

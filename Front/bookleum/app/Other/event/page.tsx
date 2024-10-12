@@ -46,6 +46,8 @@ export default function Event() {
     fetchData();
   }, []);
 
+  console.log(eventList);
+
   return (
     <div className="w-full mx-auto font-TTL bg-[#FFF8E8]">
       <div className="flex justify-center mb-8 pt-12">
@@ -58,7 +60,7 @@ export default function Event() {
           </button>
         </Link>
       </div>
-      <div className="w-[95%] mx-auto py-12 rounded-md">
+      <div className="w-[95%] mx-auto py-4 rounded-md">
         <div className="w-[80%] mx-auto pb-4">
           <ul className="flex items-center px-4 pt-2 font-bold">
             <li className="w-[20%]">No.</li>

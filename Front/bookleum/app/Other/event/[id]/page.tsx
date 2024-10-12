@@ -47,8 +47,8 @@ export default function EventDetail() {
   return (
     <div className="w-[70%] mx-auto mt-12">
       <div className="font-TTL">
-        <p className="font-bold text-[2rem]">이벤트</p>
-        <div className="w-full h-[2px] bg-black mt-2"></div>
+        <p className="font-bold text-[2rem]">🍂가을 문구 작성 이벤트</p>
+        <div className="w-full h-[2px] bg-[#ef9a4a] mt-2"></div>
         <div className="flex justify-between items-center py-4">
           <p className="text-[1.5rem]">{eventData.title}</p>
           <div>
@@ -58,7 +58,7 @@ export default function EventDetail() {
             <p>작성자 : 관리자</p>
           </div>
         </div>
-        <div className="w-full h-[2px] bg-black mt-2"></div>
+        <div className="w-full h-[2px] bg-[#ef9a4a] mt-2"></div>
       </div>
       <div className="mt-8">
         {sentences.map(

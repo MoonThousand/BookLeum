@@ -95,15 +95,6 @@ export default function PurchaseEach() {
       quantity: item.quantity,
     }));
 
-    console.log(
-      userId,
-      recipient,
-      phone,
-      fullAddress,
-      memo,
-      requestOrderDetailsList
-    );
-
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/user/order/purchase`,
@@ -111,7 +102,7 @@ export default function PurchaseEach() {
           userId,
           recipient,
           phone,
-          fullAddress,
+          address: fullAddress,
           memo,
           requestOrderDetailsList,
         }

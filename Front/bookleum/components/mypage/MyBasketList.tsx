@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import Link from "next/link";
+import Loading from "../UI/loding";
 import MyBasketListDetail from "./MyBasketListDetail";
+import MyNan from "./MyNan";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 
@@ -15,7 +17,7 @@ interface MyList {
 export default function MyBasketList() {
   const [userId, setUserId] = useState<string | undefined>(undefined);
   const [myListData, setMyListData] = useState<MyList[]>([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const id = getCookie("userId") as string | undefined;
     if (id) {
@@ -52,6 +54,8 @@ export default function MyBasketList() {
       } catch (error) {
         console.error("서버 에러:", error);
         alert("서버 에러 발생");
+      } finally {
+        setIsLoading(false);
       }
     };
     if (userId !== undefined) {
@@ -82,32 +86,42 @@ export default function MyBasketList() {
     }
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
-    <div className="w-[80%] mx-auto ml-8 font-TTL">
-      <p className="font-bold text-[1.8rem]">장바구니</p>
-      <div className="w-full h-[30px] bg-gradient-to-r from-emerald-400 to-emerald-500 mt-2 flex justify-end items-center pr-4">
-        <p className="font-semibold text-white">{`나의 장바구니 개수 : ${myListData.length}개`}</p>
-      </div>
-      <div className="flex justify-end">
-        <Link href={"Other/purchase"}>
-          <button className="text-emerald-500 border-2 border-emerald-500 py-2 px-4 mt-3 rounded">
-            구매하기
-          </button>
-        </Link>
-      </div>
-      {myListData.map((mylist: MyList) => (
-        <div key={mylist.isbn}>
-          <Link href={`/Other/book/${mylist.isbn}`}>
-            <MyBasketListDetail
-              title={mylist.title}
-              cover={mylist.cover}
-              price={mylist.price}
-              isbn={mylist.isbn}
-              onDelete={handleMyBasketDelete}
-            />
-          </Link>
+    <>
+      {myListData.length > 0 ? (
+        <div className="w-[80%] mx-auto ml-8 font-TTL">
+          <p className="font-bold text-[1.8rem]">장바구니</p>
+          <div className="w-full h-[30px] bg-gradient-to-r from-emerald-400 to-emerald-500 mt-2 flex justify-end items-center pr-4">
+            <p className="font-semibold text-white">{`나의 장바구니 개수 : ${myListData.length}개`}</p>
+          </div>
+          <div className="flex justify-end">
+            <Link href={"Other/purchase"}>
+              <button className="text-emerald-500 border-2 border-emerald-500 py-2 px-4 mt-3 rounded">
+                구매하기
+              </button>
+            </Link>
+          </div>
+          {myListData.map((mylist: MyList) => (
+            <div key={mylist.isbn}>
+              <Link href={`/Other/book/${mylist.isbn}`}>
+                <MyBasketListDetail
+                  title={mylist.title}
+                  cover={mylist.cover}
+                  price={mylist.price}
+                  isbn={mylist.isbn}
+                  onDelete={handleMyBasketDelete}
+                />
+              </Link>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      ) : (
+        <MyNan title="장바구니" />
+      )}
+    </>
   );
 }

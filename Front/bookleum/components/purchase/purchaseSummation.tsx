@@ -21,7 +21,7 @@ export default function PurchaseSummation({ price, tip }: Props) {
       <div className="w-full h-[2px] bg-black mt-2"></div>
       <span className="flex justify-between">
         <p className="text-[1.3rem] mb-4 pl-4">총 결제 금액</p>
-        <p className="pr-4 text-[1.3rem] font-bold">40500원</p>
+        <p className="pr-4 text-[1.3rem] font-bold">{`${price + tip}원`}</p>
       </span>
     </div>
   );

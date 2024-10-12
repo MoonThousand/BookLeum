@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 
+import Loading from "../UI/loding";
+import MyNan from "./MyNan";
 import OrderListDetail from "./OrderListDetail";
 import axios from "axios";
 import { getCookie } from "cookies-next";
@@ -28,6 +30,7 @@ interface Array {
 export default function OrderList() {
   const [userId, setUserId] = useState<string | undefined>(undefined);
   const [orderCheckData, setOrderCheckData] = useState<OrderList[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const id = getCookie("userId") as string | undefined;
@@ -55,6 +58,7 @@ export default function OrderList() {
               orderListLengh: order.responseOrderDetailsDTOS.length,
             };
           });
+          console.log(orderData);
           setOrderCheckData(orderData);
         } else {
           console.error("데이터를 불러오지 못했습니다.");
@@ -62,6 +66,8 @@ export default function OrderList() {
       } catch (error) {
         console.error("서버 에러:", error);
         alert("서버 에러 발생");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -70,21 +76,31 @@ export default function OrderList() {
     }
   }, [userId]);
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
-    <div className="w-[80%] mx-auto ml-8 font-TTL">
-      <p className="font-bold text-[1.8rem]">주문 내역</p>
-      {orderCheckData.map((order: OrderList, index) => (
-        <OrderListDetail
-          address={order.address}
-          createdDate={order.createdDate}
-          memo={order.memo}
-          orderId={order.orderId}
-          recipient={order.recipient}
-          ordertitle={order.ordertitle}
-          orderListLengh={order.orderListLengh}
-          key={index}
-        />
-      ))}
-    </div>
+    <>
+      {orderCheckData.length > 0 ? (
+        <div className="w-[80%] mx-auto ml-8 font-TTL">
+          <p className="font-bold text-[1.8rem]">주문 내역</p>
+          {orderCheckData.map((order: OrderList, index) => (
+            <OrderListDetail
+              address={order.address}
+              createdDate={order.createdDate}
+              memo={order.memo}
+              orderId={order.orderId}
+              recipient={order.recipient}
+              ordertitle={order.ordertitle}
+              orderListLengh={order.orderListLengh}
+              key={index}
+            />
+          ))}
+        </div>
+      ) : (
+        <MyNan title="주문내역" />
+      )}
+    </>
   );
 }
