@@ -8,10 +8,7 @@ import Bukgu.Dalcheon.domain.admin.dao.EventDAO;
 import Bukgu.Dalcheon.domain.admin.dto.RequestEventCreateDTO;
 import Bukgu.Dalcheon.domain.login.dao.UserEntity;
 import Bukgu.Dalcheon.domain.purchaseStatus;
-import Bukgu.Dalcheon.domain.user.dao.CartDAO;
-import Bukgu.Dalcheon.domain.user.dao.OrderDAO;
-import Bukgu.Dalcheon.domain.user.dao.OrderDetailsDAO;
-import Bukgu.Dalcheon.domain.user.dao.WishDAO;
+import Bukgu.Dalcheon.domain.user.dao.*;
 import Bukgu.Dalcheon.domain.user.dto.*;
 import Bukgu.Dalcheon.repository.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -36,9 +33,10 @@ public class UserService {
     private final OrderRepository orderRepository;
     private final ProductCheckAPI productCheckAPI;
     private final EventRepository eventRepository;
+    private final InquiryRepository inquiryRepository;
 
 
-    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository, OrderRepository orderRepository, ProductCheckAPI productCheckAPI, EventRepository eventRepository) {
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository, OrderRepository orderRepository, ProductCheckAPI productCheckAPI, EventRepository eventRepository, InquiryRepository inquiryRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
@@ -46,6 +44,7 @@ public class UserService {
         this.orderRepository = orderRepository;
         this.productCheckAPI = productCheckAPI;
         this.eventRepository = eventRepository;
+        this.inquiryRepository = inquiryRepository;
     }
 
 
@@ -385,5 +384,43 @@ public class UserService {
     // TODO Event 삭제
     public void deleteEvent(Long eventId) {
         eventRepository.deleteById(eventId);
+    }
+
+    // TODO 1:1 문의 작성
+    public ResponseEntity<?> createInquiry(RequestCreateInquiryDTO requestCreateInquiryDTO) {
+        UserEntity user = new UserEntity();
+        try{
+            user = userRepository.findByUserId(requestCreateInquiryDTO.getUserId());
+        }catch(EmptyResultDataAccessException e) {
+            return ResponseEntity.status(401).body("User not found");
+        }
+        InquiryDAO inquiryDAO = new InquiryDAO(requestCreateInquiryDTO);
+        inquiryDAO.setUserEntity(user);
+        inquiryRepository.save(inquiryDAO);
+        return ResponseEntity.status(200).body("1:1문의 작성 완료 ID : " + user.getUserId());
+    }
+
+    // TODO 1:1 문의 조회 (user가 쓴 문의만 조회됨)
+    public ResponseEntity<?> readInquiry(String userId) {
+        UserEntity user = new UserEntity();
+        try{
+            user = userRepository.findByUserId(userId);
+        }catch(EmptyResultDataAccessException e) {
+            return ResponseEntity.status(401).body("User not found");
+        }
+        List<InquiryDAO> inquiryDAOS = inquiryRepository.findByUserEntity_UserId(user.getUserId());
+
+        if(inquiryDAOS.isEmpty()) {
+            return ResponseEntity.status(204).body("아무것도 없음");
+        }
+
+        ResponseReadInquiryDTO responseReadInquiryDTO = new ResponseReadInquiryDTO();
+        responseReadInquiryDTO.setUserId(user.getUserId());
+        List<InquiryDTO> inquiryDTOS = new ArrayList<>();
+        for (InquiryDAO inquiryDAO : inquiryDAOS) {
+            inquiryDTOS.add(new InquiryDTO(inquiryDAO));
+        }
+        responseReadInquiryDTO.setInquiryList(inquiryDTOS);
+        return ResponseEntity.status(200).body(responseReadInquiryDTO);
     }
 }

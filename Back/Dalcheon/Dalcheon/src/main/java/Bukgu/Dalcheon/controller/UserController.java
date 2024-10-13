@@ -20,6 +20,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
     // TODO 장바구니 조회
     @GetMapping("/cart/read/{userId}")
     public List<ResponseCartReadDTO> readCart(@PathVariable String userId) throws JsonProcessingException {
@@ -82,7 +83,7 @@ public class UserController {
 
     // TODO 비밀번호 변경
     @PostMapping("/history/change-password")
-    public String ChangePassword(@RequestBody RequestChangePassword requestChangePassword){
+    public String ChangePassword(@RequestBody RequestChangePassword requestChangePassword) {
         return userService.ChangePassword(requestChangePassword);
     }
 
@@ -114,11 +115,24 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     // TODO 이벤트 삭제
     // 특정 공지사항 삭제
     @DeleteMapping("/event/delete/{eventId}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long eventId) {
         userService.deleteEvent(eventId);
         return ResponseEntity.noContent().build();
+    }
+
+    // TODO 1:1문의 작성
+    @PostMapping("/inquiry/create")
+    public ResponseEntity<?> createInquiry(@RequestBody RequestCreateInquiryDTO requestCreateInquiryDTO) {
+        return userService.createInquiry(requestCreateInquiryDTO);
+    }
+
+    // TODO 1:1문의 조회
+    @GetMapping("/inquiry/read/{userId}")
+    public ResponseEntity<?> readInquiry(@PathVariable String userId) {
+        return userService.readInquiry(userId);
     }
 }
