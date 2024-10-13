@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import Address from "@/components/signup/address";
 import Input from "@/components/login/Input";
@@ -8,7 +9,6 @@ import PurchaseList from "@/components/purchase/purchaseList";
 import PurchaseSummation from "@/components/purchase/purchaseSummation";
 import axios from "axios";
 import { getCookie } from "cookies-next";
-import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 
 interface MyList {
@@ -30,6 +30,8 @@ export default function PurchaseEach() {
   const router = useRouter();
   const pathname = usePathname();
   const isbn13 = pathname.substring(pathname.lastIndexOf("/") + 1);
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type");
 
   useEffect(() => {
     const id = getCookie("userId") as string | undefined;
@@ -105,6 +107,7 @@ export default function PurchaseEach() {
           address: fullAddress,
           memo,
           requestOrderDetailsList,
+          type: type?.toUpperCase(),
         }
       );
 
@@ -125,8 +128,6 @@ export default function PurchaseEach() {
   const handleAdress = (addr: string) => {
     setAddress(addr);
   };
-
-  console.log(bookData);
 
   return (
     <div className="w-[80%] mx-auto mt-12">

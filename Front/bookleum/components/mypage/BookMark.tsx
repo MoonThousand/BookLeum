@@ -103,7 +103,7 @@ export default function BookMark() {
           </div>
           {wishData.map((wish: Wish) => (
             <div key={wish.isbn}>
-              <Link href={`/Other/book/${wish.isbn}`}>
+              <Link href={`/Other/purchase/${wish.isbn}?type=wish`}>
                 <BookMarkDetail
                   title={wish.title}
                   cover={wish.cover}

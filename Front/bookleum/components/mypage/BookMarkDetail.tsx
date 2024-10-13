@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 
 interface Wish {
@@ -28,11 +27,6 @@ export default function BookMarkDetail({
           <p className="text-[1.1rem] font-semibold">{`가격 : ${price}원`}</p>
         </div>
         <div className="flex flex-col justify-end items-end space-x-4 pr-2">
-          <Link href={`/Other/purchase/${isbn}`}>
-            <button className="text-gray-600 px-4 py-2 rounded mb-4 border border-gray-400 hover:bg-gray-200">
-              구매
-            </button>
-          </Link>
           <button
             className="bg-gray-600 text-white px-4 py-2 rounded border border-gray-400 hover:bg-gray-800"
             onClick={() => onDelete(isbn)}
