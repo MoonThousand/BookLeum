@@ -34,9 +34,10 @@ public class UserService {
     private final ProductCheckAPI productCheckAPI;
     private final EventRepository eventRepository;
     private final InquiryRepository inquiryRepository;
+    private final QuestionRepository questionRepository;
 
 
-    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository, OrderRepository orderRepository, ProductCheckAPI productCheckAPI, EventRepository eventRepository, InquiryRepository inquiryRepository) {
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository, OrderRepository orderRepository, ProductCheckAPI productCheckAPI, EventRepository eventRepository, InquiryRepository inquiryRepository, QuestionRepository questionRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
@@ -45,6 +46,7 @@ public class UserService {
         this.productCheckAPI = productCheckAPI;
         this.eventRepository = eventRepository;
         this.inquiryRepository = inquiryRepository;
+        this.questionRepository = questionRepository;
     }
 
 
@@ -386,6 +388,35 @@ public class UserService {
         eventRepository.deleteById(eventId);
     }
 
+    // TODO 자주 찾는 질문 작성(admin 전용임)
+    public ResponseEntity<?> createQuestion(RequestCreateQuestionDTO requestCreateQuestionDTO) {
+        QuestionDAO questionDAO = new QuestionDAO();
+        questionDAO.setTitle(requestCreateQuestionDTO.getTitle());
+        questionDAO.setContent(requestCreateQuestionDTO.getContent());
+        questionDAO.setAuthor("관리자");
+        questionRepository.save(questionDAO);
+        return ResponseEntity.status(200).body("작성 완료");
+    }
+
+    // TODO 자주 찾는 질문 조회
+    public ResponseEntity<?> readQuestion() {
+        List<QuestionDAO> questionDAOs = questionRepository.findAll();
+        List<QuestionDTO> questionDTOS = new ArrayList<>();
+        for(QuestionDAO questionDAO : questionDAOs) {
+            questionDTOS.add(new QuestionDTO(questionDAO));
+        }
+        return ResponseEntity.status(200).body(questionDTOS);
+    }
+
+    // TODO 자주 찾는 질문 삭제
+    public ResponseEntity<?> deleteQuestion(Long questionId){
+        if (!questionRepository.existsByQuestionId(questionId)) {
+            return ResponseEntity.status(404).body("Question not found");
+        }
+        questionRepository.deleteById(questionId);
+        return ResponseEntity.status(200).body("자주 찾는 질문 삭제 완료");
+    }
+
     // TODO 1:1 문의 작성
     public ResponseEntity<?> createInquiry(RequestCreateInquiryDTO requestCreateInquiryDTO) {
         UserEntity user = new UserEntity();
@@ -433,4 +464,5 @@ public class UserService {
 
         return ResponseEntity.status(200).body("InquiryId : " + inquiryId + " 삭제 완료");
     }
+
 }

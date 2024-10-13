@@ -123,6 +123,22 @@ public class UserController {
         userService.deleteEvent(eventId);
         return ResponseEntity.noContent().build();
     }
+    // TODO 자주 찾는 질문 조회
+    @GetMapping("/question/read")
+    public ResponseEntity<?> readQuestion() {
+        return userService.readQuestion();
+    }
+
+    // TODO 자주 찾는 질문 작성
+    @PostMapping("/question/create")
+    public ResponseEntity<?> createQuestion(@RequestBody RequestCreateQuestionDTO requestCreateQuestionDTO){
+        return userService.createQuestion(requestCreateQuestionDTO);
+    }
+    // TODO 자주 찾는 질문 삭제
+    @DeleteMapping("/question/delete/{questionId}")
+    public ResponseEntity<?> deleteQuestion(@PathVariable Long questionId) {
+        return userService.deleteQuestion(questionId);
+    }
 
     // TODO 1:1문의 작성
     @PostMapping("/inquiry/create")
