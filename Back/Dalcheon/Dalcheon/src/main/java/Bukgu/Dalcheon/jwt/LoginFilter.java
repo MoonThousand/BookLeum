@@ -109,6 +109,7 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
         UserEntity userEntity = userRepository.findByUserId(userId);
         String userName = userEntity.getName();
         jsonResponse.put("userName", userName);
+        jsonResponse.put("userId",userEntity.getUserId());
         jsonResponse.put("access", access);
         jsonResponse.put("refresh", refresh);
 

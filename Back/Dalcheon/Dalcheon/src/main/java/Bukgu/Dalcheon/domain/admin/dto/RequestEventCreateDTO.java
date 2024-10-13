@@ -9,5 +9,5 @@ public class RequestEventCreateDTO {
 
     private String content;
 
-    private String author;
+    private String userId;
 }

@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<EventDAO, Long> {
 
     Optional<EventDAO> findById(Long id);
+
+    Optional<EventDAO> findByAuthor(String author);
 }

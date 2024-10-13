@@ -4,7 +4,10 @@ import Bukgu.Dalcheon.component.OpenApi.ProductCheckAPI;
 import Bukgu.Dalcheon.domain.OpenApi.ApiResponseDTO;
 import Bukgu.Dalcheon.domain.OpenApi.CheckProduct;
 import Bukgu.Dalcheon.domain.OpenApi.ItemDTO;
+import Bukgu.Dalcheon.domain.admin.dao.EventDAO;
+import Bukgu.Dalcheon.domain.admin.dto.RequestEventCreateDTO;
 import Bukgu.Dalcheon.domain.login.dao.UserEntity;
+import Bukgu.Dalcheon.domain.purchaseStatus;
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
 import Bukgu.Dalcheon.domain.user.dao.OrderDAO;
 import Bukgu.Dalcheon.domain.user.dao.OrderDetailsDAO;
@@ -23,7 +26,6 @@ import org.springframework.transaction.TransactionSystemException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -33,29 +35,35 @@ public class UserService {
     private final WishRepository wishRepository;
     private final OrderRepository orderRepository;
     private final ProductCheckAPI productCheckAPI;
+    private final EventRepository eventRepository;
 
 
-    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository, OrderRepository orderRepository, ProductCheckAPI productCheckAPI) {
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository, OrderRepository orderRepository, ProductCheckAPI productCheckAPI, EventRepository eventRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.wishRepository = wishRepository;
         this.orderRepository = orderRepository;
         this.productCheckAPI = productCheckAPI;
+        this.eventRepository = eventRepository;
     }
 
 
     // TODO 장바구니 추가
-    public String addToCart(RequestCartAddDTO requestCartAddDTO) {
+    public ResponseEntity<?> addToCart(RequestCartAddDTO requestCartAddDTO) {
         // UserEntity 조회
         UserEntity user = userRepository.findByUserId(requestCartAddDTO.getUserId());
         if (user == null) {
             throw new RuntimeException("User not found");
         }
+        System.out.println("isbn : " + requestCartAddDTO.getIsbn());
+        if (requestCartAddDTO.getIsbn() == null || requestCartAddDTO.getIsbn().isEmpty()) {
+            return ResponseEntity.status(204).body("다루지 않는 책입니다.");
+        }
 
         // TODO 장바구니에 원래 있는 데이터인지 검사
         if (cartRepository.existsByIsbn(requestCartAddDTO.getIsbn())) {
-            return "장바구니에 이미 있는 상품입니다.";
+            return ResponseEntity.status(204).body("장바구니에 이미 있는 상품입니다.");
         }
 
 
@@ -78,7 +86,7 @@ public class UserService {
             // 기타 예외 처리
             System.out.println("An error occurred: " + e.getMessage());
         }
-        return "장바구니 추가 완료 : " + requestCartAddDTO.getIsbn();
+        return ResponseEntity.status(200).body("장바구니 추가 완료 : " + requestCartAddDTO.getIsbn());
 
     }
 
@@ -156,18 +164,24 @@ public class UserService {
     }
 
     // TODO 찜 목록 추가
-    public String AddWish(RequestWishAddDTO requestWishAddDTO) {
+    public ResponseEntity<?> AddWish(RequestWishAddDTO requestWishAddDTO) {
         // UserEntity 조회
         UserEntity user = new UserEntity();
+        System.out.println("ISBN : " + requestWishAddDTO.getIsbn());
+
+        if (requestWishAddDTO.getIsbn() == null || requestWishAddDTO.getIsbn().isEmpty()) {
+            return ResponseEntity.status(204).body("다루지 않는 책입니다.");
+        }
+
         try{
             user = userRepository.findByUserId(requestWishAddDTO.getUserId());
         }catch(EmptyResultDataAccessException e) {
-            return "User not found";
+            return ResponseEntity.status(402).body("User not found");
         }
 
         // TODO 찜목록에 원래 있는 데이터인지 추가
         if (wishRepository.existsByIsbn(requestWishAddDTO.getIsbn())) {
-            return "찜 목록에 이미 있습니다.";
+            return ResponseEntity.status(300).body("찜 목록에 이미 있습니다.");
         }
 
         // WishDAO 생성 및 설정
@@ -188,12 +202,13 @@ public class UserService {
             // 기타 예외 처리
             System.out.println("An error occurred: " + e.getMessage());
         }
-        return "찜목록 추가 완료 : " + requestWishAddDTO.getIsbn();
+        return ResponseEntity.status(200).body("찜목록 추가 완료 : " + requestWishAddDTO.getIsbn());
     }
 
     // TODO 찜 목록 조회
     public ResponseEntity<?> ReadWishList(String userId) throws JsonProcessingException {
         // UserEntity 조회
+        System.out.println("userId : " + userId);
         UserEntity user = new UserEntity();
         try{
             user = userRepository.findByUserId(userId);
@@ -274,6 +289,7 @@ public class UserService {
     public ResponseEntity<String> PurchaseBook(RequestOrderDTO requestOrderDTO) {
         // UserEntity 조회
         UserEntity user = new UserEntity();
+        System.out.println("address : " + requestOrderDTO.getAddress());
         try{
             user = userRepository.findByUserId(requestOrderDTO.getUserId());
         }catch(EmptyResultDataAccessException e) {
@@ -301,6 +317,15 @@ public class UserService {
         }
         orderDAO.setOrderDetails(orderDetailsDAOList);
         orderRepository.save(orderDAO);
+
+        if (requestOrderDTO.getType().equals(purchaseStatus.WISH)) {
+            wishRepository.deleteByUserEntity_UserIdAndIsbn(requestOrderDTO.getUserId(), requestOrderDTO.getRequestOrderDetailsList().get(0).getIsbn());
+        }else if(requestOrderDTO.getType().equals(purchaseStatus.CART)){
+            for(RequestOrderDetails isbn : requestOrderDTO.getRequestOrderDetailsList()){
+                cartRepository.deleteByUserEntity_UserIdAndIsbn(requestOrderDTO.getUserId(), isbn.getIsbn());
+            }
+        }
+
         return ResponseEntity.status(200).body("구매 완료");
     }
 
@@ -308,6 +333,7 @@ public class UserService {
     public ResponseEntity<?> OrderHistory(String userId) {
         // UserEntity 조회
         UserEntity user = new UserEntity();
+        System.out.println("userId : " + userId);
         try{
             user = userRepository.findByUserId(userId);
         }catch(EmptyResultDataAccessException e) {
@@ -333,6 +359,31 @@ public class UserService {
             responseOrderHistoryDTO.setResponseOrderDetailsDTOS(responseOrderDetailsDTOS);
             orderHistoryDTOS.add(responseOrderHistoryDTO);
         }
+        System.out.println("orderHistoryDTOs : " + orderHistoryDTOS);
+
         return ResponseEntity.status(HttpStatus.OK).body(orderHistoryDTOS);
+    }
+
+    // TODO Event 작성
+    public EventDAO createEvent(RequestEventCreateDTO event) {
+        EventDAO eventDAO = new EventDAO();
+        eventDAO.setTitle(event.getTitle());
+        eventDAO.setContent(event.getContent());
+        eventDAO.setAuthor(event.getUserId());
+        eventRepository.save(eventDAO);
+        return eventDAO;
+    }
+    // TODO Event 업데이트
+    public EventDAO updateEvent(RequestEventCreateDTO requestEventCreateDTO) {
+        return eventRepository.findByAuthor(requestEventCreateDTO.getUserId()).map(event -> {
+            event.setTitle(requestEventCreateDTO.getTitle());
+            event.setContent(requestEventCreateDTO.getContent());
+            return eventRepository.save(event);
+        }).orElseThrow(() -> new RuntimeException("event not found with userId " + requestEventCreateDTO.getUserId()));
+    }
+
+    // TODO Event 삭제
+    public void deleteEvent(Long eventId) {
+        eventRepository.deleteById(eventId);
     }
 }

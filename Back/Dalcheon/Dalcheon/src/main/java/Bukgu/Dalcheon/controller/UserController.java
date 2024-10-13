@@ -1,5 +1,7 @@
 package Bukgu.Dalcheon.controller;
 
+import Bukgu.Dalcheon.domain.admin.dao.EventDAO;
+import Bukgu.Dalcheon.domain.admin.dto.RequestEventCreateDTO;
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
 import Bukgu.Dalcheon.domain.user.dto.*;
 import Bukgu.Dalcheon.service.UserService;
@@ -26,7 +28,7 @@ public class UserController {
 
     // TODO 장바구니 물품 등록( 유저ID, ISBN )
     @PostMapping("/cart/add")
-    public String CartAdd(@RequestBody RequestCartAddDTO requestCartAddDTO) {
+    public ResponseEntity<?> CartAdd(@RequestBody RequestCartAddDTO requestCartAddDTO) {
         return userService.addToCart(requestCartAddDTO);
     }
 
@@ -56,7 +58,7 @@ public class UserController {
 
     // TODO 찜하기 등록 (유저ID, ISBN)
     @PostMapping("/wish/add")
-    public String WishAdd(@RequestBody RequestWishAddDTO requestWishAddDTO) {
+    public ResponseEntity<?> WishAdd(@RequestBody RequestWishAddDTO requestWishAddDTO) {
         return userService.AddWish(requestWishAddDTO);
     }
 
@@ -94,5 +96,29 @@ public class UserController {
     @GetMapping("/order/history/{userId}")
     public ResponseEntity<?> orderHistory(@PathVariable String userId) {
         return userService.OrderHistory(userId);
+    }
+
+    // TODO 이벤트 작성
+    @PostMapping("/event/create")
+    public EventDAO createEvent(@RequestBody RequestEventCreateDTO event) {
+        return userService.createEvent(event);
+    }
+
+    // TODO 이벤트 업데이트
+    @PostMapping("/event/update")
+    public ResponseEntity<EventDAO> updateEvent(@RequestBody RequestEventCreateDTO eventDetails) {
+        try {
+            EventDAO updatedEvent = userService.updateEvent(eventDetails);
+            return ResponseEntity.ok(updatedEvent);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    // TODO 이벤트 삭제
+    // 특정 공지사항 삭제
+    @DeleteMapping("/event/delete/{eventId}")
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long eventId) {
+        userService.deleteEvent(eventId);
+        return ResponseEntity.noContent().build();
     }
 }

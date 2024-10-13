@@ -5,14 +5,26 @@ import Bukgu.Dalcheon.domain.OpenApi.ItemDTO;
 import Bukgu.Dalcheon.domain.OpenApi.ListProduct;
 import Bukgu.Dalcheon.domain.OpenApi.SearchProduct;
 import Bukgu.Dalcheon.service.OpenApiService;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.json.simple.parser.ParseException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.Duration;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -73,6 +85,33 @@ public class OpenApiController {
     public Object testCheckProduct(@PathVariable(value = "itemId") String itemId) throws Exception {
         CheckProduct checkProduct = new CheckProduct(itemId);
         return openApiService.testCheckProduct(checkProduct);
+    }
+    @PostMapping("/open/crawling")
+    public String crawlData(@RequestParam String url) {
+
+
+        String pleManiaFeed = "";
+        // WebDriver 설정
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        // ChromeDriver 경로 설정
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\lobil\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
+
+        try {
+            driver.get(url);
+            Thread.sleep(4000); // 페이지 로딩 시간 동안 기다림
+
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id='Ere_prod_allwrap']/div[9]/div[6]/div[3]")));
+
+            pleManiaFeed = element.getText(); // 텍스트 가져오기
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.quit(); // 드라이버 종료
+        }
+
+        return pleManiaFeed; // 선택한 내용 반환
     }
 
 }
