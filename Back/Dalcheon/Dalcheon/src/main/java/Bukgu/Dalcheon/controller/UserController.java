@@ -135,4 +135,10 @@ public class UserController {
     public ResponseEntity<?> readInquiry(@PathVariable String userId) {
         return userService.readInquiry(userId);
     }
+
+    // TODO 1:1문의 삭제
+    @DeleteMapping("/inquiry/delete/{inquiryId}")
+    public ResponseEntity<?> deleteInquiry(@PathVariable Long inquiryId) {
+        return userService.deleteInquiry(inquiryId);
+    }
 }

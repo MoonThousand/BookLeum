@@ -423,4 +423,14 @@ public class UserService {
         responseReadInquiryDTO.setInquiryList(inquiryDTOS);
         return ResponseEntity.status(200).body(responseReadInquiryDTO);
     }
+
+    // TODO 1:1문의 삭제
+    public ResponseEntity<?> deleteInquiry(Long inquiryId) {
+        if(!inquiryRepository.existsById(inquiryId)) {
+            return ResponseEntity.status(401).body("InquiryId not found");
+        }
+        inquiryRepository.deleteById(inquiryId);
+
+        return ResponseEntity.status(200).body("InquiryId : " + inquiryId + " 삭제 완료");
+    }
 }
