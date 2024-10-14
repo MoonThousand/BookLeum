@@ -399,13 +399,18 @@ public class UserService {
     }
 
     // TODO 자주 찾는 질문 조회
-    public ResponseEntity<?> readQuestion() {
+    public ResponseEntity<?> readAllQuestion() {
         List<QuestionDAO> questionDAOs = questionRepository.findAll();
         List<QuestionDTO> questionDTOS = new ArrayList<>();
         for(QuestionDAO questionDAO : questionDAOs) {
             questionDTOS.add(new QuestionDTO(questionDAO));
         }
         return ResponseEntity.status(200).body(questionDTOS);
+    }
+    // TODO 자주 찾는 질문 상세 조회
+    public ResponseEntity<?> readQuestion(Long questionId) {
+        QuestionDAO questionDAO = questionRepository.findById(questionId).get();
+        return ResponseEntity.status(200).body(questionDAO);
     }
 
     // TODO 자주 찾는 질문 삭제
@@ -432,7 +437,7 @@ public class UserService {
     }
 
     // TODO 1:1 문의 조회 (user가 쓴 문의만 조회됨)
-    public ResponseEntity<?> readInquiry(String userId) {
+    public ResponseEntity<?> readAllInquiry(String userId) {
         UserEntity user = new UserEntity();
         try{
             user = userRepository.findByUserId(userId);
@@ -453,6 +458,13 @@ public class UserService {
         }
         responseReadInquiryDTO.setInquiryList(inquiryDTOS);
         return ResponseEntity.status(200).body(responseReadInquiryDTO);
+    }
+
+    // TODO 1:1문의 상세 조회
+    public ResponseEntity<?> readInquiry(Long inquiryId) {
+        InquiryDAO inquiryDAO = inquiryRepository.findById(inquiryId).get();
+        InquiryDTO inquiryDTO = new InquiryDTO(inquiryDAO);
+        return ResponseEntity.status(200).body(inquiryDTO);
     }
 
     // TODO 1:1문의 삭제

@@ -125,8 +125,13 @@ public class UserController {
     }
     // TODO 자주 찾는 질문 조회
     @GetMapping("/question/read")
-    public ResponseEntity<?> readQuestion() {
-        return userService.readQuestion();
+    public ResponseEntity<?> readAllQuestion() {
+        return userService.readAllQuestion();
+    }
+    // TODO 자주 찾는 질문 상세 조회
+    @GetMapping("/question/read/{questionId}")
+    public ResponseEntity<?> readQuestion(@PathVariable Long questionId) {
+        return userService.readQuestion(questionId);
     }
 
     // TODO 자주 찾는 질문 작성
@@ -140,16 +145,25 @@ public class UserController {
         return userService.deleteQuestion(questionId);
     }
 
+
+
     // TODO 1:1문의 작성
     @PostMapping("/inquiry/create")
     public ResponseEntity<?> createInquiry(@RequestBody RequestCreateInquiryDTO requestCreateInquiryDTO) {
+
         return userService.createInquiry(requestCreateInquiryDTO);
     }
 
     // TODO 1:1문의 조회
-    @GetMapping("/inquiry/read/{userId}")
-    public ResponseEntity<?> readInquiry(@PathVariable String userId) {
-        return userService.readInquiry(userId);
+    @GetMapping("/inquiry/readAll/{userId}")
+    public ResponseEntity<?> readAllInquiry(@PathVariable String userId) {
+        return userService.readAllInquiry(userId);
+    }
+
+    // TODO 1:1문의 상세 조회
+    @GetMapping("/inquiry/read/{inquiryId}")
+    public ResponseEntity<?> readInquiry(@PathVariable Long inquiryId) {
+        return userService.readInquiry(inquiryId);
     }
 
     // TODO 1:1문의 삭제
