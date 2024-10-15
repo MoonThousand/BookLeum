@@ -42,7 +42,7 @@ export default function NoticeDetail() {
   }, []);
 
   return (
-    <div className="w-[70%] mx-auto">
+    <div className="w-[70%] mx-auto min-h-[300px]">
       <div>
         <p className="pl-2 font-bold text-[2rem]">공지사항</p>
         <div className="w-full h-[4px] bg-black mt-2"></div>

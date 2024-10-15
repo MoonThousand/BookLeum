@@ -8,9 +8,10 @@ import { formatDate } from "@/utils/formatDate";
 import { getCookie } from "cookies-next";
 
 interface Inquiry {
-  id: number;
-  title: string;
-  createdDate: string;
+  inquiryId: number;
+  inquiryType: string;
+  createDate: string;
+  status: string;
 }
 
 export default function Inquiry() {
@@ -28,18 +29,21 @@ export default function Inquiry() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/user/inquiry/read/${userId}`
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/user/inquiry/readAll/${userId}`
         );
         if (response.status === 200) {
           console.log(response);
-          // const inquiryData = response.data.map((qustion: Inquiry) => {
-          //   return {
-          //     title: qustion.title,
-          //     id: qustion.id,
-          //     createdDate: qustion.createdDate,
-          //   };
-          // });
-          // setInquiryList(inquiryData);
+          const inquiryData = response.data.inquiryList.map(
+            (inquiry: Inquiry) => {
+              return {
+                inquiryType: inquiry.inquiryType,
+                inquiryId: inquiry.inquiryId,
+                status: inquiry.status,
+                createDate: inquiry.createDate,
+              };
+            }
+          );
+          setInquiryList(inquiryData);
         } else {
           console.error("데이터를 불러오지 못했습니다.");
         }
@@ -54,31 +58,67 @@ export default function Inquiry() {
     }
   }, [userId]);
 
-  console.log(userId);
+  const handleAlert = () => {
+    alert("로그인이 필요합니다");
+  };
 
   return (
-    <div className="w-[70%] mx-auto">
+    <div className="w-[70%] mx-auto min-h-[300px]">
       <div>
-        <p className="pl-2 font-bold text-[2rem]">1:1문의 내역</p>
+        <div className="flex justify-between items-center">
+          <p className="pl-2 font-bold text-[2rem]">1:1문의 내역</p>
+          {userId ? (
+            <Link href="/Other/notice/inquiryDetail/inquiryWrite">
+              <button className="py-2 px-3 bg-gray-700 text-white rounded-md border border-black hover:bg-gray-800">
+                작성
+              </button>
+            </Link>
+          ) : (
+            <button
+              className="py-2 px-3 bg-gray-700 text-white rounded-md border border-black hover:bg-gray-800"
+              onClick={handleAlert}
+            >
+              작성
+            </button>
+          )}
+        </div>
         <div className="w-full h-[4px] bg-black mt-2"></div>
         <ul className="flex items-center pl-2 pt-2">
           <li className="w-[20%]">No.</li>
-          <li className="w-[50%]">제목</li>
-          <li className="w-[30%]">등록일</li>
+          <li className="w-[30%]">문의 유형</li>
+          <li className="w-[25%]">문의 날짜</li>
+          <li className="w-[15%]">상태</li>
         </ul>
         <div className="w-full h-[2px] bg-black mt-2"></div>
       </div>
-      {inquiryList.map((inquiry: Inquiry, index) => (
-        <div className="py-4" key={inquiry.id}>
-          <Link href={`/Other/notice/noticeDetail/${inquiry.id}`}>
-            <ul className="flex items-center pl-2 pt-2">
-              <li className="w-[20%]">{index + 1}.</li>
-              <li className="w-[50%]">{inquiry.title}</li>
-              <li className="w-[30%]">{formatDate(inquiry.createdDate)}</li>
-            </ul>
-          </Link>
+      {userId ? (
+        <>
+          {inquiryList.length > 0 ? (
+            inquiryList.map((inquiry: Inquiry, index) => (
+              <div className="py-4" key={inquiry.inquiryId}>
+                <Link href={`/Other/notice/inquiryDetail/${inquiry.inquiryId}`}>
+                  <ul className="flex items-center pl-2 pt-2">
+                    <li className="w-[20%]">{index + 1}.</li>
+                    <li className="w-[30%]">{inquiry.inquiryType}</li>
+                    <li className="w-[25%]">
+                      {formatDate(inquiry.createDate)}
+                    </li>
+                    <li className="w-[15%]">{inquiry.status}</li>
+                  </ul>
+                </Link>
+              </div>
+            ))
+          ) : (
+            <div className="w-full h-[300px] flex items-center justify-center">
+              <p className="text-[1.5rem]">문의 내역이 없습니다</p>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="mx-auto ml-8 font-TTL h-[300px] flex flex-col justify-center items-center">
+          <p className="text-[1.5rem]">로그인이 필요합니다</p>
         </div>
-      ))}
+      )}
     </div>
   );
 }

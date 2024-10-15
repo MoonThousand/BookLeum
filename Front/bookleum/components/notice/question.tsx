@@ -7,7 +7,7 @@ import axios from "axios";
 import { formatDate } from "@/utils/formatDate";
 
 interface Question {
-  id: number;
+  questionId: number;
   title: string;
   createdDate: string;
 }
@@ -26,7 +26,7 @@ export default function Question() {
           const qustionData = response.data.map((qustion: Question) => {
             return {
               title: qustion.title,
-              id: qustion.id,
+              questionId: qustion.questionId,
               createdDate: qustion.createdDate,
             };
           });
@@ -45,7 +45,7 @@ export default function Question() {
 
   console.log(questionList);
   return (
-    <div className="w-[70%] mx-auto">
+    <div className="w-[70%] mx-auto min-h-[300px]">
       <div>
         <p className="pl-2 font-bold text-[2rem]">자주하는 질문</p>
         <div className="w-full h-[4px] bg-black mt-2"></div>
@@ -57,8 +57,8 @@ export default function Question() {
         <div className="w-full h-[2px] bg-black mt-2"></div>
       </div>
       {questionList.map((question: Question, index) => (
-        <div className="py-4" key={question.id}>
-          <Link href={`/Other/notice/noticeDetail/${question.id}`}>
+        <div className="py-4" key={question.questionId}>
+          <Link href={`/Other/notice/questionDetail/${question.questionId}`}>
             <ul className="flex items-center pl-2 pt-2">
               <li className="w-[20%]">{index + 1}.</li>
               <li className="w-[50%]">{question.title}</li>

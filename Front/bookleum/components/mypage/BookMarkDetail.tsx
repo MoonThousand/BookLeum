@@ -1,5 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface Wish {
   title: string;
@@ -26,12 +28,17 @@ export default function BookMarkDetail({
           <p className="font-bold text-[1.2rem] mb-4">{title}</p>
           <p className="text-[1.1rem] font-semibold">{`가격 : ${price}원`}</p>
         </div>
-        <div className="flex flex-col justify-end items-end space-x-4 pr-2">
+        <div className="flex justify-end items-end space-x-4 pr-2">
+          <Link href={`/Other/purchase/${isbn}?type=wish`}>
+            <button className="bg-white px-3 py-2 rounded text-pink-400 border-2 border-pink-300 hover:border-pink-400 w-16 h-10 flex justify-center items-center">
+              <p>구매</p>
+            </button>
+          </Link>
           <button
-            className="bg-gray-600 text-white px-4 py-2 rounded border border-gray-400 hover:bg-gray-800"
+            className="bg-white px-3 py-2 rounded border-2 border-gray-400 hover:border-gray-500 w-16 h-10 flex justify-center items-center"
             onClick={() => onDelete(isbn)}
           >
-            취소
+            <RiDeleteBin6Line />
           </button>
         </div>
       </div>

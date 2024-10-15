@@ -17,6 +17,7 @@ interface MyList {
   cover: string;
   isbn: string;
   quantity: number;
+  author: string;
 }
 
 export default function PurchaseEach() {
@@ -90,12 +91,23 @@ export default function PurchaseEach() {
     const fullAddress = `${address} ${detailAddress}`;
 
     const requestOrderDetailsList = bookData.map((item) => ({
-      isbn: item.isbn,
+      isbn: isbn13,
       title: item.title,
       price: item.priceSales,
       cover: item.cover,
+      author: item.author,
       quantity: item.quantity,
     }));
+
+    console.log(
+      userId,
+      type?.toUpperCase(),
+      recipient,
+      phone,
+      fullAddress,
+      memo,
+      requestOrderDetailsList
+    );
 
     try {
       const response = await axios.post(

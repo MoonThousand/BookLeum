@@ -20,6 +20,7 @@ export default function Mypage() {
         subTitle2="장바구니"
         subTitle3="찜 목록"
         subTitle4="내 정보 조회"
+        type="mypage"
       />
 
       {select === 1 && <OrderList />}

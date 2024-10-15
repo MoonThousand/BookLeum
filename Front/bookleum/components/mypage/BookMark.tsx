@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 
 import BookMarkDetail from "./BookMarkDetail";
-import Link from "next/link";
 import Loading from "../UI/loding";
 import MyNan from "./MyNan";
 import axios from "axios";
@@ -103,15 +102,13 @@ export default function BookMark() {
           </div>
           {wishData.map((wish: Wish) => (
             <div key={wish.isbn}>
-              <Link href={`/Other/purchase/${wish.isbn}?type=wish`}>
-                <BookMarkDetail
-                  title={wish.title}
-                  cover={wish.cover}
-                  price={wish.price}
-                  isbn={wish.isbn}
-                  onDelete={handleWishListSelectDelete}
-                />
-              </Link>
+              <BookMarkDetail
+                title={wish.title}
+                cover={wish.cover}
+                price={wish.price}
+                isbn={wish.isbn}
+                onDelete={handleWishListSelectDelete}
+              />
             </div>
           ))}
         </div>
