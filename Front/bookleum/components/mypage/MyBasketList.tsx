@@ -6,6 +6,7 @@ import MyBasketListDetail from "./MyBasketListDetail";
 import MyNan from "./MyNan";
 import axios from "axios";
 import { getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 interface MyList {
   title: string;
@@ -19,6 +20,7 @@ export default function MyBasketList() {
   const [myListData, setMyListData] = useState<MyList[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedIsbns, setSelectedIsbns] = useState<string[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const id = getCookie("userId") as string | undefined;
@@ -118,6 +120,15 @@ export default function MyBasketList() {
     }
   };
 
+  const handleSelectedPurchase = () => {
+    if (selectedIsbns.length > 0) {
+      sessionStorage.setItem("selectedIsbns", JSON.stringify(selectedIsbns));
+      router.push("Other/purchase?type=cartselect");
+    } else {
+      alert("선택된 항목이 없습니다.");
+    }
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -131,25 +142,35 @@ export default function MyBasketList() {
             <p className="font-semibold text-white">{`나의 장바구니 개수 : ${myListData.length}개`}</p>
           </div>
           <div className="flex justify-end">
-            <Link href={"Other/purchase"}>
-              <button className="text-emerald-500 border-2 border-emerald-500 py-2 px-4 mt-3 rounded">
-                전체구매
-              </button>
-            </Link>
             {selectedIsbns.length > 0 ? (
-              <button
-                className="text-red-500 border-2 border-red-500 py-2 px-4 mt-3 rounded ml-4 hover:text-red-600 hover:border-red-600"
-                onClick={handleSelectedDelete}
-              >
-                선택 삭제
-              </button>
+              <>
+                <button
+                  className="text-blue-500 border-2 border-blue-500 py-2 px-4 mt-3 rounded"
+                  onClick={handleSelectedPurchase}
+                >
+                  선택 구매
+                </button>
+                <button
+                  className="text-gray-500 border-2 border-gray-500 py-2 px-4 mt-3 rounded ml-4 hover:text-gray-600 hover:border-gray-600"
+                  onClick={handleSelectedDelete}
+                >
+                  선택 삭제
+                </button>
+              </>
             ) : (
-              <button
-                className="text-gray-500 border-2 border-gray-500 py-2 px-4 mt-3 rounded ml-4 hover:text-gray-600 hover:border-gray-600"
-                onClick={handleMyBasketAllDelete}
-              >
-                전체 삭제
-              </button>
+              <>
+                <Link href={"Other/purchase"}>
+                  <button className="text-emerald-500 border-2 border-emerald-500 py-2 px-4 mt-3 rounded">
+                    전체 구매
+                  </button>
+                </Link>
+                <button
+                  className="text-gray-500 border-2 border-gray-500 py-2 px-4 mt-3 rounded ml-4 hover:text-gray-600 hover:border-gray-600"
+                  onClick={handleMyBasketAllDelete}
+                >
+                  전체 삭제
+                </button>
+              </>
             )}
           </div>
           {myListData.map((mylist: MyList) => (
