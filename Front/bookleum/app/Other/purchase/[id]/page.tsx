@@ -62,6 +62,7 @@ export default function PurchaseEach() {
               cover: modifiedCoverUrl,
               priceSales: data.priceSales,
               quantity: 1,
+              author: data.author,
             };
           });
           setBookData(myBookData);

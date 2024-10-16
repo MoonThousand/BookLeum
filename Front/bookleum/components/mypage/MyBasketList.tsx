@@ -97,6 +97,8 @@ export default function MyBasketList() {
       return;
     }
 
+    console.log(userId, selectedIsbns);
+
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/user/cart/delete`,

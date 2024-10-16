@@ -76,6 +76,7 @@ export default function BookMark() {
       );
       if (response.status === 200) {
         console.log("선택 목록 삭제 완료");
+        alert("해당 물품이 삭제되었습니다");
         setWishData((prevData) =>
           prevData.filter((wish) => wish.isbn !== isbn)
         );
