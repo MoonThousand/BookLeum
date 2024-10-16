@@ -16,7 +16,7 @@ const config: Config = {
         TTS: ["TTSamlipCreamyWhiteR"],
         Score: ["S-CoreDream-3Ligh"],
         TTL: ["TTLaundryGothicB"],
-        Jeju: ["paybooc-Bold"],
+        Uiyeun: ["Uiyeun"],
       },
     },
   },

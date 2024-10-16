@@ -43,7 +43,7 @@ export default function EventDetail() {
     fetchData();
   }, [postId]);
 
-  const sentences = eventData.content.split(".");
+  const sentences = eventData.content.split("/");
   return (
     <div className="w-[70%] mx-auto mt-12">
       <div className="font-TTL">
@@ -60,7 +60,7 @@ export default function EventDetail() {
         </div>
         <div className="w-full h-[2px] bg-[#ef9a4a] mt-2"></div>
       </div>
-      <div className="mt-8">
+      <div className="mt-8 font-Uiyeun text-[1.6rem]">
         {sentences.map(
           (sentence, index) =>
             sentence.trim() && (
