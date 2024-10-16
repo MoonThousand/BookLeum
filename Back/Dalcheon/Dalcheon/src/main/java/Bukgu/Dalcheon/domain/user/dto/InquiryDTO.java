@@ -4,6 +4,8 @@ import Bukgu.Dalcheon.domain.user.dao.InquiryDAO;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class InquiryDTO {
@@ -12,6 +14,7 @@ public class InquiryDTO {
     private String inquiryTitle;
     private String inquiryContent;
     private String status;
+    private LocalDateTime createDate;
 
     public InquiryDTO(InquiryDAO inquiryDAO) {
         this.inquiryId = inquiryDAO.getInquiryId();
@@ -19,5 +22,6 @@ public class InquiryDTO {
         this.inquiryTitle = inquiryDAO.getInquiryTitle();
         this.inquiryContent = inquiryDAO.getInquiryContent();
         this.status = inquiryDAO.getStatus();
+        this.createDate = inquiryDAO.getCreatedDate();
     }
 }

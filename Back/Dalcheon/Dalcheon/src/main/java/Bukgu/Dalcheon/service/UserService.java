@@ -319,7 +319,9 @@ public class UserService {
         orderDAO.setOrderDetails(orderDetailsDAOList);
         orderRepository.save(orderDAO);
 
+
         if (requestOrderDTO.getType().equals(purchaseStatus.WISH)) {
+            System.out.println("isbn : " +requestOrderDTO.getRequestOrderDetailsList().get(0).getIsbn());
             wishRepository.deleteByUserEntity_UserIdAndIsbn(requestOrderDTO.getUserId(), requestOrderDTO.getRequestOrderDetailsList().get(0).getIsbn());
         }else if(requestOrderDTO.getType().equals(purchaseStatus.CART)){
             for(RequestOrderDetails isbn : requestOrderDTO.getRequestOrderDetailsList()){

@@ -6,6 +6,7 @@ import Bukgu.Dalcheon.domain.user.dao.CartDAO;
 import Bukgu.Dalcheon.domain.user.dto.*;
 import Bukgu.Dalcheon.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,13 +30,13 @@ public class UserController {
 
     // TODO 장바구니 물품 등록( 유저ID, ISBN )
     @PostMapping("/cart/add")
-    public ResponseEntity<?> CartAdd(@RequestBody RequestCartAddDTO requestCartAddDTO) {
+    public ResponseEntity<?> CartAdd(@Valid @RequestBody RequestCartAddDTO requestCartAddDTO) {
         return userService.addToCart(requestCartAddDTO);
     }
 
     // TODO 장바구니 물품 선택 삭제(유저ID, ISBN)
     @PostMapping("/cart/delete")
-    public String CartDelete(@RequestBody RequestCartDeleteDTO requestCartDeleteDTO) {
+    public String CartDelete(@Valid @RequestBody RequestCartDeleteDTO requestCartDeleteDTO) {
         return userService.DeleteCart(requestCartDeleteDTO);
     }
 
@@ -47,7 +48,7 @@ public class UserController {
 
     // TODO 장바구니 품목 업데이트 (유저ID, ISBN)
     @PostMapping("/cart/update")
-    public String CartUpdate(@RequestBody RequestCartUpdateDTO requestCartUpdateDTO) {
+    public String CartUpdate(@Valid @RequestBody RequestCartUpdateDTO requestCartUpdateDTO) {
         return userService.UpdateCart(requestCartUpdateDTO);
     }
 
@@ -59,13 +60,13 @@ public class UserController {
 
     // TODO 찜하기 등록 (유저ID, ISBN)
     @PostMapping("/wish/add")
-    public ResponseEntity<?> WishAdd(@RequestBody RequestWishAddDTO requestWishAddDTO) {
+    public ResponseEntity<?> WishAdd(@Valid @RequestBody RequestWishAddDTO requestWishAddDTO) {
         return userService.AddWish(requestWishAddDTO);
     }
 
     // TODO 찜하기 품목 선택 삭제 (userId, ISBN)
     @PostMapping("/wish/delete")
-    public String WishDelete(@RequestBody RequestWishDeleteDTO requestWishDeleteDTO) {
+    public String WishDelete(@Valid @RequestBody RequestWishDeleteDTO requestWishDeleteDTO) {
         return userService.DeleteWish(requestWishDeleteDTO);
     }
 
@@ -89,7 +90,7 @@ public class UserController {
 
     // TODO 구매
     @PostMapping("/order/purchase")
-    public ResponseEntity<String> purchaseBook(@RequestBody RequestOrderDTO requestOrderDTO) {
+    public ResponseEntity<String> purchaseBook(@Valid @RequestBody RequestOrderDTO requestOrderDTO) {
         return userService.PurchaseBook(requestOrderDTO);
     }
 
@@ -117,7 +118,6 @@ public class UserController {
     }
 
     // TODO 이벤트 삭제
-    // 특정 공지사항 삭제
     @DeleteMapping("/event/delete/{eventId}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long eventId) {
         userService.deleteEvent(eventId);
