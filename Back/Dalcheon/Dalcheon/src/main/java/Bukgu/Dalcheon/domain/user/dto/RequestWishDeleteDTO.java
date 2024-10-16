@@ -10,6 +10,5 @@ public class RequestWishDeleteDTO {
 
     @NotBlank(message = "userId is Empty.")
     private String userId;
-    @NotBlank(message = "List ISBN is Empty.")
     private List<String> isbn;
 }

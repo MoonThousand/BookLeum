@@ -182,7 +182,7 @@ public class UserService {
 
         // TODO 찜목록에 원래 있는 데이터인지 추가
         if (wishRepository.existsByIsbn(requestWishAddDTO.getIsbn())) {
-            return ResponseEntity.status(300).body("찜 목록에 이미 있습니다.");
+            return ResponseEntity.status(400).body("찜 목록에 이미 있습니다.");
         }
 
         // WishDAO 생성 및 설정
@@ -346,9 +346,7 @@ public class UserService {
 
         // List이 비어 있는지 확인
         if (orderDAOs.isEmpty()) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body("Unauthorized: Order not found or access denied.");
+            return ResponseEntity.status(400).body("주문내역 비어있습니다.");
         }
         List<ResponseOrderHistoryDTO> orderHistoryDTOS = new ArrayList<>();
         for(OrderDAO orderDAO : orderDAOs) {
@@ -362,7 +360,6 @@ public class UserService {
             responseOrderHistoryDTO.setResponseOrderDetailsDTOS(responseOrderDetailsDTOS);
             orderHistoryDTOS.add(responseOrderHistoryDTO);
         }
-        System.out.println("orderHistoryDTOs : " + orderHistoryDTOS);
 
         return ResponseEntity.status(HttpStatus.OK).body(orderHistoryDTOS);
     }

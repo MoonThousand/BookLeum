@@ -1,6 +1,7 @@
 package Bukgu.Dalcheon.domain.user.dto;
 
 import Bukgu.Dalcheon.domain.purchaseStatus;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
@@ -19,8 +20,8 @@ public class RequestOrderDTO {
     private String address;
     @NotBlank(message = "memo is Empty.")
     private String memo;
-    @NotBlank(message = "type is Empty.")
     private purchaseStatus type;
 
+    @Valid
     private List<RequestOrderDetails> requestOrderDetailsList;
 }
