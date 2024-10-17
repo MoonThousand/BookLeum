@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
 import { getCookie } from "cookies-next";
+import { starRating } from "@/utils/starRating";
 
 interface Props {
   author: string;
@@ -33,7 +34,6 @@ export default function ListBookDetailDiv({
 }: Props) {
   const [cookie, setCookie] = useState<string | undefined>(undefined);
   const [userId, setUserId] = useState<string | undefined>(undefined);
-  const randomRating = (Math.random() * (4.3 - 3.4) + 3.4).toFixed(1);
 
   useEffect(() => {
     const token = getCookie("accessToken") as string | undefined;
@@ -95,17 +95,19 @@ export default function ListBookDetailDiv({
           <div className="flex justify-start">
             <p className="flex items-center mt-2">
               <FaStar className="text-[#FF4E88] text-[1.5rem]" />
-              <b className="text-[1rem] ml-4">{randomRating}</b>
+              <b className="text-[1rem] ml-4">{`${
+                isbn13 !== "" ? starRating(isbn13) : 4.3
+              }`}</b>
             </p>
           </div>
           <p className="my-2 text-[1.1rem]">{author}</p>
           <p className="my-2 font-semibold text-[0.9rem]">
             <span className="text-[#0D92F4]">정가 : </span>
-            {`${priceStandard}원`}
+            {`${parseInt(priceStandard).toLocaleString()}원`}
           </p>
           <p className="my-2 font-semibold text-[0.9rem]">
             <span className="text-[#EF5A6F]">판매가 : </span>
-            {` ${priceSales}원`}
+            {`${parseInt(priceSales).toLocaleString()}원`}
           </p>
           <p className="font-Score">{description}</p>
         </Link>
@@ -120,7 +122,9 @@ export default function ListBookDetailDiv({
                   : "bg-blue-400 text-white"
               } border border-gray-400 w-32 h-12 mb-12 rounded-md`}
             >
-              <Link href={`/Other/purchase/${isbn13}`}>구매하기</Link>
+              <Link href={`/Other/purchase/${isbn13}?type=normal`}>
+                구매하기
+              </Link>
             </button>
             <button
               className={`${

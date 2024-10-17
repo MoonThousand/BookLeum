@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 
 interface MyList {
   title: string;
-  priceSales: string; // 가격이 문자열로 저장되어 있음
+  priceSales: string;
   cover: string;
   isbn: string;
   quantity: number;
@@ -28,6 +28,8 @@ export default function PurchaseEach() {
   const [address, setAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
   const [memo, setMemo] = useState("");
+  const [recipientError, setRecipientError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const router = useRouter();
   const pathname = usePathname();
   const isbn13 = pathname.substring(pathname.lastIndexOf("/") + 1);
@@ -48,7 +50,6 @@ export default function PurchaseEach() {
           `${process.env.NEXT_PUBLIC_SERVER_URL}/api/open/check-product/ISBN/${isbn13}/mid}`
         );
         if (response.status === 200) {
-          console.log(response);
           const myBookData = response.data.item.map((data: MyList) => {
             const originalCoverUrl = data.cover;
             const modifiedCoverUrl = originalCoverUrl.replace(
@@ -100,15 +101,15 @@ export default function PurchaseEach() {
       quantity: item.quantity,
     }));
 
-    console.log(
+    console.log({
       userId,
-      type?.toUpperCase(),
       recipient,
       phone,
-      fullAddress,
+      address: fullAddress,
       memo,
-      requestOrderDetailsList
-    );
+      requestOrderDetailsList,
+      type: type?.toUpperCase(),
+    });
 
     try {
       const response = await axios.post(
@@ -125,11 +126,9 @@ export default function PurchaseEach() {
       );
 
       if (response.status === 200) {
-        console.log("구매 성공");
         alert("구매가 완료되었습니다");
         router.push("/");
       } else {
-        console.error("데이터를 불러오지 못했습니다.");
         alert("구매에 실패하였습니다");
       }
     } catch (error) {
@@ -140,6 +139,26 @@ export default function PurchaseEach() {
 
   const handleAdress = (addr: string) => {
     setAddress(addr);
+  };
+
+  const validateRecipient = (value: string) => {
+    const regex = /^[가-힣]{1,15}$/;
+    if (!regex.test(value)) {
+      setRecipientError("수령인 이름은 한글 1~15자여야 합니다.");
+    } else {
+      setRecipientError("");
+    }
+    setRecipient(value);
+  };
+
+  const validatePhone = (value: string) => {
+    const regex = /^\d{11}$/;
+    if (!regex.test(value)) {
+      setPhoneError("전화번호는 숫자 11자리여야 합니다.");
+    } else {
+      setPhoneError("");
+    }
+    setPhone(value);
   };
 
   return (
@@ -164,21 +183,29 @@ export default function PurchaseEach() {
       <div className="flex  mt-16">
         <div className="w-[50%]">
           <p className="font-bold text-[1.4rem] mb-4">배송지 정보</p>
-          <div className="flex items-center w-full">
-            <Input
-              label="수령인"
-              value={recipient}
-              onChange={setRecipient}
-              placeholder="수령인을 입력해주세요"
-            />
+          <div className="w-full mb-2">
+            <div className="flex items-center w-full">
+              <Input
+                label="수령인"
+                value={recipient}
+                onChange={(value) => validateRecipient(value)}
+                placeholder="수령인을 입력해주세요"
+              />
+            </div>
+            {recipientError && (
+              <p className="text-red-500 text-sm">{recipientError}</p>
+            )}
           </div>
-          <div className="flex items-center w-full">
-            <Input
-              label="전화 번호"
-              value={phone}
-              onChange={setPhone}
-              placeholder="전화번호를 입력해주세요"
-            />
+          <div className="w-full mb-2">
+            <div className="flex items-center w-full">
+              <Input
+                label="전화 번호"
+                value={phone}
+                onChange={(value) => validatePhone(value)}
+                placeholder="전화번호를 입력해주세요"
+              />
+            </div>
+            {phoneError && <p className="text-red-500 text-sm">{phoneError}</p>}
           </div>
           <div className="flex flex-col w-full">
             <Address handleAdress={handleAdress} />

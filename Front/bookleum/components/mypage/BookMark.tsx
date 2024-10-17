@@ -114,7 +114,7 @@ export default function BookMark() {
           ))}
         </div>
       ) : (
-        <MyNan title="찜 목록" />
+        <MyNan title="찜 목록이 비어있어요🥹" />
       )}
     </>
   );

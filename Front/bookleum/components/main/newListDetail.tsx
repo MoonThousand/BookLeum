@@ -12,7 +12,7 @@ interface Props {
 export default function NewListDetail({ title, author, cover, isbn13 }: Props) {
   return (
     <div className="flex flex-col items-center">
-      <Link href={`/Other/book/${isbn13}`}>
+      <Link href={`/Other/book/${isbn13}?type=normal`}>
         <Image src={cover} width={170} height={100} alt="new book" />
       </Link>
       <p className="font-semibold my-4">{title}</p>

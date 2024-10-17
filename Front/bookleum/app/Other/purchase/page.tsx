@@ -26,6 +26,8 @@ export default function Purchase() {
   const [address, setAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
   const [memo, setMemo] = useState("");
+  const [recipientError, setRecipientError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -133,6 +135,26 @@ export default function Purchase() {
     setAddress(addr);
   };
 
+  const validateRecipient = (value: string) => {
+    const regex = /^[가-힣]{1,15}$/;
+    if (!regex.test(value)) {
+      setRecipientError("수령인 이름은 한글 1~15자여야 합니다.");
+    } else {
+      setRecipientError("");
+    }
+    setRecipient(value);
+  };
+
+  const validatePhone = (value: string) => {
+    const regex = /^\d{11}$/;
+    if (!regex.test(value)) {
+      setPhoneError("전화번호는 숫자 11자리여야 합니다.");
+    } else {
+      setPhoneError("");
+    }
+    setPhone(value);
+  };
+
   return (
     <div className="w-[80%] mx-auto mt-12">
       <div>
@@ -155,21 +177,29 @@ export default function Purchase() {
       <div className="flex  mt-16">
         <div className="w-[50%]">
           <p className="font-bold text-[1.4rem] mb-4">배송지 정보</p>
-          <div className="flex items-center w-full">
-            <Input
-              label="수령인"
-              value={recipient}
-              onChange={setRecipient}
-              placeholder="수령인을 입력해주세요"
-            />
+          <div className="w-full mb-2">
+            <div className="flex items-center w-full">
+              <Input
+                label="수령인"
+                value={recipient}
+                onChange={(value) => validateRecipient(value)}
+                placeholder="수령인을 입력해주세요"
+              />
+            </div>
+            {recipientError && (
+              <p className="text-red-500 text-sm">{recipientError}</p>
+            )}
           </div>
-          <div className="flex items-center w-full">
-            <Input
-              label="전화 번호"
-              value={phone}
-              onChange={setPhone}
-              placeholder="전화번호를 입력해주세요"
-            />
+          <div className="w-full mb-2">
+            <div className="flex items-center w-full">
+              <Input
+                label="전화 번호"
+                value={phone}
+                onChange={(value) => validatePhone(value)}
+                placeholder="전화번호를 입력해주세요"
+              />
+            </div>
+            {phoneError && <p className="text-red-500 text-sm">{phoneError}</p>}
           </div>
           <div className="flex flex-col w-full">
             <Address handleAdress={handleAdress} />

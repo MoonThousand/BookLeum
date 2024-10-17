@@ -58,13 +58,13 @@ export default function LogIn() {
   };
 
   return (
-    <div className="w-[60%] mx-auto mt-8">
+    <div className="w-[60%] mx-auto mt-8 font-TTL">
       <div>
         <span className="font-bold text-[1.5rem]">로그인</span>
-        <div className="w-full h-[2px] bg-[#9b8e61] mt-2"></div>
+        <div className="w-full h-[2px] bg-gray-700 mt-2"></div>
       </div>
 
-      <div className="flex flex-col items-center mt-4">
+      <div className="flex flex-col items-center mt-8">
         <Input label="ID" value={userId} onChange={setId} placeholder="ID" />
         <Input
           label="Password"
@@ -74,20 +74,20 @@ export default function LogIn() {
         />
       </div>
 
-      <div className="w-[70%] mx-auto flex flex-col items-center justify-center mt-4">
+      <div className="w-[70%] mx-auto flex flex-col items-center justify-center mt-8">
         <button
           onClick={handleLogin}
-          className="mt-4 p-2 bg-[#98bc91] text-white rounded-md w-full border border-gray-400"
+          className="mt-4 p-2 bg-[#98bc91] text-white rounded-md w-[80%] border border-gray-400"
         >
-          Log In
+          로그인
         </button>
 
-        <button className="mt-4 p-2 bg-gray-200 rounded-md w-full border border-gray-400">
+        <button className="mt-4 p-2 bg-gray-200 rounded-md w-[80%] border border-gray-400">
           <Link
             href="/Login/signup"
             className="w-full h-full flex items-center justify-center"
           >
-            Sign Up
+            회원가입
           </Link>
         </button>
       </div>

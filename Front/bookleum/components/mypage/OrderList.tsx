@@ -105,7 +105,7 @@ export default function OrderList() {
           ))}
         </div>
       ) : (
-        <MyNan title="주문내역" />
+        <MyNan title="주문내역이 비어있어요🥹" />
       )}
     </>
   );

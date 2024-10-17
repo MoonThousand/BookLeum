@@ -27,7 +27,7 @@ export default function TodayBook({
       {cover !== "" && (
         <div className="flex justify-around w-full">
           <div className="w-[40%] flex justify-center items-center">
-            <Link href={`/Other/book/${isbn13}`}>
+            <Link href={`/Other/book/${isbn13}?type=normal`}>
               <Image src={cover} width={200} height={100} alt="today book" />
             </Link>
           </div>
@@ -36,7 +36,7 @@ export default function TodayBook({
             <p className="mb-4 text-[1.2rem]">{author}</p>
             <p className="mb-4">{description}</p>
             <div className="flex justify-end mt-12">
-              <Link href={`/Other/book/${isbn13}`}>
+              <Link href={`/Other/book/${isbn13}?type=normal`}>
                 <button className="bg-blue-600 text-white rounded-lg w-32 h-12">
                   살펴보기
                 </button>

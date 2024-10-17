@@ -7,7 +7,7 @@ interface Props {
 export default function MyNan({ title }: Props) {
   return (
     <div className="w-[80%] mx-auto ml-8 font-TTL h-[300px] flex flex-col justify-center items-center">
-      <p className="text-[1.5rem]">{`${title}가  비어있어요🥹`}</p>
+      <p className="text-[1.5rem]">{`${title}`}</p>
     </div>
   );
 }

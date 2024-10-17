@@ -7,7 +7,7 @@ interface Props {
 
 export default function PurchaseSummation({ price, tip }: Props) {
   return (
-    <div className="w-[50%] mt-8 bg-gray-300 py-4 px-6 flex flex-col justify-evenly border-2 border-gray-400">
+    <div className="w-[50%] mt-8 bg-gray-100 py-4 px-6 flex flex-col justify-evenly border-2 border-gray-400">
       <p className="text-[1.4rem] mb-4 pl-4 font-bold">결제 금액</p>
       <div className="w-full h-[2px] bg-black mt-2"></div>
       <span className="flex justify-between">

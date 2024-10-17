@@ -20,8 +20,8 @@ export default function Best() {
   const [loading, setLoading] = useState(true);
   const [books, setBooks] = useState<Book[]>([]);
   const [year, setYear] = useState(2024);
-  const [month, setMonth] = useState(9);
-  const [week, setWeek] = useState(1);
+  const [month, setMonth] = useState(10);
+  const [week, setWeek] = useState(2);
 
   const years = Array.from({ length: 2025 - 2000 }, (_, i) => 2000 + i);
   const months = Array.from({ length: 12 }, (_, i) => i + 1);

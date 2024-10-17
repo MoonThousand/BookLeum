@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 
 import axios from "axios";
+import { formatDate } from "@/utils/formatDate";
 import { usePathname } from "next/navigation";
 
 export default function NoticeDetailPage() {
@@ -49,7 +50,9 @@ export default function NoticeDetailPage() {
         <div className="flex justify-between items-center py-4">
           <p className="text-[1.5rem]">{noticeData.title}</p>
           <div>
-            <p className="pb-2">{`작성일 : ${noticeData.createdDate}`}</p>
+            <p className="pb-2">{`작성일 : ${formatDate(
+              noticeData.createdDate
+            )}`}</p>
             <p>작성자 : 관리자</p>
           </div>
         </div>

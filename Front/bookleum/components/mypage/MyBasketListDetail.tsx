@@ -28,7 +28,7 @@ export default function MyBasketListDetail({
       </div>
       <div className="flex items-end mr-4">
         <Link href={`/Other/purchase/${isbn}?type=cart`}>
-          <button className="flex justify-center items-center w-16 h-8 border-2 border-emerald-600 hover:border-emerald-700">
+          <button className="flex justify-center items-center w-16 h-8 border-2 bg-emerald-500 text-white hover:bg-emerald-600">
             <p>구매</p>
           </button>
         </Link>

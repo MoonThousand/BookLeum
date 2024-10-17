@@ -6,7 +6,6 @@ import MyBasketListDetail from "./MyBasketListDetail";
 import MyNan from "./MyNan";
 import axios from "axios";
 import { getCookie } from "cookies-next";
-import { useRouter } from "next/navigation";
 
 interface MyList {
   title: string;
@@ -20,7 +19,6 @@ export default function MyBasketList() {
   const [myListData, setMyListData] = useState<MyList[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedIsbns, setSelectedIsbns] = useState<string[]>([]);
-  const router = useRouter();
 
   useEffect(() => {
     const id = getCookie("userId") as string | undefined;
@@ -122,14 +120,14 @@ export default function MyBasketList() {
     }
   };
 
-  const handleSelectedPurchase = () => {
-    if (selectedIsbns.length > 0) {
-      sessionStorage.setItem("selectedIsbns", JSON.stringify(selectedIsbns));
-      router.push("Other/purchase?type=cartselect");
-    } else {
-      alert("선택된 항목이 없습니다.");
-    }
-  };
+  // const handleSelectedPurchase = () => {
+  //   if (selectedIsbns.length > 0) {
+  //     sessionStorage.setItem("selectedIsbns", JSON.stringify(selectedIsbns));
+  //     router.push("Other/purchase?type=cartselect");
+  //   } else {
+  //     alert("선택된 항목이 없습니다.");
+  //   }
+  // };
 
   if (isLoading) {
     return <Loading />;
@@ -146,12 +144,6 @@ export default function MyBasketList() {
           <div className="flex justify-end">
             {selectedIsbns.length > 0 ? (
               <>
-                <button
-                  className="text-blue-500 border-2 border-blue-500 py-2 px-4 mt-3 rounded"
-                  onClick={handleSelectedPurchase}
-                >
-                  선택 구매
-                </button>
                 <button
                   className="text-gray-500 border-2 border-gray-500 py-2 px-4 mt-3 rounded ml-4 hover:text-gray-600 hover:border-gray-600"
                   onClick={handleSelectedDelete}
@@ -195,7 +187,7 @@ export default function MyBasketList() {
           ))}
         </div>
       ) : (
-        <MyNan title="장바구니" />
+        <MyNan title="장바구니가 비어있어요🥹" />
       )}
     </>
   );
