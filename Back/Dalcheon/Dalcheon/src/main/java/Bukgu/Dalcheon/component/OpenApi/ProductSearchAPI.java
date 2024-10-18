@@ -1,6 +1,6 @@
 package Bukgu.Dalcheon.component.OpenApi;
 
-import Bukgu.Dalcheon.domain.Api.SearchProduct;
+import Bukgu.Dalcheon.domain.OpenApi.SearchProduct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -34,8 +34,11 @@ public class ProductSearchAPI implements ProductAPI{
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
         ResponseEntity<Map> resultMap = restTemplate.exchange(makeURL(searchProduct), HttpMethod.GET, entity, Map.class);
-        System.out.println(resultMap.getBody());
         return resultMap;
+    }
+    public String getSearchProductJsonString(SearchProduct searchProduct) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(makeURL(searchProduct), String.class);
     }
 }
 

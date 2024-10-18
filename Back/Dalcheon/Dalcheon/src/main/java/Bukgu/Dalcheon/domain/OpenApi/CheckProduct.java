@@ -1,4 +1,4 @@
-package Bukgu.Dalcheon.domain.Api;
+package Bukgu.Dalcheon.domain.OpenApi;
 
 import lombok.Getter;
 
@@ -15,6 +15,14 @@ public class CheckProduct {
         this.itemIdType = itemIdType;
         this.itemId = itemId;
         this.cover = cover;
+        this.end = "&output=js&Version=20131101";
+    }
+
+    public CheckProduct(String itemId) {
+        this.BASE_URL = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=";
+        this.itemIdType = "ISBN";
+        this.itemId = itemId;
+        this.cover = "mid";
         this.end = "&output=js&Version=20131101";
     }
 }

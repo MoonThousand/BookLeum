@@ -24,7 +24,7 @@ public class JoinService {
         String username = joinDTO.getUserId();
         String password = joinDTO.getPassword();
 
-        Boolean isExist = userRepository.existsByUsername(username);
+        Boolean isExist = userRepository.existsByUserId(username);
 
         if (isExist) {
 
@@ -33,26 +33,26 @@ public class JoinService {
 
         UserEntity data = new UserEntity();
 
-        data.setUsername(username);
+        data.setUserId(username);
         data.setPassword(bCryptPasswordEncoder.encode(password));
         data.setEmail(joinDTO.getEmail());
         data.setName(joinDTO.getName());
         data.setPhone(joinDTO.getPhone());
         data.setAddress(joinDTO.getAddress());
         data.setBirthDate(joinDTO.getBirthDate());
-        data.setRole("ROLE_ADMIN");
+        data.setRole("ROLE_USER");
 
         userRepository.save(data);
         return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
     }
 
     // ID 중복체크
-    public String UserIdCheck(String userId){
-         Boolean isExist = userRepository.existsByUsername(userId);
+    public ResponseEntity<String> UserIdCheck(String userId){
+         Boolean isExist = userRepository.existsByUserId(userId);
          if (isExist) {
-             return "중복없음";
+             return new ResponseEntity<>("중복된 아이디입니다.", HttpStatus.CONFLICT);
          }
-        return "중복";
+        return new ResponseEntity<>("사용 가능한 아이디입니다." , HttpStatus.OK);
     }
 
     // 비밀번호 확인

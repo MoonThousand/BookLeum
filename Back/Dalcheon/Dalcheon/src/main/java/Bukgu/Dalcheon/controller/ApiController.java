@@ -1,54 +1,27 @@
 package Bukgu.Dalcheon.controller;
 
-import Bukgu.Dalcheon.domain.Api.CheckProduct;
-import Bukgu.Dalcheon.domain.Api.ListProduct;
-import Bukgu.Dalcheon.domain.Api.SearchProduct;
+import Bukgu.Dalcheon.domain.user.dao.OrderDetailsDAO;
+import Bukgu.Dalcheon.domain.user.dto.OrderDetailsDTO;
+import Bukgu.Dalcheon.repository.OrderDetailsRepository;
 import Bukgu.Dalcheon.service.ApiService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.UnsupportedEncodingException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping("/api")
 public class ApiController {
+
     private final ApiService apiService;
+    private final OrderDetailsRepository orderDetailsRepository;
 
-    @Autowired
-    public ApiController(ApiService apiService) {
+    public ApiController(ApiService apiService, OrderDetailsRepository orderDetailsRepository) {
         this.apiService = apiService;
+        this.orderDetailsRepository = orderDetailsRepository;
     }
 
-    @GetMapping("/search-product/{queryType}/{query}/{maxResults}/{searchTarget}/{cover}")
-    public Object openApiSearchProduct(@PathVariable(value = "queryType") String queryType,
-                                       @PathVariable(value = "query") String query,
-                                       @PathVariable(value = "maxResults") String maxResults,
-                                       @PathVariable(value = "searchTarget") String searchTarget,
-                                       @PathVariable(value = "cover") String cover) throws UnsupportedEncodingException {
-        SearchProduct searchProduct = new SearchProduct(queryType, query, maxResults, searchTarget, cover);
-        return apiService.AladinSearchProduct(searchProduct);
-    }
-
-    @GetMapping("list-product/{queryType}/{maxResults}/{searchTarget}/{year}/{month}/{week}/{cover}")
-    public Object openApiListProduct(@PathVariable(value = "queryType") String queryType,
-                                     @PathVariable(value = "maxResults") String maxResults,
-                                     @PathVariable(value = "searchTarget") String searchTarget,
-                                     @PathVariable(value = "year") int year,
-                                     @PathVariable(value = "month") int month,
-                                     @PathVariable(value = "week") int week,
-                                     @PathVariable(value = "cover") String cover) throws UnsupportedEncodingException {
-        ListProduct listProduct = new ListProduct(queryType, maxResults, searchTarget, year, month, week, cover);
-        return apiService.AladinListProduct(listProduct);
-    }
-    @GetMapping("check-product/{itemIdType}/{itemId}/{cover}")
-    public Object openApiCheckProduct(@PathVariable(value = "itemIdType") String itemIdType,
-                                      @PathVariable(value = "itemId") String itemId,
-                                      @PathVariable(value = "cover") String cover) throws UnsupportedEncodingException {
-        CheckProduct checkProduct = new CheckProduct(itemIdType, itemId, cover);
-        return apiService.AladinCheckProduct(checkProduct);
+    @GetMapping("/history/user/{userId}")
+    public String userHistory(@PathVariable String userId) throws JsonProcessingException {
+        return apiService.UserHistory(userId);
     }
 
 }

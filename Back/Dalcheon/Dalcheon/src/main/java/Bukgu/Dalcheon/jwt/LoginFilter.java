@@ -1,8 +1,13 @@
 package Bukgu.Dalcheon.jwt;
 
 import Bukgu.Dalcheon.domain.login.dao.RefreshEntity;
+import Bukgu.Dalcheon.domain.login.dao.UserEntity;
+import Bukgu.Dalcheon.domain.login.dto.LoginDTO;
 import Bukgu.Dalcheon.repository.RefreshRepository;
+import Bukgu.Dalcheon.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,10 +18,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.util.StreamUtils;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
 
@@ -27,11 +33,15 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
     // TODO JWTUtil 주입
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+    private final ObjectMapper objectMapper;
+    private final UserRepository userRepository;
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository, ObjectMapper objectMapper, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        this.objectMapper = objectMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -40,9 +50,23 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
         /**
          * 요청 받은 값에서 username, password를 가져옴
          **/
-        String username = obtainUsername(requset);
-        String password = obtainPassword(requset);
-        System.out.println("username: " + username + " password: " + password);
+//        String username = obtainUsername(requset);
+//        String password = obtainPassword(requset);
+//        System.out.println("username: " + username + " password: " + password);
+        LoginDTO loginDTO = new LoginDTO();
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ServletInputStream inputStream = requset.getInputStream();
+            String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+            loginDTO = objectMapper.readValue(messageBody, LoginDTO.class);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        String username = loginDTO.getUserId();
+        String password = loginDTO.getPassword();
 
         /**
          * 스프링 시큐리티에서 username과 password를 검증하기 위해서 token에 담는다
@@ -57,10 +81,10 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
     }
     //로그인 성공시 실행하는 메소드 (여기서 JWT를 발급하면 됨)
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
 
         //유저 정보
-        String username = authentication.getName();
+        String userId = authentication.getName();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -68,16 +92,30 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
         String role = auth.getAuthority();
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access", username, role, 600000L);
-        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
+        String access = jwtUtil.createJwt("access", userId, role, 600000L);
+        String refresh = jwtUtil.createJwt("refresh", userId, role, 86400000L);
 
         // Refresh 토큰 저장
-        addRefreshEntity(username, refresh, 86400000L);
+        addRefreshEntity(userId, refresh, 86400000L);
 
         //응답 설정
         response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        // 바디에 추가
+        Map<String, String> jsonResponse = new HashMap<>();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        String userName = userEntity.getName();
+        jsonResponse.put("userName", userName);
+        jsonResponse.put("userId",userEntity.getUserId());
+        jsonResponse.put("access", access);
+        jsonResponse.put("refresh", refresh);
+
+        String token = objectMapper.writeValueAsString(jsonResponse);
+        response.getWriter().write(token);
+
     }
     private void addRefreshEntity(String username, String refresh, Long expiredMs) {
 
@@ -93,10 +131,11 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
 
     //로그인 실패시 실행하는 메소드
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
 
         // 로그인 실패시 401 응답 코드 반환
         response.setStatus(401);
+        response.getWriter().write("로그인 실패");
     }
 
     private Cookie createCookie(String key, String value) {

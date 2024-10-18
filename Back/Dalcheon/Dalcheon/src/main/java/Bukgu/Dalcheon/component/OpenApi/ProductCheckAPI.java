@@ -1,6 +1,6 @@
 package Bukgu.Dalcheon.component.OpenApi;
 
-import Bukgu.Dalcheon.domain.Api.CheckProduct;
+import Bukgu.Dalcheon.domain.OpenApi.CheckProduct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -29,7 +29,11 @@ public class ProductCheckAPI {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
         ResponseEntity<Map> resultMap = restTemplate.exchange(makeURL(checkProduct), HttpMethod.GET, entity, Map.class);
-        System.out.println(resultMap.getBody());
         return resultMap;
     }
+    public String getCheckProductJsonString(CheckProduct checkProduct) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(makeURL(checkProduct), String.class);
+    }
+
 }
