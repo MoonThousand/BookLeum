@@ -286,6 +286,15 @@ public class UserService {
         return "변경 성공!";
     }
 
+    // TODO 유저 패스워드 확인
+    public ResponseEntity<?> checkPassword(RequestCheckPassword requestCheckPassword) {
+        UserEntity user = userRepository.findByUserId(requestCheckPassword.getUserId());
+        if (!bCryptPasswordEncoder.matches(requestCheckPassword.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(401).body("비밀번호 일치하지 않음");
+        }
+        return ResponseEntity.status(200).body("비밀번호 일치함!");
+    }
+
     // TODO 구매
     public ResponseEntity<String> PurchaseBook(RequestOrderDTO requestOrderDTO) {
         // UserEntity 조회

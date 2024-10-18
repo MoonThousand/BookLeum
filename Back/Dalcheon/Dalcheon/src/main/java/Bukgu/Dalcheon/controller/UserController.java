@@ -84,8 +84,14 @@ public class UserController {
 
     // TODO 비밀번호 변경
     @PostMapping("/history/change-password")
-    public String ChangePassword(@RequestBody RequestChangePassword requestChangePassword) {
+    public String ChangePassword(@Valid @RequestBody RequestChangePassword requestChangePassword) {
         return userService.ChangePassword(requestChangePassword);
+    }
+
+    // TODO 비밀번호 확인
+    @PostMapping("/history/check-password")
+    public ResponseEntity<?> checkPassword(@Valid @RequestBody RequestCheckPassword requestCheckPassword) {
+        return userService.checkPassword(requestCheckPassword);
     }
 
     // TODO 구매
