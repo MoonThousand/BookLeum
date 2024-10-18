@@ -12,6 +12,8 @@ java {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
+
+// java 컴파일 옵션
 compileJava {
 	options.compilerArgs << '-parameters'
 }
@@ -46,6 +48,15 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
+	// json-simple
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+	// jsoup 크롤링
+	implementation 'org.jsoup:jsoup:1.14.3'
+	implementation 'org.seleniumhq.selenium:selenium-java:4.20.0'
+	implementation 'io.github.bonigarcia:webdrivermanager:5.7.0'
+
 
 	implementation 'javax.persistence:javax.persistence-api:2.2'
 

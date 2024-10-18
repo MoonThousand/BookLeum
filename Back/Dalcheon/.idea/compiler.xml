@@ -18,9 +18,8 @@
         <module name="Bukgu.Dalcheon.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Dalcheon.Dalcheon.main" target="11" />
-      <module name="Dalcheon.Dalcheon.test" target="11" />
-    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-parameters" />
   </component>
 </project>

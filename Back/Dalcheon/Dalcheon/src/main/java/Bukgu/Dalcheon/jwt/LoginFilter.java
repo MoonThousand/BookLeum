@@ -1,8 +1,10 @@
 package Bukgu.Dalcheon.jwt;
 
 import Bukgu.Dalcheon.domain.login.dao.RefreshEntity;
+import Bukgu.Dalcheon.domain.login.dao.UserEntity;
 import Bukgu.Dalcheon.domain.login.dto.LoginDTO;
 import Bukgu.Dalcheon.repository.RefreshRepository;
+import Bukgu.Dalcheon.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletInputStream;
@@ -32,12 +34,14 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
     private final ObjectMapper objectMapper;
+    private final UserRepository userRepository;
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository, ObjectMapper objectMapper) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository, ObjectMapper objectMapper, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
         this.objectMapper = objectMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -80,7 +84,7 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
 
         //유저 정보
-        String username = authentication.getName();
+        String userId = authentication.getName();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -88,20 +92,27 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
         String role = auth.getAuthority();
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access", username, role, 600000L);
-        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
+        String access = jwtUtil.createJwt("access", userId, role, 600000L);
+        String refresh = jwtUtil.createJwt("refresh", userId, role, 86400000L);
 
         // Refresh 토큰 저장
-        addRefreshEntity(username, refresh, 86400000L);
+        addRefreshEntity(userId, refresh, 86400000L);
 
         //응답 설정
         response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
         // 바디에 추가
         Map<String, String> jsonResponse = new HashMap<>();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        String userName = userEntity.getName();
+        jsonResponse.put("userName", userName);
+        jsonResponse.put("userId",userEntity.getUserId());
         jsonResponse.put("access", access);
         jsonResponse.put("refresh", refresh);
+
         String token = objectMapper.writeValueAsString(jsonResponse);
         response.getWriter().write(token);
 

@@ -29,7 +29,11 @@ public class ProductCheckAPI {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
         ResponseEntity<Map> resultMap = restTemplate.exchange(makeURL(checkProduct), HttpMethod.GET, entity, Map.class);
-        System.out.println(resultMap.getBody());
         return resultMap;
     }
+    public String getCheckProductJsonString(CheckProduct checkProduct) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(makeURL(checkProduct), String.class);
+    }
+
 }

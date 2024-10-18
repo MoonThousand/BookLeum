@@ -27,4 +27,17 @@ public class ListProduct {
         this.cover = cover;
         this.end = "&output=js&Version=20131101";
     }
+
+    public ListProduct( String queryType, int year, int month, int week) {
+        this.BASE_URL = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=";
+        this.queryType = queryType;
+        this.maxResults = "100";
+        this.start = 1;
+        this.searchTarget = "Book";
+        this.year = year;
+        this.month = month;
+        this.week = week;
+        this.cover = "mid";
+        this.end = "&output=js&Version=20131101";
+    }
 }

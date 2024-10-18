@@ -34,8 +34,11 @@ public class ProductSearchAPI implements ProductAPI{
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
         ResponseEntity<Map> resultMap = restTemplate.exchange(makeURL(searchProduct), HttpMethod.GET, entity, Map.class);
-        System.out.println(resultMap.getBody());
         return resultMap;
+    }
+    public String getSearchProductJsonString(SearchProduct searchProduct) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(makeURL(searchProduct), String.class);
     }
 }
 
