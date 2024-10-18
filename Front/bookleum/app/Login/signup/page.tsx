@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 
-import Address from "@/components/UI/signup/address";
-import Input from "@/components/UI/login/Input";
+import Address from "@/components/signup/address";
+import Input from "@/components/login/Input";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
@@ -26,26 +26,46 @@ export default function SignUp() {
     setAddress(addr);
   };
 
+  const validateUserId = (userId: string) => {
+    const userIdRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{1,12}$/;
+    return userIdRegex.test(userId);
+  };
+
+  const validatePassword = (password: string) => {
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{1,12}$/;
+    return passwordRegex.test(password);
+  };
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateName = (name: string) => {
+    const nameRegex = /^[가-힣]+$/; // 한글만 가능
+    return nameRegex.test(name);
+  };
+
+  const validatePhone = (phone: string) => {
+    const phoneRegex = /^\d{11}$/; // 11자리 숫자
+    return phoneRegex.test(phone);
+  };
+
   const validateBirthDate = (birthDate: string) => {
     if (!/^\d{8}$/.test(birthDate)) {
       return false;
     }
-
     const year = parseInt(birthDate.slice(0, 4), 10);
     const month = parseInt(birthDate.slice(4, 6), 10);
     const day = parseInt(birthDate.slice(6), 10);
 
     const date = new Date(year, month - 1, day);
 
-    if (
-      date.getFullYear() !== year ||
-      date.getMonth() + 1 !== month ||
-      date.getDate() !== day
-    ) {
-      return false;
-    }
-
-    return true;
+    return (
+      date.getFullYear() === year &&
+      date.getMonth() + 1 === month &&
+      date.getDate() === day
+    );
   };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -54,7 +74,6 @@ export default function SignUp() {
       4,
       6
     )}-${birthDate.slice(6)}`;
-
     const fullAddress = `${address} ${detailAddress}`;
 
     if (
@@ -76,6 +95,11 @@ export default function SignUp() {
       return;
     }
 
+    if (!validatePassword(password)) {
+      alert("비밀번호는 영어, 숫자로 조합해주세요, 12자리까지 입력가능합니다.");
+      return;
+    }
+
     if (password !== passwordCheck) {
       setPasswordError(true);
       alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
@@ -84,23 +108,18 @@ export default function SignUp() {
       setPasswordError(false);
     }
 
-    const validateEmail = (email: string) => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    };
-
     if (!validateEmail(email)) {
       alert("유효하지 않은 이메일 형식입니다.");
       return;
     }
 
-    const validatePhone = (phone: string) => {
-      const phoneRegex = /^\d{11}$/;
-      return phoneRegex.test(phone);
-    };
+    if (!validateName(name)) {
+      alert("이름은 한글로만 입력 가능합니다.");
+      return;
+    }
 
     if (!validatePhone(phone)) {
-      alert("전화번호는 11자리여야 합니다.");
+      alert("전화번호는 11자리 숫자로 입력해야 합니다.");
       return;
     }
 
@@ -110,17 +129,21 @@ export default function SignUp() {
     }
 
     try {
-      const response = await axios.post(`http://220.120.143.96:7070/join/new`, {
-        userId,
-        password,
-        email,
-        name,
-        phone,
-        address: fullAddress,
-        birthDate: formattedBirthDate,
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/join/new`,
+        {
+          userId,
+          password,
+          email,
+          name,
+          phone,
+          address: fullAddress,
+          birthDate: formattedBirthDate,
+        }
+      );
 
       if (response.status === 200) {
+        alert("환영합니다, 회원가입에 성공하였습니다.");
         router.push("/");
         console.log("회원가입 성공");
       } else {
@@ -129,7 +152,7 @@ export default function SignUp() {
       }
     } catch (error) {
       console.error("회원가입 실패", error);
-      alert("회원가입에 실패했습니다. 다시 시도해주세요");
+      alert("회원가입에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -143,8 +166,14 @@ export default function SignUp() {
         );
 
         if (response.status === 200) {
-          alert("사용할 수 있는 아이디입니다.");
-          setIdCheck(true);
+          if (!validateUserId(userId)) {
+            alert(
+              "아이디는 영어와 숫자로만 조합 가능하며 최대 12자리까지 가능합니다."
+            );
+          } else {
+            alert("사용할 수 있는 아이디입니다.");
+            setIdCheck(true);
+          }
         } else {
           alert("이미 존재하는 아이디입니다");
         }
@@ -160,7 +189,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="w-[70%] mx-auto mt-8">
+    <div className="w-[70%] mx-auto mt-8 font-TTL">
       <div className="flex flex-col">
         <span className="font-bold text-[1.5rem]">회원 가입</span>
         <div className="w-full h-[4px] bg-black mt-2"></div>

@@ -12,6 +12,12 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        TTS: ["TTSamlipCreamyWhiteR"],
+        Score: ["S-CoreDream-3Ligh"],
+        TTL: ["TTLaundryGothicB"],
+        Uiyeun: ["Uiyeun"],
+      },
     },
   },
   plugins: [],
