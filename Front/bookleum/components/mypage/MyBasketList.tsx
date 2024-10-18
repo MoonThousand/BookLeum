@@ -153,7 +153,7 @@ export default function MyBasketList() {
               </>
             ) : (
               <>
-                <Link href={"Other/purchase"}>
+                <Link href={"Other/purchase?type=cart"}>
                   <button className="text-emerald-500 border-2 border-emerald-500 py-2 px-4 mt-3 rounded">
                     전체 구매
                   </button>
