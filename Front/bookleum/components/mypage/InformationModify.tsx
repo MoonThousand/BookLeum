@@ -150,23 +150,23 @@ export default function InformationModify() {
         <p className="font-bold text-[2rem]">내 정보</p>
         <div className="w-full h-[2px] bg-black mt-2"></div>
       </div>
-      <div className="w-[70%] pl-6 py-8 text-[1.2rem] flex justify-between">
+      <div className="w-full pl-6 py-8 text-[1.2rem] flex justify-between">
         <ul className="font-bold w-full">
           <li className="mb-6 flex justify-between">
-            <p>ID</p>
-            <p>{userData.id}</p>
+            <p className="w-[30%]">ID</p>
+            <p className="w-[70%]">{userData.id}</p>
           </li>
           <li className="mb-6 flex justify-between">
-            <p>이름</p>
-            <p>{userData.name}</p>
+            <p className="w-[30%]">이름</p>
+            <p className="w-[70%]">{userData.name}</p>
           </li>
           <li className="mb-6 flex justify-between">
-            <p>이메일</p>
-            <p>{userData.email}</p>
+            <p className="w-[30%]">이메일</p>
+            <p className="w-[70%]">{userData.email}</p>
           </li>
           <li className="mb-6 flex justify-between">
-            <p>기존 비밀번호</p>
-            <span>
+            <p className="w-[30%]">기존 비밀번호</p>
+            <span className="w-[70%]">
               <input
                 className="border border-gray-300"
                 onChange={(e) => setOldPassword(e.target.value)}
@@ -181,8 +181,8 @@ export default function InformationModify() {
             </span>
           </li>
           <li className="mb-6 flex justify-between">
-            <p>새 비밀번호</p>
-            <span>
+            <p className="w-[30%]">새 비밀번호</p>
+            <span className="w-[70%]">
               <input
                 className="border border-gray-300"
                 onChange={(e) => setNewPassword(e.target.value)}
@@ -197,16 +197,16 @@ export default function InformationModify() {
             </span>
           </li>
           <li className="mb-6 flex justify-between">
-            <p>전화 번호</p>
-            <p>{userData.phone}</p>
+            <p className="w-[30%]">전화 번호</p>
+            <p className="w-[70%]">{userData.phone}</p>
           </li>
           <li className="mb-6 flex justify-between">
-            <p>주소</p>
-            <p>{userData.address}</p>
+            <p className="w-[30%]">주소</p>
+            <p className="w-[70%]">{userData.address}</p>
           </li>
           <li className="mb-6 flex justify-between">
-            <p>생년월일</p>
-            <p>{userData.birth}</p>
+            <p className="w-[30%]">생년월일</p>
+            <p className="w-[70%]">{userData.birth}</p>
           </li>
         </ul>
       </div>
