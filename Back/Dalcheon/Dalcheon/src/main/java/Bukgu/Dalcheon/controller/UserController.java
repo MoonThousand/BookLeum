@@ -108,13 +108,13 @@ public class UserController {
 
     // TODO 이벤트 작성
     @PostMapping("/event/create")
-    public EventDAO createEvent(@RequestBody RequestEventCreateDTO event) {
+    public EventDAO createEvent(@Valid @RequestBody RequestEventCreateDTO event) {
         return userService.createEvent(event);
     }
 
     // TODO 이벤트 업데이트
     @PostMapping("/event/update")
-    public ResponseEntity<EventDAO> updateEvent(@RequestBody RequestEventCreateDTO eventDetails) {
+    public ResponseEntity<EventDAO> updateEvent(@Valid @RequestBody RequestEventCreateDTO eventDetails) {
         try {
             EventDAO updatedEvent = userService.updateEvent(eventDetails);
             return ResponseEntity.ok(updatedEvent);
@@ -134,6 +134,7 @@ public class UserController {
     public ResponseEntity<?> readAllQuestion() {
         return userService.readAllQuestion();
     }
+
     // TODO 자주 찾는 질문 상세 조회
     @GetMapping("/question/read/{questionId}")
     public ResponseEntity<?> readQuestion(@PathVariable Long questionId) {
@@ -142,7 +143,7 @@ public class UserController {
 
     // TODO 자주 찾는 질문 작성
     @PostMapping("/question/create")
-    public ResponseEntity<?> createQuestion(@RequestBody RequestCreateQuestionDTO requestCreateQuestionDTO){
+    public ResponseEntity<?> createQuestion(@Valid @RequestBody RequestCreateQuestionDTO requestCreateQuestionDTO){
         return userService.createQuestion(requestCreateQuestionDTO);
     }
     // TODO 자주 찾는 질문 삭제
@@ -155,7 +156,7 @@ public class UserController {
 
     // TODO 1:1문의 작성
     @PostMapping("/inquiry/create")
-    public ResponseEntity<?> createInquiry(@RequestBody RequestCreateInquiryDTO requestCreateInquiryDTO) {
+    public ResponseEntity<?> createInquiry(@Valid @RequestBody RequestCreateInquiryDTO requestCreateInquiryDTO) {
 
         return userService.createInquiry(requestCreateInquiryDTO);
     }
