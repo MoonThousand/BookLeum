@@ -67,7 +67,7 @@ export default function SearchPage() {
     };
 
     fetchData();
-  }, []);
+  }, [searchTarget]);
 
   const handleSearch = () => {
     if (searchTerm.trim() !== "") {

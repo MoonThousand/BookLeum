@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
 import { deleteCookie, getCookie } from "cookies-next";
 
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { userLogout } from "@/redux/slices/authSlice";
@@ -89,12 +89,17 @@ export default function InformationModify() {
           console.log("비밀번호가 틀립니다");
           alert("비밀번호가 틀립니다");
         }
-      } catch (error: any) {
-        if (error.status === 401) {
-          console.log("비밀번호가 틀립니다");
-          alert("비밀번호가 틀립니다");
+      } catch (error: unknown) {
+        if (error instanceof AxiosError && error.response) {
+          if (error.response.status === 401) {
+            console.log("비밀번호가 틀립니다");
+            alert("비밀번호가 틀립니다");
+          } else {
+            console.log(error, "서버에러");
+          }
         } else {
-          console.log(error, "서버에러");
+          console.error("알 수 없는 에러:", error);
+          alert("서버 에러 발생");
         }
       }
     }

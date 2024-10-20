@@ -82,7 +82,7 @@ export default function BookDetail() {
     };
 
     fetchData();
-  }, []);
+  }, [isbn13]);
 
   const handleCartData = async () => {
     console.log(userId, isbn13);

@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
 
 import { FaStar } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
-import axios from "axios";
 import { getCookie } from "cookies-next";
 import { starRating } from "@/utils/starRating";
 
@@ -62,8 +62,8 @@ export default function ListBookDetailDiv({
       } else {
         console.error("데이터를 보내기 실패.");
       }
-    } catch (error: any) {
-      if (error.response) {
+    } catch (error: unknown) {
+      if (error instanceof AxiosError && error.response) {
         if (error.response.status === 400) {
           alert("이미 선택된 품목입니다");
         } else if (error.response.status === 204) {

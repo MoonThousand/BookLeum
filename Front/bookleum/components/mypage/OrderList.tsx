@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
 
 import Loading from "../UI/loding";
 import MyNan from "./MyNan";
 import OrderListDetail from "./OrderListDetail";
-import axios from "axios";
 import { getCookie } from "cookies-next";
 
 interface OrderList {
@@ -63,8 +63,8 @@ export default function OrderList() {
         } else {
           console.error("데이터를 불러오지 못했습니다.");
         }
-      } catch (error: any) {
-        if (error.response) {
+      } catch (error: unknown) {
+        if (error instanceof AxiosError && error.response) {
           if (error.response.status === 400) {
             console.log("주문내역이 비어있습니다.");
           }
