@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 
 import Address from "@/components/signup/address";
 import Input from "@/components/login/Input";
@@ -9,6 +8,7 @@ import PurchaseList from "@/components/purchase/purchaseList";
 import PurchaseSummation from "@/components/purchase/purchaseSummation";
 import axios from "axios";
 import { getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 interface MyList {
   title: string;
@@ -30,8 +30,14 @@ export default function Purchase() {
   const [recipientError, setRecipientError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const type = searchParams.get("type");
+
+  // 클라이언트 사이드에서만 `useSearchParams()` 사용하도록 변경
+  const [type, setType] = useState<string | null>(null);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    setType(searchParams.get("type")); // 'type' 값을 클라이언트에서만 가져오기
+  }, []);
 
   useEffect(() => {
     const id = getCookie("userId") as string | undefined;
@@ -47,7 +53,6 @@ export default function Purchase() {
           `${process.env.NEXT_PUBLIC_SERVER_URL}/user/cart/read/${userId}`
         );
         if (response.status === 200) {
-          console.log(response);
           const myListData = response.data.map((data: MyList) => {
             const originalCoverUrl = data.cover;
             const modifiedCoverUrl = originalCoverUrl.replace(

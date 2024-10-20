@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
 
 import Address from "@/components/signup/address";
 import Input from "@/components/login/Input";
@@ -9,6 +8,7 @@ import PurchaseList from "@/components/purchase/purchaseList";
 import PurchaseSummation from "@/components/purchase/purchaseSummation";
 import axios from "axios";
 import { getCookie } from "cookies-next";
+import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 
 interface MyList {
@@ -32,9 +32,9 @@ export default function PurchaseEach() {
   const [phoneError, setPhoneError] = useState("");
   const router = useRouter();
   const pathname = usePathname();
+  const [type, setType] = useState<string | null>(null);
+
   const isbn13 = pathname.substring(pathname.lastIndexOf("/") + 1);
-  const searchParams = useSearchParams();
-  const type = searchParams.get("type");
 
   useEffect(() => {
     const id = getCookie("userId") as string | undefined;
@@ -42,6 +42,12 @@ export default function PurchaseEach() {
       setUserId(id);
     }
   }, [userId]);
+
+  useEffect(() => {
+    // 'type' 값 가져오기 (클라이언트 사이드에서만)
+    const searchParams = new URLSearchParams(window.location.search);
+    setType(searchParams.get("type")); // 'type' 값을 클라이언트에서만 가져오기
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,16 +106,6 @@ export default function PurchaseEach() {
       author: item.author,
       quantity: item.quantity,
     }));
-
-    console.log({
-      userId,
-      recipient,
-      phone,
-      address: fullAddress,
-      memo,
-      requestOrderDetailsList,
-      type: type?.toUpperCase(),
-    });
 
     try {
       const response = await axios.post(
@@ -232,7 +228,7 @@ export default function PurchaseEach() {
           className="font-bold text-[1.5rem] w-full h-full flex justify-center items-center"
           onClick={handlePurchase}
         >
-          <p>결제 하기</p>
+          주문하기
         </button>
       </div>
     </div>
