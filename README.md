@@ -25,7 +25,7 @@
 ## 팀원 역할
 | **이름**    | **역할**         | **담당**                                                                                         |
 |:------------:|:----------------:|:-------------------------------------------------------------------------------------------------|
-| 정의현       | 백엔드 개발      | 빈 칸                                                                                             |
+| 정의현       | 백엔드 개발      | 요청 도메인 개발과 Spring Boot를 이용한 백엔드 서버와 MySQL을 이용한 DB 설계와 구축을 담당했습니다. |
 | 박병근       | 프론트엔드 개발  | React와 NextJS 기반의 프론트엔드 서버의 개발과 배포를 담당하였으며 사용자 UI/UX 기획과 디자인을 담당했습니다. |
 
 <br>
@@ -37,7 +37,7 @@
 ## 개발 환경
 
 - Front : React, NextJS, Redux-toolkit, TypeScript, JWT, TailwindCSS
-- Back-end : 빈 칸
+- Back-end : Java17, Spring boot 3.3.4, IntelliJ IDEA, MySQL, postman
 - 버전 및 이슈관리 : Github
 - 협업 툴 : Discord, Figma
 - 배포 : AWS
