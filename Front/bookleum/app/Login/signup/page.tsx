@@ -162,7 +162,7 @@ export default function SignUp() {
     } else {
       try {
         const response = await axios.get(
-          `http://220.120.143.96:7070/join/check/userid/${userId}`
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/join/check/userid/${userId}`
         );
 
         if (response.status === 200) {
