@@ -30,11 +30,6 @@ export default function LogIn() {
         {
           userId,
           password,
-        },
-        {
-          headers: {
-            Origin: "https://bookleum.net",
-          },
         }
       );
 
