@@ -30,6 +30,9 @@ export default function LogIn() {
         {
           userId,
           password,
+        },
+        {
+          withCredentials: true,
         }
       );
 
