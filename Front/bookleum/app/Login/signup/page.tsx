@@ -128,6 +128,16 @@ export default function SignUp() {
       return;
     }
 
+    console.log(
+      userId,
+      password,
+      email,
+      name,
+      phone,
+      fullAddress,
+      formattedBirthDate
+    );
+
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/join/new`,

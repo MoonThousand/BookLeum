@@ -22,6 +22,8 @@ export default function LogIn() {
       return;
     }
 
+    console.log(userId, password);
+
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
