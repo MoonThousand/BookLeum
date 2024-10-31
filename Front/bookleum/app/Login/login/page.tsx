@@ -31,7 +31,11 @@ export default function LogIn() {
           userId,
           password,
         },
-        { withCredentials: true }
+        {
+          headers: {
+            Origin: "https://bookleum.net",
+          },
+        }
       );
 
       if (response.status === 200) {
