@@ -3,11 +3,16 @@
 <img src="https://github.com/user-attachments/assets/a2f3ed74-266e-4dd8-865f-0acf9402bf7a" width="300" height="300"/>
 
 <br>
-
+  
 ## 🌳 프로젝트 소개
 
 - 해당 프로젝트는 알라딘 API를 이용해 만든 도서정보 검색 및 모의 구매 사이트입니다. 
 - AWS EC2를 사용해 백엔드, 프론트엔드 서버를 각각 배포하였습니다.
+- 사이트 주소
+ - https://bookleum.net
+ - 테스트 계정
+   - ID : user2
+   - PW : a123
 
 ## ⏰ 개발 기간
 
