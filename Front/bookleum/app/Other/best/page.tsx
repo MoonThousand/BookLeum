@@ -21,7 +21,7 @@ export default function Best() {
   const [books, setBooks] = useState<Book[]>([]);
   const [year, setYear] = useState(2024);
   const [month, setMonth] = useState(10);
-  const [week, setWeek] = useState(2);
+  const [week, setWeek] = useState(4);
 
   const years = Array.from({ length: 2025 - 2000 }, (_, i) => 2000 + i);
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
