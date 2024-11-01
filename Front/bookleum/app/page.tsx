@@ -32,7 +32,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/open/list-product/bestseller/5/book/2024/7/4/mid`
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/open/list-product/bestseller/5/book/2024/9/2/mid`
         );
         if (response.status === 200) {
           console.log(response);
