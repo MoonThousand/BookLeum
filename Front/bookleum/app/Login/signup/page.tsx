@@ -131,6 +131,7 @@ export default function SignUp() {
     console.log(
       userId,
       password,
+      passwordCheck,
       email,
       name,
       phone,
@@ -144,6 +145,7 @@ export default function SignUp() {
         {
           userId,
           password,
+          passwordCheck,
           email,
           name,
           phone,
