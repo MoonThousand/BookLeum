@@ -11,7 +11,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry corsRegistry) {
 
         corsRegistry.addMapping("/**")
-                .allowedOrigins("https://bookleum.net", "http://localhost:3000");
+                .allowedOrigins("https://bookleum.net", "http://localhost:3000", "http://220.120.143.96:7070");
     }
 }
 

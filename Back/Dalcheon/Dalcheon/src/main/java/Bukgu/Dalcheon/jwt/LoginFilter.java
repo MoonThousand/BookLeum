@@ -103,7 +103,7 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
         response.addCookie(createCookie("refresh", refresh));
 
         // TODO cors 해결점
-        response.setHeader("Access-Control-Allow-Origin", "https://bookleum.net"); // Set your frontend URL
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000"); // Set your frontend URL
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
 
         response.setStatus(HttpStatus.OK.value());

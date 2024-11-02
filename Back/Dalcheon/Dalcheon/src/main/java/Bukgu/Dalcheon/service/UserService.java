@@ -382,17 +382,17 @@ public class UserService {
         EventDAO eventDAO = new EventDAO();
         eventDAO.setTitle(event.getTitle());
         eventDAO.setContent(event.getContent());
-        eventDAO.setAuthor(event.getUserId());
+        eventDAO.setAuthor(event.getAuthor());
         eventRepository.save(eventDAO);
         return eventDAO;
     }
     // TODO Event 업데이트
     public EventDAO updateEvent(RequestEventCreateDTO requestEventCreateDTO) {
-        return eventRepository.findByAuthor(requestEventCreateDTO.getUserId()).map(event -> {
+        return eventRepository.findByAuthor(requestEventCreateDTO.getAuthor()).map(event -> {
             event.setTitle(requestEventCreateDTO.getTitle());
             event.setContent(requestEventCreateDTO.getContent());
             return eventRepository.save(event);
-        }).orElseThrow(() -> new RuntimeException("event not found with userId " + requestEventCreateDTO.getUserId()));
+        }).orElseThrow(() -> new RuntimeException("event not found with userId " + requestEventCreateDTO.getAuthor()));
     }
 
     // TODO Event 삭제
