@@ -5,6 +5,7 @@ import Bukgu.Dalcheon.domain.OpenApi.ApiResponseDTO;
 import Bukgu.Dalcheon.domain.OpenApi.CheckProduct;
 import Bukgu.Dalcheon.domain.OpenApi.ItemDTO;
 import Bukgu.Dalcheon.domain.admin.dao.EventDAO;
+import Bukgu.Dalcheon.domain.admin.dao.NoticeDAO;
 import Bukgu.Dalcheon.domain.admin.dto.RequestEventCreateDTO;
 import Bukgu.Dalcheon.domain.login.dao.UserEntity;
 import Bukgu.Dalcheon.domain.purchaseStatus;
@@ -23,6 +24,7 @@ import org.springframework.transaction.TransactionSystemException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -35,9 +37,10 @@ public class UserService {
     private final EventRepository eventRepository;
     private final InquiryRepository inquiryRepository;
     private final QuestionRepository questionRepository;
+    private final NoticeRepository noticeRepository;
 
 
-    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository, OrderRepository orderRepository, ProductCheckAPI productCheckAPI, EventRepository eventRepository, InquiryRepository inquiryRepository, QuestionRepository questionRepository) {
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, CartRepository cartRepository, UserRepository userRepository, WishRepository wishRepository, OrderRepository orderRepository, ProductCheckAPI productCheckAPI, EventRepository eventRepository, InquiryRepository inquiryRepository, QuestionRepository questionRepository, NoticeRepository noticeRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
@@ -47,6 +50,7 @@ public class UserService {
         this.eventRepository = eventRepository;
         this.inquiryRepository = inquiryRepository;
         this.questionRepository = questionRepository;
+        this.noticeRepository = noticeRepository;
     }
 
 
@@ -483,6 +487,15 @@ public class UserService {
         inquiryRepository.deleteById(inquiryId);
 
         return ResponseEntity.status(200).body("InquiryId : " + inquiryId + " 삭제 완료");
+    }
+    // TODO 공지사항 전체 조회
+    public List<NoticeDAO> getAllNotices() {
+        return noticeRepository.findAll();
+    }
+
+    // TODO 공지사항 상세 조회
+    public Optional<NoticeDAO> getNoticeById(Long id) {
+        return noticeRepository.findById(id);
     }
 
 }

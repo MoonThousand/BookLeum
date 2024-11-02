@@ -71,7 +71,7 @@ public class SecurityConfig {
             config.setMaxAge(3600L);
             //프론트로 헤더를 보내줄 때 Authorization 도 허용해줘야함
             config.setExposedHeaders(Collections.singletonList("Authorization"));
-            config.setAllowedOriginPatterns(Collections.singletonList("https://bookleum.net")); // ⭐️ 허용할 origin
+            config.setAllowedOriginPatterns(List.of("https://bookleum.net","http://localhost:3000")); // ⭐️ 허용할 origin
             config.setAllowCredentials(true);
             return config;
         };
