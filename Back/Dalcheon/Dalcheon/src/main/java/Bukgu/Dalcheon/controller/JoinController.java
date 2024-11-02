@@ -2,6 +2,7 @@ package Bukgu.Dalcheon.controller;
 
 import Bukgu.Dalcheon.domain.login.dto.JoinDTO;
 import Bukgu.Dalcheon.service.JoinService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class JoinController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<String> joinProcess(@RequestBody JoinDTO joinDTO){
+    public ResponseEntity<String> joinProcess(@Valid @RequestBody JoinDTO joinDTO){
 
         System.out.println(joinDTO.getUserId());
 

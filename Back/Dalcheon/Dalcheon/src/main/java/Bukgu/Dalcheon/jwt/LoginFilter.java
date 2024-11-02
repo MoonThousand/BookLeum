@@ -101,6 +101,11 @@ public class LoginFilter  extends UsernamePasswordAuthenticationFilter {
         //응답 설정
         response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
+
+        // TODO cors 해결점
+        response.setHeader("Access-Control-Allow-Origin", "https://bookleum.net"); // Set your frontend URL
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+
         response.setStatus(HttpStatus.OK.value());
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
