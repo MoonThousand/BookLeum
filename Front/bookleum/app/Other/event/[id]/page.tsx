@@ -23,6 +23,7 @@ export default function EventDetail() {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/main/event/post/${postId}`
         );
+        console.log(response);
         if (response.status === 200) {
           setEventData({
             id: response.data.id,
@@ -44,8 +45,9 @@ export default function EventDetail() {
   }, [postId]);
 
   const sentences = eventData.content.split("/");
+
   return (
-    <div className="w-[70%] mx-auto mt-12">
+    <div className="w-[70%] mx-auto mt-12 min-h-[450px]">
       <div className="font-TTL">
         <p className="font-bold text-[2rem]">🍂가을 문구 작성 이벤트</p>
         <div className="w-full h-[2px] bg-[#ef9a4a] mt-2"></div>
@@ -55,7 +57,7 @@ export default function EventDetail() {
             <p className="pb-2">{`작성일 : ${formatDate(
               eventData.createdDate
             )}`}</p>
-            <p>작성자 : 관리자</p>
+            <p>{`작성자 : ${eventData.author}`}</p>
           </div>
         </div>
         <div className="w-full h-[2px] bg-[#ef9a4a] mt-2"></div>

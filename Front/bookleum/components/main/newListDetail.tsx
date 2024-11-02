@@ -12,9 +12,11 @@ interface Props {
 export default function NewListDetail({ title, author, cover, isbn13 }: Props) {
   return (
     <div className="flex flex-col items-center">
-      <Link href={`/Other/book/${isbn13}?type=normal`}>
-        <Image src={cover} width={170} height={100} alt="new book" />
-      </Link>
+      <div className="relative w-[15rem]">
+        <Link href={`/Other/book/${isbn13}?type=normal`}>
+          <Image src={cover} width={170} height={100} alt="new book" />
+        </Link>
+      </div>
       <p className="font-semibold my-4">{title}</p>
       <p>{author} 지음</p>
     </div>

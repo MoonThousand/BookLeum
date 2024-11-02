@@ -27,9 +27,11 @@ export default function TodayBook({
       {cover !== "" && (
         <div className="flex justify-around w-full">
           <div className="w-[40%] flex justify-center items-center">
-            <Link href={`/Other/book/${isbn13}?type=normal`}>
-              <Image src={cover} width={200} height={100} alt="today book" />
-            </Link>
+            <div className="relative w-[15rem]">
+              <Link href={`/Other/book/${isbn13}?type=normal`}>
+                <Image src={cover} width={200} height={100} alt="today book" />
+              </Link>
+            </div>
           </div>
           <div className="px-12 w-[60%] flex flex-col justify-center font-TTL">
             <p className="mb-4 font-bold text-[1.3rem]">{title}</p>

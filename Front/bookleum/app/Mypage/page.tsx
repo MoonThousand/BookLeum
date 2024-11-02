@@ -11,7 +11,7 @@ import SideMenu from "@/components/notice/sideMenu";
 export default function Mypage() {
   const [select, setSelect] = useState(1);
   return (
-    <div className="w-[80%] mx-auto flex mt-12 font-TTL">
+    <div className="w-[80%] mx-auto flex mt-12 font-TTL min-h-[350px]">
       <SideMenu
         select={select}
         setSelect={setSelect}

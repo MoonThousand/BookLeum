@@ -23,9 +23,9 @@ export default function SideMenu({
   type,
 }: SideMenuProps) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mr-16">
       <p className="font-medium text-[1.5rem] mb-2">{mainTitle}</p>
-      <div className="flex flex-col w-[180px]">
+      <div className="flex flex-col w-[15rem]">
         <button
           className={`border-t border-r border-l border-gray-600 py-3 flex items-center cursor-pointer ${
             select === 1 ? "bg-gray-100" : ""

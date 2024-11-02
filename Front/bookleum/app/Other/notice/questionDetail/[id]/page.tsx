@@ -42,7 +42,7 @@ export default function QuestionDetail() {
     fetchData();
   }, [postId]);
 
-  const sentences = questionData.content.split(".");
+  const sentences = questionData.content.split("/");
   return (
     <div className="w-[70%] mx-auto mt-12">
       <div className="font-TTL">

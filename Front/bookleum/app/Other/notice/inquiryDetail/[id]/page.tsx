@@ -42,7 +42,7 @@ export default function InquiryDetail() {
     fetchData();
   }, [postId]);
 
-  const sentences = inquiryData.inquiryContent.split(".");
+  const sentences = inquiryData.inquiryContent.split("/");
   return (
     <div className="w-[70%] mx-auto mt-12">
       <div className="font-TTL">

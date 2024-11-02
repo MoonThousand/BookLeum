@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
 import { formatDate } from "@/utils/formatDate";
+import { getCookie } from "cookies-next";
 
 interface Event {
   title: string;
@@ -16,6 +17,14 @@ interface Event {
 
 export default function Event() {
   const [eventList, setEventList] = useState<Event[]>([]);
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const id = getCookie("userId") as string | undefined;
+    if (id) {
+      setUserId(id);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,6 +55,10 @@ export default function Event() {
     fetchData();
   }, []);
 
+  const handleAlert = () => {
+    alert("로그인이 필요합니다");
+  };
+
   console.log(eventList);
 
   return (
@@ -53,13 +66,24 @@ export default function Event() {
       <div className="flex justify-center mb-8 pt-12">
         <Image src="/eventLogo.png" width={800} height={100} alt="today book" />
       </div>
-      <div className="w-[75%] mx-auto flex justify-end">
-        <Link href="/Other/event/create">
-          <button className="py-2 px-4 border-2 border-orange-300 bg-orange-300 rounded-lg hover:bg-orange-400">
+      {userId ? (
+        <div className="w-[75%] mx-auto flex justify-end">
+          <Link href="/Other/event/create">
+            <button className="py-2 px-4 border-2 border-orange-300 bg-orange-300 rounded-lg hover:bg-orange-400">
+              작성하기
+            </button>
+          </Link>
+        </div>
+      ) : (
+        <div className="w-[75%] mx-auto flex justify-end">
+          <button
+            className="py-2 px-4 border-2 border-orange-300 bg-orange-300 rounded-lg hover:bg-orange-400"
+            onClick={handleAlert}
+          >
             작성하기
           </button>
-        </Link>
-      </div>
+        </div>
+      )}
       <div className="w-[95%] mx-auto py-4 rounded-md">
         <div className="w-[80%] mx-auto pb-4">
           <ul className="flex items-center px-4 pt-2 font-bold">

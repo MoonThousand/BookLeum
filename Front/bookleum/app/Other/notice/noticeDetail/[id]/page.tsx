@@ -41,9 +41,9 @@ export default function NoticeDetailPage() {
     fetchData();
   }, [postId]);
 
-  const sentences = noticeData.content.split(".");
+  const sentences = noticeData.content.split("/");
   return (
-    <div className="w-[70%] mx-auto mt-12">
+    <div className="w-[70%] mx-auto mt-12 min-h-[300px]">
       <div className="font-TTL">
         <p className="font-bold text-[2rem]">공지사항</p>
         <div className="w-full h-[2px] bg-black mt-2"></div>

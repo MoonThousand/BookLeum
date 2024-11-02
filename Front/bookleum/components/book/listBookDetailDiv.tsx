@@ -85,9 +85,11 @@ export default function ListBookDetailDiv({
   return (
     <div className="flex items-center justify-around my-4 py-8 px-6 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]">
       <div className="w-[30%] flex justify-center">
-        <Link href={`/Other/book/${isbn13}`}>
-          <Image src={cover} width={180} height={100} alt="book" />
-        </Link>
+        <div className="relative w-[15rem]">
+          <Link href={`/Other/book/${isbn13}`}>
+            <Image src={cover} width={180} height={100} alt="book" />
+          </Link>
+        </div>
       </div>
       <div className="w-[50%]">
         <Link href={`/Other/book/${isbn13}`}>

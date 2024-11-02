@@ -27,7 +27,7 @@ export default function EventCreate() {
 
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/event/create`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/user/event/create`,
         {
           title,
           content,

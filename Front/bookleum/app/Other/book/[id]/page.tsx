@@ -141,12 +141,14 @@ export default function BookDetail() {
     <div className="w-[80%] mx-auto mt-16 font-TTL">
       {isLoading ? (
         <div className="flex justify-around items-center">
-          <Image
-            src={book.cover}
-            width={250}
-            height={100}
-            alt="main logo Image"
-          />
+          <div className="relative w-[15rem]">
+            <Image
+              src={book.cover}
+              width={250}
+              height={100}
+              alt="main logo Image"
+            />
+          </div>
           <div className="w-[60%]">
             <p className="my-2 text-[2rem]">{book.title}</p>
             <p className="text-[1.1rem]">{book.author}</p>
