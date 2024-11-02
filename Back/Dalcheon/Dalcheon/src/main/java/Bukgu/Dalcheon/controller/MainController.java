@@ -39,14 +39,14 @@ public class MainController {
 
     // TODO 공지사항 조회
 
-    // 특정 공지사항 조회
+    // TODO 특정 공지사항 조회
     @GetMapping("/notice/post/{postId}")
     public ResponseEntity<NoticeDAO> getNoticeById(@PathVariable Long postId) {
         return mainService.getNoticeById(postId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    // 모든 공지사항 조회
+    // TODO 모든 공지사항 조회
     @GetMapping("/notice/list")
     public List<NoticeDAO> getAllNotices() {
         return mainService.getAllNotices();

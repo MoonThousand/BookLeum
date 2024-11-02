@@ -50,7 +50,7 @@ public class AdminService {
         EventDAO eventDAO = new EventDAO();
         eventDAO.setTitle(event.getTitle());
         eventDAO.setContent(event.getContent());
-        eventDAO.setAuthor(event.getUserId());
+        eventDAO.setAuthor(event.getAuthor());
         eventRepository.save(eventDAO);
         return eventDAO;
     }

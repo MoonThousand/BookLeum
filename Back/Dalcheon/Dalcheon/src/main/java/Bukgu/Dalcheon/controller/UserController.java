@@ -1,6 +1,7 @@
 package Bukgu.Dalcheon.controller;
 
 import Bukgu.Dalcheon.domain.admin.dao.EventDAO;
+import Bukgu.Dalcheon.domain.admin.dao.NoticeDAO;
 import Bukgu.Dalcheon.domain.admin.dto.RequestEventCreateDTO;
 import Bukgu.Dalcheon.domain.user.dao.CartDAO;
 import Bukgu.Dalcheon.domain.user.dto.*;
@@ -151,8 +152,6 @@ public class UserController {
         return userService.deleteQuestion(questionId);
     }
 
-
-
     // TODO 1:1문의 작성
     @PostMapping("/inquiry/create")
     public ResponseEntity<?> createInquiry(@RequestBody RequestCreateInquiryDTO requestCreateInquiryDTO) {
@@ -176,5 +175,18 @@ public class UserController {
     @DeleteMapping("/inquiry/delete/{inquiryId}")
     public ResponseEntity<?> deleteInquiry(@PathVariable Long inquiryId) {
         return userService.deleteInquiry(inquiryId);
+    }
+    // TODO 모든 공지사항 조회
+    @GetMapping("/notice/list")
+    public List<NoticeDAO> getAllNotices() {
+        return userService.getAllNotices();
+    }
+
+    // TODO 공지사항 상세 조회
+    @GetMapping("/notice/read/{postId}")
+    public ResponseEntity<NoticeDAO> getNoticeById(@PathVariable Long postId) {
+        return userService.getNoticeById(postId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
