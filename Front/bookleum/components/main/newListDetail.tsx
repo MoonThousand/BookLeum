@@ -14,7 +14,13 @@ export default function NewListDetail({ title, author, cover, isbn13 }: Props) {
     <div className="flex flex-col items-center">
       <div className="relative w-[15rem]">
         <Link href={`/Other/book/${isbn13}?type=normal`}>
-          <Image src={cover} width={170} height={100} alt="new book" />
+          <Image
+            src={cover}
+            width={170}
+            height={100}
+            alt="new book"
+            className="mx-auto"
+          />
         </Link>
       </div>
       <p className="font-semibold my-4">{title}</p>
