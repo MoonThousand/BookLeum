@@ -67,7 +67,7 @@ public class UserService {
         }
 
         // TODO 장바구니에 원래 있는 데이터인지 검사
-        if (cartRepository.existsByIsbn(requestCartAddDTO.getIsbn())) {
+        if (cartRepository.existsByUserEntity_userIdAndIsbn(user.getUserId(),requestCartAddDTO.getIsbn())) {
             return ResponseEntity.status(204).body("장바구니에 이미 있는 상품입니다.");
         }
 
